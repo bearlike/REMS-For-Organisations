@@ -1,0 +1,15 @@
+.logo {
+  width: 100%;
+  height: auto;
+  padding-top: 5px;
+  max-width: inherit;
+}
+
+@media screen and (max-width: 576px) {
+  .logo {
+    width: 100%;
+    height: auto;
+    max-width: inherit;
+  }
+}
+
