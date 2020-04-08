@@ -13,6 +13,7 @@
         }
         if(isset($_GET['mode'])){
             $mode=1;
+            $countr = -1;
             $event = "Events Details";
             $sql = "select event_name, date from events order by date;";
             $result = $conn->query($sql);
@@ -137,7 +138,7 @@
             <div class="container-fluid">
                 <h3 class="text-dark mb-4">Certificates Distrubution System (CDS)</h3>
                 <?php
-                    if ($countr == 0) { 
+                    if (($countr == 0) && ($mode == 0)) { 
                         echo "<div class=\"card shadow mb-4\">
                             <div class=\"card-header py-3\">
                                 <h6 class=\"text-primary m-0 font-weight-bold\">".ucwords($event)."</h6>
@@ -148,7 +149,7 @@
                             </div>";
                     }
                 ?>
-                <div class="card shadow" <?php if ($countr == 0) { echo "style=\"display: none;\""; } ?> >
+                <div class="card shadow" <?php if (($countr == 0) && ($mode == 0)) { echo "style=\"display: none;\""; } ?> >
                     <div class="card-header py-3">
                         <p class="text-primary m-0 font-weight-bold"><?php echo ucwords($event); ?></p>
                     </div>
