@@ -29,7 +29,7 @@
                     header('Location: index.php?status=notfound');
                 }
             }
-            $sql = "SELECT name,regno,dept,year,section,position,cert_link from certificates where event_name=\"".$event."\" order by name";
+            $sql = "SELECT DISTINCT name,regno,dept,year,section,position,cert_link from certificates where event_name=\"".$event."\" order by name";
             $result = $conn->query($sql);
             $resultc = $conn->query("SELECT COUNT(*) FROM certificates where event_name=\"".$event."\"");
             $rowc = $resultc->fetch_row();
