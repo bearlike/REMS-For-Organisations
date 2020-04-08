@@ -186,8 +186,8 @@ if (isset($storagename) && $handle = fopen($Uploaded_Files . $_FILES["file"]["na
 		imagettftext($im, 120, 0, 224, 1327, 0x3e4246, realpath($font_light), $participant_name);
 		imagettftext($im, 45, 0, 929, 1493, 0x3e4246, realpath($font_regular), $event_name);
 		imagettftext($im, 45, 0, 1035, 1685, 0x3e4246, realpath($font_regular), $event_date);
-		imagepng($im, $Generated_Certificate . $foldername[0] . '/Certificate-' . $event_name . "_" .$participant_id . '.png');
-		$cert_link = $Generated_Certificate . $foldername[0] . '/Certificate-' . $event_name . "_" .$participant_id . '.png';
+		imagepng($im, $Generated_Certificate . $foldername[0] . '/Certificate-' . str_replace(" ","_",$event_name) . "_" . str_replace(" ","_",$participant_name) . "_" . $participant_id . '.png');
+		$cert_link = $Generated_Certificate . $foldername[0] . '/Certificate-' . str_replace(" ","_",$event_name) . "_" . str_replace(" ","_",$participant_name) . "_" . $participant_id . '.png';
 		imagedestroy($im);
 		$participant_id++;
 		$submit_sql = "INSERT INTO `certificates` (`name`,`regno`,`dept`,`year`,`section`,`position`,`cert_link`,`event_name`) VALUES ('" . $participant_name . "','" . $registration_number . "','" . $department . "','" . $year . "','" . $section . "','" . $position . "','" . $cert_link . "','" . $event_name . "');";
