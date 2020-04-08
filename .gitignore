@@ -1,3 +1,4 @@
 # Git ignore file for 
 # https://github.com/K-Kraken/cms-for-organisations
-
+CDS_Admin/Uploaded files/
+CDS_Admin/Generated Certificate/
