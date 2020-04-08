@@ -7,15 +7,15 @@
 <h4 align="center">User-friendly CMS for small organisations and clubs. Mailers, Certificate Generation and much more :)</h4>
 
 <p align="center">
-  <a href="#"><img src="https://img.shields.io/github/last-commit/K-Kraken/cms-for-organisations?color=blue&style=flat-square"></a>
+  <img src="https://img.shields.io/github/last-commit/K-Kraken/cms-for-organisations?color=blue&style=flat-square">
   <a href="/LICENSE"><img src="https://img.shields.io/github/license/K-Kraken/cms-for-organisations.svg?style=flat-square"></a>
 </p>
 
 
 
 
-### Why do I do it?
-Lorem Ipsum Lorem Ipsum
+### Why are we doing it?
+We are running a chapter (club) at our college. We organize 20+ events for our 1500+ participants. It was a tedious process to manually make forms, certificates, advertising via mail so we decided to automate that process. Any organization, clubs or institutions looking for a similar service can fork our project and tweak it according to their needs.
 
 
 
@@ -23,7 +23,7 @@ Lorem Ipsum Lorem Ipsum
 
 ### Prerequisites
 What things you need to run the software:
-- A web server preferably Apache2 and PHP.MySQL
+- A web server preferably Apache2 with PHP.
 - A MySQL Database Server. (Done and tested on 10.4.8-MariaDB)
 
 
