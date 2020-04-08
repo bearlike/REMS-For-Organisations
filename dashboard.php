@@ -1,3 +1,6 @@
+<?php 
+    include("header.php");
+?>
 <html>
 
 <head>
@@ -20,8 +23,8 @@
                 </a>
                 <hr class="sidebar-divider my-0">
                 <ul class="nav navbar-nav text-light" id="accordionSidebar">
-                    <li class="nav-item" role="presentation"><a class="nav-link active" href="dashboard.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="cds-admin.html"><i class="fab fa-creative-commons-share"></i><span>Certificate Generation<br></span></a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link active" href="dashboard.php"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="cds-admin.php"><i class="fab fa-creative-commons-share"></i><span>Certificate Generation<br></span></a></li>
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
             </div>
@@ -55,7 +58,7 @@
                                                 <div class="bg-primary icon-circle"><i class="fas fa-file-alt text-white"></i></div>
                                             </div>
                                             <div><span class="small text-gray-500">December 12, 2019</span>
-                                                <p>Test Message</p>
+                                                <p>Sample Text</p>
                                             </div>
                                         </a>
                                         <a class="d-flex align-items-center dropdown-item" href="#">
@@ -63,7 +66,7 @@
                                                 <div class="bg-success icon-circle"><i class="fas fa-donate text-white"></i></div>
                                             </div>
                                             <div><span class="small text-gray-500">December 7, 2019</span>
-                                                <p>Test Message</p>
+                                                <p>Sample Text</p>
                                             </div>
                                         </a>
                                         <a class="d-flex align-items-center dropdown-item" href="#">
@@ -71,7 +74,7 @@
                                                 <div class="bg-warning icon-circle"><i class="fas fa-exclamation-triangle text-white"></i></div>
                                             </div>
                                             <div><span class="small text-gray-500">December 2, 2019</span>
-                                                <p>Test Message</p>
+                                                <p>Sample Text</p>
                                             </div>
                                         </a><a class="text-center dropdown-item small text-gray-500" href="#">Show All Alerts</a></div>
                                 </div>
@@ -81,7 +84,7 @@
                             </li>
                             <div class="d-none d-sm-block topbar-divider"></div>
                             <li class="nav-item dropdown no-arrow" role="presentation">
-                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="d-none d-lg-inline mr-2 text-gray-600 small">Username</span><img class="border rounded-circle img-profile" src="assets/img/avatars/avatar1.jpeg"></a>
+                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="d-none d-lg-inline mr-2 text-gray-600 small"><?php echo $loginUser; ?></span><img class="border rounded-circle img-profile" src="assets/img/avatars/avatar1.jpeg"></a>
                                     <div
                                         class="dropdown-menu shadow dropdown-menu-right animated--grow-in" role="menu"><a class="dropdown-item" role="presentation" href="#"><i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Profile</a><a class="dropdown-item" role="presentation" href="#"><i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Settings</a>
                                         <a
@@ -94,7 +97,7 @@
             </nav>
             <div class="container-fluid">
                 <div class="d-sm-flex justify-content-between align-items-center mb-4">
-                    <h3 class="text-dark mb-0">Dashboard</h3><a class="btn btn-primary btn-sm d-none d-sm-inline-block" role="button" href="#"><i class="fas fa-upload fa-sm text-white-50"></i>&nbsp;Upload CSV for CDS&nbsp;</a></div>
+                    <h3 class="text-dark mb-0">Dashboard</h3><a class="btn btn-primary btn-sm d-none d-sm-inline-block" role="button" href="cds-admin.php"><i class="fas fa-upload fa-sm text-white-50"></i>&nbsp;Upload CSV for CDS&nbsp;</a></div>
                 <div class="row">
                     <div class="col-md-6 col-xl-3 mb-4">
                         <div class="card shadow border-left-primary py-2">
