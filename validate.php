@@ -34,6 +34,8 @@ if (!empty( $_POST)) {
     }
     else {
         $_SESSION['uname'] = $_POST['uname'];
+        date_default_timezone_set('Asia/Kolkata');
+        $_SESSION['loginTime'] = date('m/d/Y h:i:s a', time());
         $conn->close();
         header('Location: dashboard.php');
     }

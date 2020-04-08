@@ -1,11 +1,6 @@
 <html>
-<?php
-/* database credentials START */
-$servername = 'localhost';
-$username = 'root';
-$password = '';
-$dbname = 'svcehost_cms';
-/* database credentials END */
+<?php 
+include("header.php");
 /* Directory Path Variables START */
 $Generated_Certificate = 'CDS_Admin/Generated Certificate/';
 $Uploaded_Files = "CDS_Admin/Uploaded files/";
@@ -33,8 +28,8 @@ $Fonts_Path = "CDS_Admin/Fonts/";
                 </a>
                 <hr class="sidebar-divider my-0">
                 <ul class="nav navbar-nav text-light" id="accordionSidebar">
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="dashboard.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link active" href="cds-admin.html"><i class="fab fa-creative-commons-share"></i><span>Certificate Generation<br></span></a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="dashboard.php"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link active" href="cds-admin.php"><i class="fab fa-creative-commons-share"></i><span>Certificate Generation<br></span></a></li>
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
             </div>
@@ -68,7 +63,7 @@ $Fonts_Path = "CDS_Admin/Fonts/";
                                                 <div class="bg-primary icon-circle"><i class="fas fa-file-alt text-white"></i></div>
                                             </div>
                                             <div><span class="small text-gray-500">December 12, 2019</span>
-                                                <p>A new monthly report is ready to download!</p>
+                                                <p>Sample Text</p>
                                             </div>
                                         </a>
                                         <a class="d-flex align-items-center dropdown-item" href="#">
@@ -76,7 +71,7 @@ $Fonts_Path = "CDS_Admin/Fonts/";
                                                 <div class="bg-success icon-circle"><i class="fas fa-donate text-white"></i></div>
                                             </div>
                                             <div><span class="small text-gray-500">December 7, 2019</span>
-                                                <p>$290.29 has been deposited into your account!</p>
+                                                <p>Sample Text</p>
                                             </div>
                                         </a>
                                         <a class="d-flex align-items-center dropdown-item" href="#">
@@ -84,7 +79,7 @@ $Fonts_Path = "CDS_Admin/Fonts/";
                                                 <div class="bg-warning icon-circle"><i class="fas fa-exclamation-triangle text-white"></i></div>
                                             </div>
                                             <div><span class="small text-gray-500">December 2, 2019</span>
-                                                <p>Spending Alert: We've noticed unusually high spending for your account.</p>
+                                                <p>Sample Text</p>
                                             </div>
                                         </a><a class="text-center dropdown-item small text-gray-500" href="#">Show All Alerts</a></div>
                                 </div>
@@ -94,7 +89,7 @@ $Fonts_Path = "CDS_Admin/Fonts/";
                             </li>
                             <div class="d-none d-sm-block topbar-divider"></div>
                             <li class="nav-item dropdown no-arrow" role="presentation">
-                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="d-none d-lg-inline mr-2 text-gray-600 small">Username</span><img class="border rounded-circle img-profile" src="assets/img/avatars/avatar1.jpeg"></a>
+                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="d-none d-lg-inline mr-2 text-gray-600 small"><?php echo $loginUser; ?></span><img class="border rounded-circle img-profile" src="assets/img/avatars/avatar1.jpeg"></a>
                                     <div
                                         class="dropdown-menu shadow dropdown-menu-right animated--grow-in" role="menu"><a class="dropdown-item" role="presentation" href="#"><i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Profile</a><a class="dropdown-item" role="presentation" href="#"><i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Settings</a>
                                         <a
@@ -106,7 +101,8 @@ $Fonts_Path = "CDS_Admin/Fonts/";
             </div>
             </nav>
             <div class="container-fluid">
-                <h3 class="text-dark mb-4">Certificate Generation</h3>
+                <div class="d-sm-flex justify-content-between align-items-center mb-4">
+                    <h3 class="text-dark mb-0">Certificate Generation</h3><a class="btn btn-primary btn-sm d-none d-sm-inline-block" role="button" href="CDS_Admin/Sample_headers.csv"><i class="fas fa-download fa-sm text-white-50"></i>&nbsp;Download Sample CSV for CDS&nbsp;</a></div>
                 <style>
                 .upload-btn-wrapper input[type=file] {
                     opacity: 0;
@@ -121,96 +117,117 @@ $Fonts_Path = "CDS_Admin/Fonts/";
 
                 <div class="card shadow">
                     <div class="card-header py-3">
-                        <p class="text-primary m-0 font-weight-bold">Current Log</p>
+                        <p class="text-primary m-0 font-weight-bold">Metadata</p>
+                    </div>
+                    <div class="card-body">                   
+<?php
+    /* Driver */
+    if (isset($_POST["submit"])) {
+        if (isset($_FILES["file"])) {
+            if ($_FILES["file"]["error"] > 0) {
+                echo "<b>Return Code</b>: " . $_FILES["file"]["error"] . "<br />";
+            } 
+            else {
+                echo "<b>Upload</b>: " . $_FILES["file"]["name"] . "<br />";
+                echo "<b>Type</b>: " . $_FILES["file"]["type"] . "<br />";
+                echo "<b>Size</b>: " . round (($_FILES["file"]["size"] / 1024),2) . " Mb<br />";
+                if (file_exists("upload/" . $_FILES["file"]["name"])) {
+                    echo $_FILES["file"]["name"] . " already exists. ";
+                } 
+                else {
+                    $storagename = $_FILES["file"]["name"];
+                    move_uploaded_file($_FILES["file"]["tmp_name"], $Uploaded_Files . $storagename);
+                    // echo "<b>Stored in</b>: " . "Uploaded files/" . $_FILES["file"]["name"] . "<br />";
+                }
+            }
+        } 
+        else {
+            echo "No file selected <br />";
+        }
+    }
+    echo "<br>";
+    $conn = new mysqli($servername, $username, $password, $dbname);
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error); // IF-Fail to Connect
+    }
+    if (isset($_FILES["file"])){
+        $foldername = explode('.', $_FILES["file"]["name"]);
+        // echo $foldername[0];
+        if (!file_exists($Generated_Certificate . $foldername[0])) {
+            mkdir($Generated_Certificate . $foldername[0], 0777, true);
+        }
+    }
+    $row = 1;
+    $flag = true;
+    $participant_id = 0000;
+?>
+                    </div>
+                </div>
+                <br><br>
+                <div class="card shadow">
+                    <div class="card-header py-3">
+                        <p class="text-primary m-0 font-weight-bold">Certification Creation Log</p>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
                             <table class="table dataTable my-0" id="dataTable">
+                                <thead>
+                                    <th>ID</th>	
+                                    <th>Name</th>	
+                                    <th>Registration Number</th>	
+                                    <th>Position</th>	
+                                    <th>Event Name</th>	
+                                    <th>Certificate Link</th>
+                                </thead>
                                 <tbody>
 <?php
-/* Driver */
-if (isset($_POST["submit"])) {
-	if (isset($_FILES["file"])) {
-		if ($_FILES["file"]["error"] > 0) {
-			echo "Return Code: " . $_FILES["file"]["error"] . "<br />";
-		} else {
-			echo "Upload: " . $_FILES["file"]["name"] . "<br />";
-			echo "Type: " . $_FILES["file"]["type"] . "<br />";
-			echo "Size: " . ($_FILES["file"]["size"] / 1024) . " Kb<br />";
-			echo "Temp file: " . $_FILES["file"]["tmp_name"] . "<br />";
-			if (file_exists("upload/" . $_FILES["file"]["name"])) {
-				echo $_FILES["file"]["name"] . " already exists. ";
-			} else {
-				$storagename = $_FILES["file"]["name"];
-				move_uploaded_file($_FILES["file"]["tmp_name"], $Uploaded_Files . $storagename);
-				echo "Stored in: " . "Uploaded files/" . $_FILES["file"]["name"] . "<br />";
-			}
-		}
-	} else {
-		echo "No file selected <br />";
-	}
-}
-$conn = new mysqli($servername, $username, $password, $dbname);
-if ($conn->connect_error) {
-	die("Connection failed: " . $conn->connect_error); // IF-Fail to Connect
-}
-if (isset($_FILES["file"])){
-	$foldername = explode('.', $_FILES["file"]["name"]);
-	echo $foldername[0];
-	if (!file_exists($Generated_Certificate . $foldername[0])) {
-		mkdir($Generated_Certificate . $foldername[0], 0777, true);
-	}
-}
-$row = 1;
-$flag = true;
-$participant_id = 0000;
-if (isset($storagename) && $handle = fopen($Uploaded_Files . $_FILES["file"]["name"], "r")) {
-	while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-		if ($flag) {
-			$flag = false;
-			continue;
-		}
-		/* Event variables START*/
-		$participant_name = ucwords($data[0]);
-		$registration_number = $data[1];
-		$department = ucwords($data[2]);
-		$year = $data[3];
-		$section = ucwords($data[4]);
-		$position = ucwords($data[5]);
-		$event_name = ucwords($data[6]);
-		$event_date = '3rd March';
-		/* Event variables END*/
-		$im = imagecreatefrompng($Certificate_Template);
-		$font_light = $Fonts_Path.'Raleway/Raleway-Light.ttf';
-		$font_regular = $Fonts_Path.'Raleway/Raleway-Regular.ttf';
-		imagettftext($im, 120, 0, 224, 1327, 0x3e4246, realpath($font_light), $participant_name);
-		imagettftext($im, 45, 0, 929, 1493, 0x3e4246, realpath($font_regular), $event_name);
-		imagettftext($im, 45, 0, 1035, 1685, 0x3e4246, realpath($font_regular), $event_date);
-		imagepng($im, $Generated_Certificate . $foldername[0] . '/Certificate-' . $participant_id . '.png');
-		$cert_link = $Generated_Certificate . $foldername[0] . '/Certificate-' . $participant_id . '.png';
-		imagedestroy($im);
-		$participant_id++;
-		$submit_sql = "INSERT INTO `certificates` (`name`,`regno`,`dept`,`year`,`section`,`position`,`cert_link`,`event_name`) VALUES ('" . $participant_name . "','" . $registration_number . "','" . $department . "','" . $year . "','" . $section . "','" . $position . "','" . $cert_link . "','" . $event_name . "');";
-		$submit_stmt = $conn->prepare($submit_sql);
-		if (!$submit_stmt) {
-			echo "Prepare failed: (" . $conn->errno . ") " . $conn->error . "<br>";
-		}
-		$submit_stmt->execute();
-		echo '<p>Certificate created for participant_id' . $participant_id . 'participant:' . $participant_name . ', position:' . $position . ',event_name:' . $event_name . '</p>';
-		$submit_stmt->close();
-	}
-	fclose($handle);
-}
+    if (isset($storagename) && $handle = fopen($Uploaded_Files . $_FILES["file"]["name"], "r")) {
+        while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+            if ($flag) {
+                $flag = false;
+                continue;
+            }
+            /* Event variables START*/
+            $participant_name = ucwords($data[0]);
+            $registration_number = $data[1];
+            $department = ucwords($data[2]);
+            $year = $data[3];
+            $section = ucwords($data[4]);
+            $position = ucwords($data[5]);
+            $event_name = ucwords($data[6]);
+            $event_date = '3rd March';
+            /* Event variables END*/
+            $im = imagecreatefrompng($Certificate_Template);
+            $font_light = $Fonts_Path.'Raleway/Raleway-Light.ttf';
+            $font_regular = $Fonts_Path.'Raleway/Raleway-Regular.ttf';
+            imagettftext($im, 120, 0, 224, 1327, 0x3e4246, realpath($font_light), $participant_name);
+            imagettftext($im, 45, 0, 929, 1493, 0x3e4246, realpath($font_regular), $event_name);
+            imagettftext($im, 45, 0, 1035, 1685, 0x3e4246, realpath($font_regular), $event_date);
+            imagepng($im, $Generated_Certificate . $foldername[0] . '/Certificate-' . str_replace(" ","_",$event_name) . "_" . str_replace(" ","_",$participant_name) . "_" . $participant_id . '.png');
+            $cert_link = $Generated_Certificate . $foldername[0] . '/Certificate-' . str_replace(" ","_",$event_name) . "_" . str_replace(" ","_",$participant_name) . "_" . $participant_id . '.png';
+            imagedestroy($im);
+            $participant_id++;
+            $submit_sql = "INSERT INTO `certificates` (`name`,`regno`,`dept`,`year`,`section`,`position`,`cert_link`,`event_name`) VALUES ('" . $participant_name . "','" . $registration_number . "','" . $department . "','" . $year . "','" . $section . "','" . $position . "','" . $cert_link . "','" . $event_name . "');";
+            $submit_stmt = $conn->prepare($submit_sql);
+            if (!$submit_stmt) {
+                echo "Prepare failed: (" . $conn->errno . ") " . $conn->error . "<br>";
+            }
+            $submit_stmt->execute();
+            echo '<tr><td>' . $participant_id . ' </td><td> ' . $participant_name . '</td><td> ' . $registration_number . '</td><td> ' . $position . '</td><td> ' . $event_name . '</td><td> <a href="' . $cert_link . '">Link</a></td></tr>';
+            $submit_stmt->close();
+        }
+        fclose($handle);
+    }
 ?>
-
-
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
+        
         <footer class="bg-white sticky-footer">
             <div class="container my-auto">
                 <div class="text-center my-auto copyright"><span>SVCE ACM Student Chapter</span></div>
