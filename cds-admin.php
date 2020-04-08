@@ -33,8 +33,8 @@ $Fonts_Path = "CDS_Admin/Fonts/";
                 </a>
                 <hr class="sidebar-divider my-0">
                 <ul class="nav navbar-nav text-light" id="accordionSidebar">
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="dashboard.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link active" href="cds-admin.html"><i class="fab fa-creative-commons-share"></i><span>Certificate Generation<br></span></a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="dashboard.php"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link active" href="cds-admin.php"><i class="fab fa-creative-commons-share"></i><span>Certificate Generation<br></span></a></li>
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
             </div>
@@ -132,31 +132,31 @@ $Fonts_Path = "CDS_Admin/Fonts/";
 if (isset($_POST["submit"])) {
 	if (isset($_FILES["file"])) {
 		if ($_FILES["file"]["error"] > 0) {
-			echo "Return Code: " . $_FILES["file"]["error"] . "<br />";
+			echo "<b>Return Code</b>: " . $_FILES["file"]["error"] . "<br />";
 		} else {
-			echo "Upload: " . $_FILES["file"]["name"] . "<br />";
-			echo "Type: " . $_FILES["file"]["type"] . "<br />";
-			echo "Size: " . ($_FILES["file"]["size"] / 1024) . " Kb<br />";
-			echo "Temp file: " . $_FILES["file"]["tmp_name"] . "<br />";
+			    echo "<b>Upload</b>: " . $_FILES["file"]["name"] . "<br />";
+			// echo "<b>Type</b>: " . $_FILES["file"]["type"] . "<br />";
+			echo "<b>Size</b>: " . round (($_FILES["file"]["size"] / 1024),2) . " Mb<br />";
 			if (file_exists("upload/" . $_FILES["file"]["name"])) {
 				echo $_FILES["file"]["name"] . " already exists. ";
 			} else {
 				$storagename = $_FILES["file"]["name"];
 				move_uploaded_file($_FILES["file"]["tmp_name"], $Uploaded_Files . $storagename);
-				echo "Stored in: " . "Uploaded files/" . $_FILES["file"]["name"] . "<br />";
+				// echo "<b>Stored in</b>: " . "Uploaded files/" . $_FILES["file"]["name"] . "<br />";
 			}
 		}
 	} else {
 		echo "No file selected <br />";
 	}
 }
+echo "<br>";
 $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
 	die("Connection failed: " . $conn->connect_error); // IF-Fail to Connect
 }
 if (isset($_FILES["file"])){
 	$foldername = explode('.', $_FILES["file"]["name"]);
-	echo $foldername[0];
+	// echo $foldername[0];
 	if (!file_exists($Generated_Certificate . $foldername[0])) {
 		mkdir($Generated_Certificate . $foldername[0], 0777, true);
 	}
@@ -186,8 +186,8 @@ if (isset($storagename) && $handle = fopen($Uploaded_Files . $_FILES["file"]["na
 		imagettftext($im, 120, 0, 224, 1327, 0x3e4246, realpath($font_light), $participant_name);
 		imagettftext($im, 45, 0, 929, 1493, 0x3e4246, realpath($font_regular), $event_name);
 		imagettftext($im, 45, 0, 1035, 1685, 0x3e4246, realpath($font_regular), $event_date);
-		imagepng($im, $Generated_Certificate . $foldername[0] . '/Certificate-' . $participant_id . '.png');
-		$cert_link = $Generated_Certificate . $foldername[0] . '/Certificate-' . $participant_id . '.png';
+		imagepng($im, $Generated_Certificate . $foldername[0] . '/Certificate-' . $event_name . "_" .$participant_id . '.png');
+		$cert_link = $Generated_Certificate . $foldername[0] . '/Certificate-' . $event_name . "_" .$participant_id . '.png';
 		imagedestroy($im);
 		$participant_id++;
 		$submit_sql = "INSERT INTO `certificates` (`name`,`regno`,`dept`,`year`,`section`,`position`,`cert_link`,`event_name`) VALUES ('" . $participant_name . "','" . $registration_number . "','" . $department . "','" . $year . "','" . $section . "','" . $position . "','" . $cert_link . "','" . $event_name . "');";
@@ -196,14 +196,12 @@ if (isset($storagename) && $handle = fopen($Uploaded_Files . $_FILES["file"]["na
 			echo "Prepare failed: (" . $conn->errno . ") " . $conn->error . "<br>";
 		}
 		$submit_stmt->execute();
-		echo '<p>Certificate created for participant_id' . $participant_id . 'participant:' . $participant_name . ', position:' . $position . ',event_name:' . $event_name . '</p>';
+		echo '<p>Certificate created for <b>participant_id: </b>' . $participant_id . ' <b>participant:</b> ' . $participant_name . ', <b>position:</b> ' . $position . ', <b>event_name:</b> ' . $event_name . '</p>';
 		$submit_stmt->close();
 	}
 	fclose($handle);
 }
 ?>
-
-
                                 </tbody>
                             </table>
                         </div>
