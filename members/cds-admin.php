@@ -19,7 +19,7 @@ $Fonts_Path = "CDS_Admin/Fonts/";
     <link rel="stylesheet" href="../assets/css/custom.css">
 </head>
 
-<body id="page-top">
+<body id="page-top" >
     <div id="wrapper">
         <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
             <div class="container-fluid d-flex flex-column p-0">
@@ -110,12 +110,12 @@ $Fonts_Path = "CDS_Admin/Fonts/";
                 </style>
                 <div class="" style="padding-bottom: 19px;">
                 <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post" enctype="multipart/form-data">
-                    <input type="file" name="file" id="file" />
+                    <input type="file" name="file" id="file" required />
+                    <br><br>
+                    <input type="text" name="event_name" class="form-control border-1 small" style="width: 68%;max-width:15em;" placeholder="Enter the Event Name" required />
                     <br>
-                    Event Name:<input type="text" name="event_name"/>
-                    <br>
-                    Date:<input type="text" name="date"/>
-                    <br>
+                    <input type="text" name="date" class="form-control border-1 small" style="width: 68%;max-width:15em;" placeholder="Enter the Date of the event" required />
+                    <br> 
                     <input class="btn btn-primary" type="submit" name="submit" />
                 </form>
                 </div>
@@ -135,7 +135,7 @@ $Fonts_Path = "CDS_Admin/Fonts/";
             else {
                 echo "<b>Upload</b>: " . $_FILES["file"]["name"] . "<br />";
                 echo "<b>Type</b>: " . $_FILES["file"]["type"] . "<br />";
-                echo "<b>Size</b>: " . round (($_FILES["file"]["size"] / 1024),2) . " Mb<br />";
+                echo "<b>Size</b>: " . round (($_FILES["file"]["size"] / 1024),2) . " Kb<br />";
                 if (file_exists("upload/" . $_FILES["file"]["name"])) {
                     echo $_FILES["file"]["name"] . " already exists. ";
                 } 
