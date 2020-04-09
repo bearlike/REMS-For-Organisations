@@ -1,6 +1,0 @@
-# Git ignore file for 
-# https://github.com/K-Kraken/cms-for-organisations
-
-members/CDS_Admin/Uploaded files/
-public/Generated Certificate/
-test-*.php
