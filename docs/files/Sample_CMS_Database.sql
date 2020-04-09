@@ -50,6 +50,7 @@ CREATE TABLE `certificates` (
   `dept` varchar(40) DEFAULT NULL,
   `year` int(10) DEFAULT NULL,
   `section` varchar(10) DEFAULT NULL,
+  `email` varchar(255) NOT NULL,
   `position` varchar(255) NOT NULL,
   `cert_link` varchar(255) NOT NULL,
   `event_name` varchar(255) NOT NULL
