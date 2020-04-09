@@ -23,16 +23,24 @@ We are running a chapter (club) at our college. We organize 20+ events for our 1
 
 ### Prerequisites
 What things you need to run the software:
-- A web server preferably Apache2 with PHP.
-- A MySQL Database Server. (Done and tested on 10.4.8-MariaDB)
+- A **web server** preferably Apache2 with **PHP**.
+- A **MySQL Database Server**. (Done and tested on 10.4.8-MariaDB)
 
+### Installation
+- Import the Sample CMS Database dump for **MariaDB** from [here](/docs/files/Sample_CMS_Database.sql) 
+  - ```
+      Default Username: admin
+      Default Password: admin
+    ```
+  - Contains no other data other than the default user above.
+- Copy the files from this repository to a location in the root directory of the web server. 
 
 
 ## Features
 
 ### Certificate Distribution System (CDS)
 
-**[WIP]** A system that'll automatically  generate certificates and make them available for distribution. The admin will have to upload a **Certificate Template** and a **CSV file** with Participant Names, Position Awarded, and Event Name. The generated certificates would be later automatically made for distribution.
+A two-ended system (Both for **admin** and **public**) that'll automatically  generate certificates and make them available for distribution. The admin will have to upload a **Certificate Template** and a **CSV file** with Participant Names, Position Awarded, and Event Name. The generated certificates would be later automatically made for distribution.
 
 
 
@@ -42,7 +50,13 @@ What things you need to run the software:
 Tested on Apache/2.4.41 (Win64) OpenSSL/1.1.1c PHP/7.3.11 with 10.4.8-MariaDB
 ```
 
-<img src="docs\images\cds-public.png" width="750"/>
+<img src="/docs/images/cds-public.png" width="650"/>
+
+<img src="/docs/images/cds-admin.png" width="650"/>
+
+<img src="/docs/images/cert.png" width="650"/>
+
+
 
 
 
