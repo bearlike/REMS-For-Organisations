@@ -27,7 +27,7 @@
                                         <h4 class="text-dark mb-2">Certificate Distribution System (CDS)</h4>
                                         <p class="mb-4">We're here to make your life much easier. Just enter the event name and watch then watch happen!</p>
                                     </div>
-                                    <form class="user" action="cds-public.php" method="GET">
+                                    <form class="user" action="public/cds-public.php" method="GET">
                                         <div class="form-group"><input class="form-control form-control-user" type="text" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter Event Name..." name="event" required=""></div><button class="btn btn-primary btn-block text-white btn-user"
                                             type="submit">Search Event</button></form>
                                             <div class="text-center"><p class="mb-4 small" style="color: red;" >
@@ -40,8 +40,8 @@
                                     <div class="text-center">
                                         <hr>
                                     </div>
-                                    <div class="text-center"><a class="small" href="cds-public.php?mode">Don't Know the Event Name? Click here.</a></div>
-                                    <div class="text-center"><a class="small" href="member-login.php">Are you a member? Login!</a></div>
+                                    <div class="text-center"><a class="small" href="public/cds-public.php?mode">Don't Know the Event Name? Click here.</a></div>
+                                    <div class="text-center"><a class="small" href="members/member-login.php">Are you a member? Login!</a></div>
                                 </div>
                             </div>
                         </div>
