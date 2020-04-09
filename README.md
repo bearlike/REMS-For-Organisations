@@ -27,7 +27,7 @@ What things you need to run the software:
 - A **MySQL Database Server**. (Done and tested on 10.4.8-MariaDB)
 
 ### Installation
-- Import the Sample CMS Database dump for **MariaDB** from [here](docs\files\Sample_CMS_Database.sql) 
+- Import the Sample CMS Database dump for **MariaDB** from [here](/docs/files/Sample_CMS_Database.sql) 
   - ```
       Default Username: admin
       Default Password: admin
