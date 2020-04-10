@@ -65,7 +65,7 @@ Tested on Apache/2.4.41 (Win64) OpenSSL/1.1.1c PHP/7.3.11 with 10.4.8-MariaDB
 | Authors             | Profile Links                            |
 | ------------------- | :--------------------------------------- |
 | **Krishna Alagiri** | [K-Kraken](https://github.com/K-Kraken/) |
-| **Mahalakshumi V**  | [maha2000](https://github.com/maha2000/) |
+| **Mahalakshumi V**  | [mahavisvanathan](https://github.com/mahavisvanathan/) |
 
 
 

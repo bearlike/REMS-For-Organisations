@@ -1,5 +1,6 @@
 <html>
 <?php 
+error_reporting(E_ALL & ~E_NOTICE);
 include("header.php");
 /* Directory Path Variables START */
 $Generated_Certificate = '../public/Generated Certificate/';
@@ -11,7 +12,14 @@ $Fonts_Path = "CDS_Admin/Fonts/";
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>CDS Admin: SVCE-ACM CMS</title>
+    <?php
+        if (isset($_POST["submit"])) {
+            echo "<title>Generating</title>";
+        }
+        else{
+            echo "<title>CDS Admin: SVCE-ACM CMS</title>";
+        }
+    ?>
     <link rel="icon" type="image/png" sizes="600x600" href="../assets/img/Logo_White.png">
     <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
@@ -21,19 +29,31 @@ $Fonts_Path = "CDS_Admin/Fonts/";
 
 <body id="page-top" >
     <div id="wrapper">
-        <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
-            <div class="container-fluid d-flex flex-column p-0">
-                <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
-                    <div class="sidebar-brand-icon"><img class="logo" src="../assets/img/Logo_Banner_White.png"></div>
-                </a>
-                <hr class="sidebar-divider my-0">
-                <ul class="nav navbar-nav text-light" id="accordionSidebar">
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="dashboard.php"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link active" href="cds-admin.php"><i class="fab fa-creative-commons-share"></i><span>Certificate Generation<br></span></a></li>
-                </ul>
-                <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
-            </div>
-        </nav>
+    <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
+        <div class="container-fluid d-flex flex-column p-0">
+            <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
+                <div class="sidebar-brand-icon"><img class="logo" src="../assets/img/Logo_Banner_White.png"></div>
+                <div class="sidebar-brand-text mx-3"></div>
+            </a>
+            <hr class="sidebar-divider my-0">
+            <ul class="nav navbar-nav text-light" id="accordionSidebar">
+                <li class="nav-item" role="presentation"><a class="nav-link" href="dashboard.php"><i class="fas fa-tachometer-alt"></i><span>&nbsp;Dashboard</span></a></li>
+                <hr class="sidebar-divider">
+                <div class="sidebar-heading">
+                    <p class="mb-0">Media &amp; marketing</p>
+                </div>
+                <li class="nav-item" role="presentation"><a class="nav-link" href="cds-admin.php"><i class="fas fa-medal"></i><span>&nbsp;Certificate Generator</span></a><a class="nav-link" href="mailer.php"><i class="fas fa-mail-bulk"></i><span>&nbsp;Bulk Mailer</span></a></li>
+                <hr class="sidebar-divider">
+                <div class="sidebar-heading">
+                    <p class="mb-0">Admin Stuff</p>
+                </div>
+                <li class="nav-item" role="presentation"><a class="nav-link" href="form-gen.php"><i class="fab fa-wpforms"></i><span>&nbsp;Form Generator</span></a></li>
+                <li class="nav-item" role="presentation"><a class="nav-link" href="db-manage.php"><i class="fas fa-database"></i><span>&nbsp;Maintainance</span></a></li>
+                <hr class="sidebar-divider">
+            </ul>
+            <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
+        </div>
+    </nav>
         <div class="d-flex flex-column" id="content-wrapper">
             <div id="content">
                 <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
@@ -91,10 +111,10 @@ $Fonts_Path = "CDS_Admin/Fonts/";
                             <li class="nav-item dropdown no-arrow" role="presentation">
                                 <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="d-none d-lg-inline mr-2 text-gray-600 small"><?php echo $loginUser; ?></span><img class="border rounded-circle img-profile" src="../assets/img/avatars/avatar1.jpeg"></a>
                                     <div
-                                        class="dropdown-menu shadow dropdown-menu-right animated--grow-in" role="menu"><a class="dropdown-item" role="presentation" href="#"><i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Profile</a><a class="dropdown-item" role="presentation" href="#"><i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Settings</a>
+                                        class="dropdown-menu shadow dropdown-menu-right animated--grow-in" role="menu"><a class="dropdown-item" role="presentation" href="profile.php"><i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Profile</a><a class="dropdown-item" role="presentation" href="settings.php"><i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Settings</a>
                                         <a
-                                            class="dropdown-item" role="presentation" href="#"><i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Activity log</a>
-                                            <div class="dropdown-divider"></div><a class="dropdown-item" role="presentation" href="#"><i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Logout</a></div>
+                                            class="dropdown-item" role="presentation" href="activity-log.php"><i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Activity log</a>
+                                            <div class="dropdown-divider"></div><a class="dropdown-item" role="presentation" href="logout.php"><i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Logout</a></div>
                     </div>
                     </li>
                     </ul>
@@ -115,7 +135,13 @@ $Fonts_Path = "CDS_Admin/Fonts/";
                     <input type="text" name="event_name" class="form-control border-1 small" style="width: 68%;max-width:15em;" placeholder="Enter the Event Name" required />
                     <br>
                     <input type="text" name="date" class="form-control border-1 small" style="width: 68%;max-width:15em;" placeholder="Enter the Date of the event" required />
-                    <br> 
+                    <br>
+                    <!-- <label>Select event type:</label> -->
+                         <select class="form-control border-1 small" style="width: 68%;max-width:15em;" name ="eventType" required>
+                           <option value = "0">Intra-College Event</option>
+                           <option value = "1">Inter-College Event</option>
+                         </select>
+                    <br>
                     <input class="btn btn-primary" type="submit" name="submit" />
                 </form>
                 </div>
@@ -128,6 +154,7 @@ $Fonts_Path = "CDS_Admin/Fonts/";
 <?php
     /* Driver */
     if (isset($_POST["submit"])) {
+        echo "<title><head>Processing......</head></title>";
         if (isset($_FILES["file"])) {
             if ($_FILES["file"]["error"] > 0) {
                 echo "<b>Return Code</b>: " . $_FILES["file"]["error"] . "<br />";
@@ -179,7 +206,15 @@ $Fonts_Path = "CDS_Admin/Fonts/";
                                 <thead>
                                     <th>ID</th>	
                                     <th>Name</th>	
-                                    <th>Registration Number</th>	
+                                    <?php
+                                        if($_POST["eventType"]==0) {
+                                            echo "<th>Registration Number</th>";
+                                        }
+                                        else {
+                                            echo "<th>College</th>";
+                                        }
+                                   ?>
+
                                     <th>Position</th>	
                                     <th>Event Name</th>	
                                     <th>Certificate Link</th>
@@ -187,7 +222,7 @@ $Fonts_Path = "CDS_Admin/Fonts/";
                                 <tbody>
 <?php
 	if (isset($_POST["submit"])){
-		$im_template = imagecreatefrompng($Certificate_Template);
+        $im_template = imagecreatefrompng($Certificate_Template);
 		$font_light = $Fonts_Path.'Raleway/Raleway-Light.ttf';
 		$font_regular = $Fonts_Path.'Raleway/Raleway-Regular.ttf';
 		$font_semibold = $Fonts_Path.'Raleway/Raleway-SemiBold.ttf';
@@ -214,34 +249,78 @@ $Fonts_Path = "CDS_Admin/Fonts/";
 	            /* Event variables START*/
 	            $participant_name = ucwords($data[0]);
 	            $registration_number = $data[1];
-	            $department = ucwords($data[2]);
+	            $department = str_replace("'"," ",ucwords($data[2]));
 	            $year = $data[3];
-	            $section = ucwords($data[4]);
-	            $position = ucwords($data[5]);
-	            $event_name = ucwords($data[6]);
+	            $section = str_replace("'"," ",ucwords($data[4]));
+	            $position = str_replace("'"," ",ucwords($data[5]));
+	            $event_name = str_replace("'"," ",ucwords($data[6]));
 	            $email = ucwords($data[7]);
 	            /* Event variables END*/
-	            $im = imagecreatefrompng($generated_template);
-	           if(strlen($participant_name)>22){
-				imagettftext($im, 100-((strlen($name)-24)*7), 0, 206, 1185, 0x535453, realpath($font_medium), $participant_name);
-				}
-				else{
-					imagettftext($im, 100, 0, 206, 1185, 0x535453, realpath($font_medium), $participant_name);
-				}
-	            imagepng($im, $Generated_Certificate . $foldername[0] . '/Certificate-' . str_replace(" ","_",$event_name) . "_" . str_replace(" ","_",$participant_name) . "_" . $participant_id . '.png');
-	            $cert_link = $Generated_Certificate . $foldername[0] . '/Certificate-' . str_replace(" ","_",$event_name) . "_" . str_replace(" ","_",$participant_name) . "_" . $participant_id . '.png';
-	            imagedestroy($im);
-	            $participant_id++;
-	            $submit_sql = "INSERT INTO `certificates` (`name`,`regno`,`dept`,`year`,`section`,`position`,`cert_link`,`event_name`,`email`) VALUES ('" . $participant_name . "','" . $registration_number . "','" . $department . "','" . $year . "','" . $section . "','" . $position . "','" . $cert_link . "','" . $event_name . "','".$email."');";
-	            $submit_stmt = $conn->prepare($submit_sql);
-	            if (!$submit_stmt) {
-	                echo "Prepare failed: (" . $conn->errno . ") " . $conn->error . "<br>";
-	            }
-	            $submit_stmt->execute();
-	            echo '<tr><td>' . $participant_id . ' </td><td> ' . $participant_name . '</td><td> ' . $registration_number . '</td><td> ' . $position . '</td><td> ' . $event_name . '</td><td> <a href="' . $cert_link . '">Link</a></td></tr>';
+                if($_POST["eventType"]==0){
+                    $im = imagecreatefrompng($generated_template);
+                    if(strlen($participant_name)>22){
+                    imagettftext($im, 100-((strlen($name)-24)*7), 0, 206, 1185, 0x535453, realpath($font_medium), $participant_name);
+                    }
+                    else{
+                        imagettftext($im, 100, 0, 206, 1185, 0x535453, realpath($font_medium), $participant_name);
+                    }
+                    imagepng($im, $Generated_Certificate . $foldername[0] . '/Certificate-' . str_replace(" ","_",$event_name) . "_" . str_replace(" ","_",$participant_name) . "_" . $participant_id . '.png');
+                    $cert_link = $Generated_Certificate . $foldername[0] . '/Certificate-' . str_replace(" ","_",$event_name) . "_" . str_replace(" ","_",$participant_name) . "_" . $participant_id . '.png';
+                    imagedestroy($im);
+                    $participant_id++;
+                    $submit_sql = "INSERT INTO `certificates` (`name`,`regno`,`dept`,`year`,`section`,`position`,`cert_link`,`event_name`,`email`) VALUES ('" . $participant_name . "','" . $registration_number . "','" . $department . "','" . $year . "','" . $section . "','" . $position . "','" . $cert_link . "','" . $event_name . "','".$email."');";
+                    $submit_stmt = $conn->prepare($submit_sql);
+                    if (!$submit_stmt) {
+                        echo "Prepare failed: (" . $conn->errno . ") " . $conn->error . "<br>";
+                    }
+                    $submit_stmt->execute();
+                }
+    	       else{
+                    $im = imagecreatefrompng($Certificate_Template);
+                    $college = ucwords($data[8]);
+                    $sentence = "of ".$college." for participating in ".$event_name_main." conducted by SVCE ACM Student Chapter from ".$date_main;
+                    $words = explode(" ",$sentence);
+                    $sentences = array("","","","");
+                    $no_of_sentences = 3;
+                    $sent=0;
+                    $line_limit =60;
+                    $x =0 ;
+                    while($x<sizeof($words)){
+                        $letters = strlen($words[$x]) ;
+                        while($letters<$line_limit){
+                            $sentences[$sent] = $sentences[$sent]." ".$words[$x];
+                            $x+=1;
+                            $letters += strlen($words[$x]) +1;
+                        }
+                        $sent+=1;
+                    }
+                    imagettftext($im, 50, 0, 206, 1019, 0x535453, realpath($font_light), "This certificate is presented to");
+                    if(strlen($participant_name)>22){
+                        imagettftext($im, 100-((strlen($participant_name)-22)*7), 0, 206, 1185, 0x535453, realpath($font_medium), $participant_name);
+                    }
+                    else{
+                        imagettftext($im, 100, 0, 206, 1185, 0x535453, realpath($font_medium), $participant_name);
+                    }
+                    imagettftext($im, 50, 0, 206, 1317,0x535453, realpath($font_regular), $sentences[0]);
+                    imagettftext($im, 50, 0, 206, 1439, 0x535453, realpath($font_regular), $sentences[1]);
+                    imagettftext($im, 50, 0, 206, 1562, 0x535453, realpath($font_regular), $sentences[2]);
+                    imagettftext($im, 50, 0, 206, 1692, 0x535453, realpath($font_regular), $sentences[3]);
+                    imagepng($im, $Generated_Certificate . $foldername[0] . '/Certificate-' . str_replace(" ","_",$event_name) . "_" . str_replace(" ","_",$participant_name) . "_" . $participant_id . '.png');
+                    $cert_link = $Generated_Certificate . $foldername[0] . '/Certificate-' . str_replace(" ","_",$event_name) . "_" . str_replace(" ","_",$participant_name) . "_" . $participant_id . '.png';
+                    imagedestroy($im);
+                    $participant_id++;
+                    $submit_sql = "INSERT INTO `certificates` (`name`,`regno`,`dept`,`year`,`section`,`position`,`cert_link`,`event_name`,`email`,`college`) VALUES (\"" . $participant_name . "\",\"" . $registration_number . "\",\"" . $department . "\",\"" . $year . "\",\"" . $section . "\",\"" . $position . "\",\"" . $cert_link . "\",\"" . $event_name . "\",\"".$email."\",\"".$college."\");";
+                    $submit_stmt = $conn->prepare($submit_sql);
+                    if (!$submit_stmt) {
+                        echo "Prepare failed: (" . $conn->errno . ") " . $conn->error . "<br>";
+                    }
+                    $submit_stmt->execute();
+               }
+	            echo '<tr><td>' . $participant_id . ' </td><td> ' . $participant_name . '</td><td> ' . $college . '</td><td> ' . $position . '</td><td> ' . $event_name . '</td><td> <a href="' . $cert_link . '">Link</a></td></tr>';
 	            $submit_stmt->close();
 	        }
-	        fclose($handle);
+            fclose($handle);
+            echo "<head><title>Certificates Generated</title></head>";
 	    }
 	}
 ?>

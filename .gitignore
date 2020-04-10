@@ -4,3 +4,4 @@
 members/CDS_Admin/Uploaded files/
 public/Generated Certificate/
 test-*.php
+*.log
