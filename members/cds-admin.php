@@ -1,5 +1,6 @@
 <html>
 <?php 
+error_reporting(E_ALL & ~E_NOTICE);
 include("header.php");
 /* Directory Path Variables START */
 $Generated_Certificate = '../public/Generated Certificate/';
@@ -115,7 +116,13 @@ $Fonts_Path = "CDS_Admin/Fonts/";
                     <input type="text" name="event_name" class="form-control border-1 small" style="width: 68%;max-width:15em;" placeholder="Enter the Event Name" required />
                     <br>
                     <input type="text" name="date" class="form-control border-1 small" style="width: 68%;max-width:15em;" placeholder="Enter the Date of the event" required />
-                    <br> 
+                    <br>
+                    <label>Select event type:</label>
+                         <select name = "eventType">
+                           <option value = "1">Inter college Event</option>
+                           <option value = "0">intra college Event</option>
+                         </select>
+                    <br>
                     <input class="btn btn-primary" type="submit" name="submit" />
                 </form>
                 </div>
@@ -221,23 +228,67 @@ $Fonts_Path = "CDS_Admin/Fonts/";
 	            $event_name = ucwords($data[6]);
 	            $email = ucwords($data[7]);
 	            /* Event variables END*/
-	            $im = imagecreatefrompng($generated_template);
-	           if(strlen($participant_name)>22){
-				imagettftext($im, 100-((strlen($name)-24)*7), 0, 206, 1185, 0x535453, realpath($font_medium), $participant_name);
-				}
-				else{
-					imagettftext($im, 100, 0, 206, 1185, 0x535453, realpath($font_medium), $participant_name);
-				}
-	            imagepng($im, $Generated_Certificate . $foldername[0] . '/Certificate-' . str_replace(" ","_",$event_name) . "_" . str_replace(" ","_",$participant_name) . "_" . $participant_id . '.png');
-	            $cert_link = $Generated_Certificate . $foldername[0] . '/Certificate-' . str_replace(" ","_",$event_name) . "_" . str_replace(" ","_",$participant_name) . "_" . $participant_id . '.png';
-	            imagedestroy($im);
-	            $participant_id++;
-	            $submit_sql = "INSERT INTO `certificates` (`name`,`regno`,`dept`,`year`,`section`,`position`,`cert_link`,`event_name`,`email`) VALUES ('" . $participant_name . "','" . $registration_number . "','" . $department . "','" . $year . "','" . $section . "','" . $position . "','" . $cert_link . "','" . $event_name . "','".$email."');";
-	            $submit_stmt = $conn->prepare($submit_sql);
-	            if (!$submit_stmt) {
-	                echo "Prepare failed: (" . $conn->errno . ") " . $conn->error . "<br>";
-	            }
-	            $submit_stmt->execute();
+                if($_POST["eventType"]==0){
+                    $im = imagecreatefrompng($generated_template);
+                    if(strlen($participant_name)>22){
+                    imagettftext($im, 100-((strlen($name)-24)*7), 0, 206, 1185, 0x535453, realpath($font_medium), $participant_name);
+                    }
+                    else{
+                        imagettftext($im, 100, 0, 206, 1185, 0x535453, realpath($font_medium), $participant_name);
+                    }
+                    imagepng($im, $Generated_Certificate . $foldername[0] . '/Certificate-' . str_replace(" ","_",$event_name) . "_" . str_replace(" ","_",$participant_name) . "_" . $participant_id . '.png');
+                    $cert_link = $Generated_Certificate . $foldername[0] . '/Certificate-' . str_replace(" ","_",$event_name) . "_" . str_replace(" ","_",$participant_name) . "_" . $participant_id . '.png';
+                    imagedestroy($im);
+                    $participant_id++;
+                    $submit_sql = "INSERT INTO `certificates` (`name`,`regno`,`dept`,`year`,`section`,`position`,`cert_link`,`event_name`,`email`) VALUES ('" . $participant_name . "','" . $registration_number . "','" . $department . "','" . $year . "','" . $section . "','" . $position . "','" . $cert_link . "','" . $event_name . "','".$email."');";
+                    $submit_stmt = $conn->prepare($submit_sql);
+                    if (!$submit_stmt) {
+                        echo "Prepare failed: (" . $conn->errno . ") " . $conn->error . "<br>";
+                    }
+                    $submit_stmt->execute();
+                }
+    	       else{
+                    $im = imagecreatefrompng($Certificate_Template);
+                    $college = ucwords($data[8]);
+                    $sentence = "of ".$college." for participating in ".$event_name_main." conducted by SVCE ACM Student Chapter from ".$date_main;
+                    $words = explode(" ",$sentence);
+                    $sentences = array("","","","");
+                    $no_of_sentences = 3;
+                    $sent=0;
+                    $line_limit =60;
+                    $x =0 ;
+                    while($x<sizeof($words)){
+                        $letters = strlen($words[$x]) ;
+                        while($letters<$line_limit){
+                            $sentences[$sent] = $sentences[$sent]." ".$words[$x];
+                            $x+=1;
+                            $letters += strlen($words[$x]) +1;
+                        }
+                        $sent+=1;
+                    }
+                    imagettftext($im, 50, 0, 206, 1019, 0x535453, realpath($font_light), "This certificate is presented to");
+                    if(strlen($participant_name)>22){
+                        imagettftext($im, 100-((strlen($participant_name)-22)*7), 0, 206, 1185, 0x535453, realpath($font_medium), $participant_name);
+                    }
+                    else{
+                        imagettftext($im, 100, 0, 206, 1185, 0x535453, realpath($font_medium), $participant_name);
+                    }
+                    imagettftext($im, 50, 0, 206, 1317,0x535453, realpath($font_regular), $sentences[0]);
+                    imagettftext($im, 50, 0, 206, 1439, 0x535453, realpath($font_regular), $sentences[1]);
+
+                    imagettftext($im, 50, 0, 206, 1562, 0x535453, realpath($font_regular), $sentences[2]);
+                    imagettftext($im, 50, 0, 206, 1692, 0x535453, realpath($font_regular), $sentences[3]);
+                    imagepng($im, $Generated_Certificate . $foldername[0] . '/Certificate-' . str_replace(" ","_",$event_name) . "_" . str_replace(" ","_",$participant_name) . "_" . $participant_id . '.png');
+                    $cert_link = $Generated_Certificate . $foldername[0] . '/Certificate-' . str_replace(" ","_",$event_name) . "_" . str_replace(" ","_",$participant_name) . "_" . $participant_id . '.png';
+                    imagedestroy($im);
+                    $participant_id++;
+                    $submit_sql = "INSERT INTO `certificates` (`name`,`regno`,`dept`,`year`,`section`,`position`,`cert_link`,`event_name`,`email`,`college`) VALUES ('" . $participant_name . "','" . $registration_number . "','" . $department . "','" . $year . "','" . $section . "','" . $position . "','" . $cert_link . "','" . $event_name . "','".$email."','".$college."');";
+                    $submit_stmt = $conn->prepare($submit_sql);
+                    if (!$submit_stmt) {
+                        echo "Prepare failed: (" . $conn->errno . ") " . $conn->error . "<br>";
+                    }
+                    $submit_stmt->execute();
+               }
 	            echo '<tr><td>' . $participant_id . ' </td><td> ' . $participant_name . '</td><td> ' . $registration_number . '</td><td> ' . $position . '</td><td> ' . $event_name . '</td><td> <a href="' . $cert_link . '">Link</a></td></tr>';
 	            $submit_stmt->close();
 	        }
