@@ -67,7 +67,8 @@ CREATE TABLE `certificates` (
 CREATE TABLE `events` (
   `id` int(255) NOT NULL,
   `event_name` varchar(255) NOT NULL,
-  `date` date NOT NULL
+  `date` date NOT NULL,
+  `isInter` BOOLEAN NOT NULL COMMENT 'True, if its an inter-college event'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
@@ -86,7 +87,9 @@ CREATE TABLE `login` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping default admin user into table `login`
+-- Dumping default admin user into table `login` 
+-- Username: admin
+-- Password: admin
 --
 
 INSERT INTO `login` (`UserID`, `LoginName`, `PasswordHash`, `Email`, `FullName`) VALUES
