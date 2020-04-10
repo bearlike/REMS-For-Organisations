@@ -1,4 +1,8 @@
-<?php 
+<?php
+/*
+* Header File
+* For CMS For Organisations
+*/
     session_start();
     if (!$_SESSION['uname']){
           header('Location: member-login.php');    

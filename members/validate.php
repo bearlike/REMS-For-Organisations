@@ -1,4 +1,8 @@
 <?php
+/*
+* Username and Password Validator
+* For CMS For Organisations
+*/
 if (!empty( $_POST)) {
     session_start(); 
     // Runtime Variables
