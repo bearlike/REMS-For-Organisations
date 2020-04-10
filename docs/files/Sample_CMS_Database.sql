@@ -47,6 +47,7 @@ CREATE TABLE `certificates` (
   `id` int(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `regno` varchar(255) DEFAULT NULL,
+  `college` varchar(255) DEFAULT NULL,
   `dept` varchar(40) DEFAULT NULL,
   `year` int(10) DEFAULT NULL,
   `section` varchar(10) DEFAULT NULL,

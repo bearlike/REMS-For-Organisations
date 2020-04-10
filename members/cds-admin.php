@@ -117,10 +117,10 @@ $Fonts_Path = "CDS_Admin/Fonts/";
                     <br>
                     <input type="text" name="date" class="form-control border-1 small" style="width: 68%;max-width:15em;" placeholder="Enter the Date of the event" required />
                     <br>
-                    <label>Select event type:</label>
-                         <select name = "eventType">
-                           <option value = "1">Inter college Event</option>
-                           <option value = "0">intra college Event</option>
+                    <!-- <label>Select event type:</label> -->
+                         <select class="form-control border-1 small" style="width: 68%;max-width:15em;" name ="eventType" required>
+                           <option value = "0">Intra-College Event</option>
+                           <option value = "1">Inter-College Event</option>
                          </select>
                     <br>
                     <input class="btn btn-primary" type="submit" name="submit" />
@@ -186,7 +186,15 @@ $Fonts_Path = "CDS_Admin/Fonts/";
                                 <thead>
                                     <th>ID</th>	
                                     <th>Name</th>	
-                                    <th>Registration Number</th>	
+                                    <?php
+                                        if($_POST["eventType"]==0) {
+                                            echo "<th>Registration Number</th>";
+                                        }
+                                        else {
+                                            echo "<th>College</th>";
+                                        }
+                                   ?>
+
                                     <th>Position</th>	
                                     <th>Event Name</th>	
                                     <th>Certificate Link</th>
@@ -221,11 +229,11 @@ $Fonts_Path = "CDS_Admin/Fonts/";
 	            /* Event variables START*/
 	            $participant_name = ucwords($data[0]);
 	            $registration_number = $data[1];
-	            $department = ucwords($data[2]);
+	            $department = str_replace("'"," ",ucwords($data[2]));
 	            $year = $data[3];
-	            $section = ucwords($data[4]);
-	            $position = ucwords($data[5]);
-	            $event_name = ucwords($data[6]);
+	            $section = str_replace("'"," ",ucwords($data[4]));
+	            $position = str_replace("'"," ",ucwords($data[5]));
+	            $event_name = str_replace("'"," ",ucwords($data[6]));
 	            $email = ucwords($data[7]);
 	            /* Event variables END*/
                 if($_POST["eventType"]==0){
@@ -275,21 +283,20 @@ $Fonts_Path = "CDS_Admin/Fonts/";
                     }
                     imagettftext($im, 50, 0, 206, 1317,0x535453, realpath($font_regular), $sentences[0]);
                     imagettftext($im, 50, 0, 206, 1439, 0x535453, realpath($font_regular), $sentences[1]);
-
                     imagettftext($im, 50, 0, 206, 1562, 0x535453, realpath($font_regular), $sentences[2]);
                     imagettftext($im, 50, 0, 206, 1692, 0x535453, realpath($font_regular), $sentences[3]);
                     imagepng($im, $Generated_Certificate . $foldername[0] . '/Certificate-' . str_replace(" ","_",$event_name) . "_" . str_replace(" ","_",$participant_name) . "_" . $participant_id . '.png');
                     $cert_link = $Generated_Certificate . $foldername[0] . '/Certificate-' . str_replace(" ","_",$event_name) . "_" . str_replace(" ","_",$participant_name) . "_" . $participant_id . '.png';
                     imagedestroy($im);
                     $participant_id++;
-                    $submit_sql = "INSERT INTO `certificates` (`name`,`regno`,`dept`,`year`,`section`,`position`,`cert_link`,`event_name`,`email`,`college`) VALUES ('" . $participant_name . "','" . $registration_number . "','" . $department . "','" . $year . "','" . $section . "','" . $position . "','" . $cert_link . "','" . $event_name . "','".$email."','".$college."');";
+                    $submit_sql = "INSERT INTO `certificates` (`name`,`regno`,`dept`,`year`,`section`,`position`,`cert_link`,`event_name`,`email`,`college`) VALUES (\"" . $participant_name . "\",\"" . $registration_number . "\",\"" . $department . "\",\"" . $year . "\",\"" . $section . "\",\"" . $position . "\",\"" . $cert_link . "\",\"" . $event_name . "\",\"".$email."\",\"".$college."\");";
                     $submit_stmt = $conn->prepare($submit_sql);
                     if (!$submit_stmt) {
                         echo "Prepare failed: (" . $conn->errno . ") " . $conn->error . "<br>";
                     }
                     $submit_stmt->execute();
                }
-	            echo '<tr><td>' . $participant_id . ' </td><td> ' . $participant_name . '</td><td> ' . $registration_number . '</td><td> ' . $position . '</td><td> ' . $event_name . '</td><td> <a href="' . $cert_link . '">Link</a></td></tr>';
+	            echo '<tr><td>' . $participant_id . ' </td><td> ' . $participant_name . '</td><td> ' . $college . '</td><td> ' . $position . '</td><td> ' . $event_name . '</td><td> <a href="' . $cert_link . '">Link</a></td></tr>';
 	            $submit_stmt->close();
 	        }
 	        fclose($handle);
