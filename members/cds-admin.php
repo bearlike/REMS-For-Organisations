@@ -316,11 +316,15 @@ $Fonts_Path = "CDS_Admin/Fonts/";
                     }
                     $submit_stmt->execute();
                }
-	            echo '<tr><td>' . $participant_id . ' </td><td> ' . $participant_name . '</td><td> ' . $college . '</td><td> ' . $position . '</td><td> ' . $event_name . '</td><td> <a href="' . $cert_link . '">Link</a></td></tr>';
-	            $submit_stmt->close();
+                if($_POST["eventType"]==0){	            
+                    echo '<tr><td>' . $participant_id . ' </td><td> ' . $participant_name . '</td><td> ' . $registration_number . '</td><td> ' . $position . '</td><td> ' . $event_name . '</td><td> <a href="' . $cert_link . '">Link</a></td></tr>';
+                }	            
+                else {
+                    echo '<tr><td>' . $participant_id . ' </td><td> ' . $participant_name . '</td><td> ' . $college . '</td><td> ' . $position . '</td><td> ' . $event_name . '</td><td> <a href="' . $cert_link . '">Link</a></td></tr>';
+                }                
+                $submit_stmt->close();
 	        }
             fclose($handle);
-            echo "<head><title>Certificates Generated</title></head>";
 	    }
 	}
 ?>
