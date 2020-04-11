@@ -30,13 +30,18 @@
             $mode=1;
             $countr = -1;
             $event = "Events Details";
-            $sql = "select event_name, date from events order by date;";
+            $resultc = $conn->query("SELECT COUNT(DISTINCT event_name, date) FROM events");
+            $rowc = $resultc->fetch_row();
+            $countr = $rowc[0]; // Count total certificates
+            $totalPages = ceil($countr/$perPage);
+            $startPage = $perPage*($page-1);
+            $sql = "select event_name, date from events order by date limit ".$startPage.",".$perPage.";";
             $result = $conn->query($sql);
         }
         else{
             $mode=0;
             $event = strtolower($_GET['event']);
-            // Call Procedures
+            // To know if an event exist or not
             $sql = "select count(1) as code from events where event_name=\"".$event."\"";
             $result = $conn->query($sql);
             foreach ($result as $row) { 
@@ -44,7 +49,16 @@
                     header('Location: ../index.php?status=notfound');
                 }
             }
-            $resultc = $conn->query("SELECT COUNT(*) FROM certificates where event_name=\"".$event."\" AND name LIKE '%".$_GET['search']."%' ");
+            // To know if an event is inter or intra
+            $sql = "select isInter as code from events where event_name=\"".$event."\"";
+            $result = $conn->query($sql);
+            foreach ($result as $row) { 
+                if ($row["code"]==0)
+                    $isInter=False;
+                else
+                    $isInter=True;
+            }
+            $resultc = $conn->query("SELECT COUNT(DISTINCT name,regno,college,dept,year,section,position,cert_link) FROM certificates where event_name=\"".$event."\" AND name LIKE '%".$_GET['search']."%' ");
             $rowc = $resultc->fetch_row();
             $countr = $rowc[0]; // Count total certificates
             // calculate number of pages needed
@@ -52,7 +66,10 @@
             // Find the starting element for the current $page
             $startPage = $perPage*($page-1);
             // SLECT for table
-            $sql = "SELECT DISTINCT name,regno,dept,year,section,position,cert_link from certificates where event_name=\"".$event."\" AND name LIKE '%".$_GET['search']."%' order by name limit ".$startPage.",".$perPage.";";            
+            if (!($isInter))
+                $sql = "SELECT DISTINCT name,regno,dept,year,section,position,cert_link from certificates where event_name=\"".$event."\" AND name LIKE '%".$_GET['search']."%' order by name limit ".$startPage.",".$perPage.";";            
+            else
+                $sql = "SELECT DISTINCT name,college,year,position,cert_link from certificates where event_name=\"".$event."\" AND name LIKE '%".$_GET['search']."%' order by name limit ".$startPage.",".$perPage.";";            
             $result = $conn->query($sql);
             // echo $countr; 
         }
@@ -84,7 +101,7 @@
                 <hr class="sidebar-divider my-0">
                 <ul class="nav navbar-nav text-light" id="accordionSidebar">
                     <li class="nav-item" role="presentation"><a class="nav-link" href="../index.php" style="padding-top: 20px;"><i class="fas fa-award"></i><span>CDS</span></a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="../member-login.php"><i class="far fa-user-circle"></i><span>Member Login</span></a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="../members/member-login.php"><i class="far fa-user-circle"></i><span>Member Login</span></a></li>
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
             </div>
@@ -148,7 +165,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6 text-nowrap">
-                                <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable"><label>Show&nbsp;
+                                <div id="dataTable_length" <?php if($mode==1){echo 'style="display: none;"';} ?> class="dataTables_length" aria-controls="dataTable"><label>Show&nbsp;
                                     <!-- Form weirdly starts here, don't ask me why :3 !-->
                                     <form action="<?php echo $_SERVER["PHP_SELF"]; ?>"  method="GET">
                                         <input type="hidden" name="event" value="<?php echo $_GET['event']; ?>"/>
@@ -164,7 +181,7 @@
                                             <option value="100" <?php if($perPage==100){echo 'selected=""';} ?>>100</option>
                                         </select>&nbsp;</label></div>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div <?php if($mode==1){echo 'style="display: none;"';} ?> class="col-md-6">
                                             <div class="text-md-right dataTables_filter" id="dataTable_filter"><label><input type="search" name="search" class="form-control form-control-sm" aria-controls="dataTable" placeholder="Search Name"></label></div></form>
                                         </div>
                                     </div>
@@ -173,13 +190,21 @@
                                 <thead>
                                     <tr>
                                     <?php
-                                        if($mode==0) {
+                                        if($mode==0 && !($isInter)) {
                                             echo "
                                             <th>Name</th>
                                             <th>Registration Number</th>
                                             <th>Department</th>
                                             <th>Year</th>
                                             <th>Section</th>
+                                            <th>Position</th>
+                                            <th>Link</th>";
+                                        }
+                                        else if($mode==0 && $isInter) {
+                                            echo "
+                                            <th>Name</th>
+                                            <th>College Name</th>
+                                            <th>Year</th>
                                             <th>Position</th>
                                             <th>Link</th>";
                                         }
@@ -193,7 +218,7 @@
                                 </thead>
                                 <tbody>
                                     <?php
-                                        if($mode==0) {
+                                        if($mode==0 && !($isInter)) {
                                             foreach ($result as $row) {
                                                 echo "<tr>";
                                                 echo "    <td>".ucwords($row["name"])."<br></td>";
@@ -201,6 +226,17 @@
                                                 echo "    <td>".ucwords($row["dept"])."</td>";
                                                 echo "    <td>".$row["year"]."</td>";
                                                 echo "    <td>".ucwords($row["section"])."</td>";
+                                                echo "    <td>".ucwords($row["position"])."</td>";
+                                                echo "    <td><a href=\"".$row["cert_link"]."\">Here</a></td>";
+                                                echo "</tr>";
+                                            }
+                                        }
+                                        else if($mode==0 && $isInter) {
+                                            foreach ($result as $row) {
+                                                echo "<tr>";
+                                                echo "    <td>".ucwords($row["name"])."<br></td>";
+                                                echo "    <td>".ucwords($row["college"])."</td>";
+                                                echo "    <td>".$row["year"]."</td>";
                                                 echo "    <td>".ucwords($row["position"])."</td>";
                                                 echo "    <td><a href=\"".$row["cert_link"]."\">Here</a></td>";
                                                 echo "</tr>";
@@ -219,13 +255,21 @@
                                 <tfoot>
                                     <tr>
                                     <?php
-                                        if($mode==0) {
+                                        if($mode==0 && !($isInter)) {
                                             echo "
                                             <th>Name</th>
                                             <th>Registration Number</th>
                                             <th>Department</th>
                                             <th>Year</th>
                                             <th>Section</th>
+                                            <th>Position</th>
+                                            <th>Link</th>";
+                                        }
+                                        else if($mode==0 && $isInter) {
+                                            echo "
+                                            <th>Name</th>
+                                            <th>College Name</th>
+                                            <th>Year</th>
                                             <th>Position</th>
                                             <th>Link</th>";
                                         }
