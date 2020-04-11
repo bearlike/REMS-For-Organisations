@@ -11,6 +11,18 @@
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         }
+        if(empty($_GET['page'])){
+            $page=1;
+        }
+        else{
+            $page=$_GET['page'];
+        }
+        if(empty($_GET['perPage'])){
+            $perPage=10;
+        }
+        else{
+            $perPage=$_GET['perPage'];
+        }
         if(isset($_GET['mode'])){
             $mode=1;
             $countr = -1;
@@ -29,11 +41,16 @@
                     header('Location: ../index.php?status=notfound');
                 }
             }
-            $sql = "SELECT DISTINCT name,regno,dept,year,section,position,cert_link from certificates where event_name=\"".$event."\" order by name";
-            $result = $conn->query($sql);
             $resultc = $conn->query("SELECT COUNT(*) FROM certificates where event_name=\"".$event."\"");
             $rowc = $resultc->fetch_row();
-            $countr = $rowc[0];
+            $countr = $rowc[0]; // Count total certificates
+            // calculate number of pages needed
+            $totalPages = ceil($countr/$perPage);
+            // Find the starting element for the current $page
+            $startPage = $perPage*($page-1);
+            // SLECT for table
+            $sql = "SELECT DISTINCT name,regno,dept,year,section,position,cert_link from certificates where event_name=\"".$event."\" order by name limit ".$startPage.",".$perPage.";";
+            $result = $conn->query($sql);
             // echo $countr; 
         }
     }
@@ -88,37 +105,6 @@
                                     </form>
                                 </div>
                             </li>
-                            <!--<li class="nav-item dropdown no-arrow mx-1" role="presentation">
-                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="badge badge-danger badge-counter">3+</span><i class="fas fa-bell fa-fw"></i></a>
-                                    <div class="dropdown-menu dropdown-menu-right dropdown-list dropdown-menu-right animated--grow-in"
-                                        role="menu">
-                                        <h6 class="dropdown-header">alerts center</h6>
-                                        <a class="d-flex align-items-center dropdown-item" href="#">
-                                            <div class="mr-3">
-                                                <div class="bg-primary icon-circle"><i class="fas fa-file-alt text-white"></i></div>
-                                            </div>
-                                            <div><span class="small text-gray-500">December 12, 2019</span>
-                                                <p>A new monthly report is ready to download!</p>
-                                            </div>
-                                        </a>
-                                        <a class="d-flex align-items-center dropdown-item" href="#">
-                                            <div class="mr-3">
-                                                <div class="bg-success icon-circle"><i class="fas fa-donate text-white"></i></div>
-                                            </div>
-                                            <div><span class="small text-gray-500">December 7, 2019</span>
-                                                <p>$290.29 has been deposited into your account!</p>
-                                            </div>
-                                        </a>
-                                        <a class="d-flex align-items-center dropdown-item" href="#">
-                                            <div class="mr-3">
-                                                <div class="bg-warning icon-circle"><i class="fas fa-exclamation-triangle text-white"></i></div>
-                                            </div>
-                                            <div><span class="small text-gray-500">December 2, 2019</span>
-                                                <p>Spending Alert: We've noticed unusually high spending for your account.</p>
-                                            </div>
-                                        </a><a class="text-center dropdown-item small text-gray-500" href="#">Show All Alerts</a></div>
-                                </div>
-                            </li>!-->
                             <li class="nav-item dropdown no-arrow mx-1" role="presentation">
                                 <div class="shadow dropdown-list dropdown-menu dropdown-menu-right" aria-labelledby="alertsDropdown"></div>
                             </li>
@@ -154,14 +140,28 @@
                         <p class="text-primary m-0 font-weight-bold"><?php echo ucwords($event); ?></p>
                     </div>
                     <div class="card-body">
-                        <!--<div class="row">
+                        <div class="row">
                             <div class="col-md-6 text-nowrap">
-                                <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable"><label>Show&nbsp;<select class="form-control form-control-sm custom-select custom-select-sm"><option value="10" selected="">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select>&nbsp;</label></div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="text-md-right dataTables_filter" id="dataTable_filter"><label><input type="search" class="form-control form-control-sm" aria-controls="dataTable" placeholder="Search"></label></div>
-                            </div>
-                        </div>!-->
+                                <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable"><label>Show&nbsp;
+                                    <!-- For weirdly starts here, don't ask me why :3 !-->
+                                    <form action="<?php echo $_SERVER["PHP_SELF"]; ?>"  method="GET">
+                                        <input type="hidden" name="event" value="<?php echo $_GET['event']; ?>"/>
+                                        <input type="hidden" name="page" value="<?php echo $page; ?>"/>
+                                        <?php
+                                            if(isset($_GET['mode'])) 
+                                                echo '<input type="hidden" name="mode" value=""/>';
+                                        ?>
+                                        <select onchange="this.form.submit()" name="perPage" class="form-control form-control-sm custom-select custom-select-sm">
+                                            <option value="10" <?php if($perPage==10){echo 'selected=""';} ?>>10</option>
+                                            <option value="25" <?php if($perPage==25){echo 'selected=""';} ?>>25</option>
+                                            <option value="50" <?php if($perPage==50){echo 'selected=""';} ?>>50</option>
+                                            <option value="100" <?php if($perPage==100){echo 'selected=""';} ?>>100</option>
+                                        </select>&nbsp;</label></div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="text-md-right dataTables_filter" id="dataTable_filter"><label><input type="search" class="form-control form-control-sm" aria-controls="dataTable" placeholder="Search"></label></div></form>
+                                        </div>
+                                    </div>
                         <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
                             <table class="table dataTable my-0" id="dataTable">
                                 <thead>
@@ -233,7 +233,7 @@
                                 </tfoot>
                             </table>
                         </div>
-                        <!--
+                        
                         <div class="row">
                             <div class="col-md-6 align-self-center">
                                 <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite"></p>
@@ -250,7 +250,7 @@
                                 </nav>
                             </div>
                         </div>
-                        !-->
+                        
                     </div>
                 </div>
             </div>
