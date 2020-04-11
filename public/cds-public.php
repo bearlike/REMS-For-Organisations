@@ -11,6 +11,9 @@
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         }
+        if(empty($_GET['search'])){
+            $_GET['search']="";
+        }
         if(empty($_GET['page'])){
             $page=1;
         }
@@ -41,7 +44,7 @@
                     header('Location: ../index.php?status=notfound');
                 }
             }
-            $resultc = $conn->query("SELECT COUNT(*) FROM certificates where event_name=\"".$event."\"");
+            $resultc = $conn->query("SELECT COUNT(*) FROM certificates where event_name=\"".$event."\" AND name LIKE '%".$_GET['search']."%' ");
             $rowc = $resultc->fetch_row();
             $countr = $rowc[0]; // Count total certificates
             // calculate number of pages needed
@@ -49,7 +52,7 @@
             // Find the starting element for the current $page
             $startPage = $perPage*($page-1);
             // SLECT for table
-            $sql = "SELECT DISTINCT name,regno,dept,year,section,position,cert_link from certificates where event_name=\"".$event."\" order by name limit ".$startPage.",".$perPage.";";
+            $sql = "SELECT DISTINCT name,regno,dept,year,section,position,cert_link from certificates where event_name=\"".$event."\" AND name LIKE '%".$_GET['search']."%' order by name limit ".$startPage.",".$perPage.";";            
             $result = $conn->query($sql);
             // echo $countr; 
         }
@@ -130,9 +133,12 @@
                                 <h6 class=\"text-primary m-0 font-weight-bold\">".ucwords($event)."</h6>
                             </div>
                             <div class=\"card-body\">
-                                <p class=\"m-0\">Oops! You've found an event with no available certificates.<br>If you think this is a mistake, reach out to your closest SVCE-ACM Bros or mail us to <a href=\"mailto:acm.svcecse@gmail.com\">acm.svcecse@gmail.com</a> </p>
-                            </div>
-                            </div>";
+                                <p class=\"m-0\">";
+                        if(empty($_GET['search']))
+                            echo "Oops! You've found an event with no available certificates.<br>If you think this is a mistake, reach out to your closest SVCE-ACM Bros or mail us to <a href=\"mailto:acm.svcecse@gmail.com\">acm.svcecse@gmail.com</a>";
+                        else
+                            echo "Oops! We can't find what you've searched. Check the spelling and <a href=\"".$_SERVER["PHP_SELF"]."?event=".$_GET['event']."\">return back</a> to try again.<br>If you think this is a mistake, reach out to your closest SVCE-ACM Bros or mail us to <a href=\"mailto:acm.svcecse@gmail.com\">acm.svcecse@gmail.com</a>";
+                        echo "</p></div></div>";
                     }
                 ?>
                 <div class="card shadow" <?php if (($countr == 0) && ($mode == 0)) { echo "style=\"display: none;\""; } ?> >
@@ -143,7 +149,7 @@
                         <div class="row">
                             <div class="col-md-6 text-nowrap">
                                 <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable"><label>Show&nbsp;
-                                    <!-- For weirdly starts here, don't ask me why :3 !-->
+                                    <!-- Form weirdly starts here, don't ask me why :3 !-->
                                     <form action="<?php echo $_SERVER["PHP_SELF"]; ?>"  method="GET">
                                         <input type="hidden" name="event" value="<?php echo $_GET['event']; ?>"/>
                                         <input type="hidden" name="page" value="1"/>
@@ -159,7 +165,7 @@
                                         </select>&nbsp;</label></div>
                                         </div>
                                         <div class="col-md-6">
-                                            <div class="text-md-right dataTables_filter" id="dataTable_filter"><label><input type="search" class="form-control form-control-sm" aria-controls="dataTable" placeholder="Search"></label></div></form>
+                                            <div class="text-md-right dataTables_filter" id="dataTable_filter"><label><input type="search" name="search" class="form-control form-control-sm" aria-controls="dataTable" placeholder="Search Name"></label></div></form>
                                         </div>
                                     </div>
                         <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
