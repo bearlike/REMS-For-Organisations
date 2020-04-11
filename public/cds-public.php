@@ -146,7 +146,7 @@
                                     <!-- For weirdly starts here, don't ask me why :3 !-->
                                     <form action="<?php echo $_SERVER["PHP_SELF"]; ?>"  method="GET">
                                         <input type="hidden" name="event" value="<?php echo $_GET['event']; ?>"/>
-                                        <input type="hidden" name="page" value="<?php echo $page; ?>"/>
+                                        <input type="hidden" name="page" value="1"/>
                                         <?php
                                             if(isset($_GET['mode'])) 
                                                 echo '<input type="hidden" name="mode" value=""/>';
@@ -238,17 +238,28 @@
                             <div class="col-md-6 align-self-center">
                                 <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite"></p>
                             </div>
-                            <div class="col-md-6">
+                            <form class="col-md-6">
                                 <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
                                     <ul class="pagination">
-                                        <li class="page-item disabled"><a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true">«</span></a></li>
-                                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                        <li class="page-item"><a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">»</span></a></li>
+                                        <li class="page-item <?php if($page==1){echo 'disabled';} ?>"><button name="page" value="<?php echo ($page-1); ?>" class="page-link" aria-label="Previous"><span aria-hidden="true">«</span></button></li>
+                                        <input type="hidden" name="event" value="<?php echo $_GET['event']; ?>"/>
+                                        <input type="hidden" name="perPage" value="<?php echo $perPage; ?>"/>
+                                        <?php
+                                            // Generate buttons for choosing pages 
+                                            for ($x=1; $x<=$totalPages; $x++){
+                                                if($x==$page){ 
+                                                    echo '<li class="page-item active"><button name="page" value="'.$x.'" class="page-link">'.$x.'</button></li>';
+                                                }
+                                                else{
+                                                    echo '<li class="page-item"><button name="page" value="'.$x.'" class="page-link">'.$x.'</button></li>';
+                                                }
+                                             } 
+                                        ?>
+
+                                        <li class="page-item <?php if($page==$totalPages){echo 'disabled';} ?>"><button name="page" value="<?php echo ($page+1); ?>" class="page-link" aria-label="Next"><span aria-hidden="true">»</span></button></li>
                                     </ul>
                                 </nav>
-                            </div>
+                            </form>
                         </div>
                         
                     </div>
