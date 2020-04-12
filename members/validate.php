@@ -7,10 +7,12 @@ session_start();
 if (!empty($_SESSION)) {
     if($_SESSION['remember']==0){
         session_destroy();
+        echo "no remember";
         header('Location: member-login.php');
     }
     $_POST['uname']=$_SESSION['uname'];
     $_POST['password']=$_SESSION['password'];
+    $_POST['remember']=$_SESSION['remember'];
 }
 if (!empty( $_POST)) {
     // Runtime Variables
@@ -47,7 +49,14 @@ if (!empty( $_POST)) {
     else {
         $_SESSION['uname'] = $_POST['uname'];
         $_SESSION['password'] = $_POST['password'];
-        $_SESSION['remember'] = $_POST['remember'];
+        if ($_POST['remember']==1){
+            $_SESSION['remember']=1;
+            echo "remembered";
+        } 
+        else{
+            $_SESSION['remember']=0;
+            echo "not remembered";
+        }
         date_default_timezone_set('Asia/Kolkata');
         $_SESSION['loginTime'] = date("Y-m-d H:i:s", time());
         $conn->close();
