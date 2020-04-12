@@ -34,7 +34,7 @@
                     <div class="sidebar-heading">
                         <p class="mb-0">Admin Stuff</p>
                     </div>
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="form-gen.php"><i class="fab fa-wpforms"></i><span>&nbsp;Form Generator</span></a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="form-gen"><i class="fab fa-wpforms"></i><span>&nbsp;Form Generator</span></a></li>
                     <li class="nav-item" role="presentation"><a class="nav-link" href="db-manage.php"><i class="fas fa-database"></i><span>&nbsp;Maintainance</span></a></li>
                     <hr class="sidebar-divider">
                 </ul>
