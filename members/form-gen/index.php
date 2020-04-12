@@ -136,10 +136,10 @@
                     <div class="card-body">
                         <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
 					    <table class="table dataTable my-0" id="dataTable">
-							<form action="<?php echo $_SERVER[" PHP_SELF "]; ?>" method="post" style="width: 60%;margin-left: 20%;margin-right: 20%">
+							<form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post" style="width: 60%;margin-left: 20%;margin-right: 20%">
 								<tr>
 									<th>Event name</th>
-									<td><input type="text" class="form-control" name="event_name"></td>
+									<td><input type="text" class="form-control" name="event_name"/></td>
 									<td></td>
 								</tr>
 
@@ -243,6 +243,20 @@
 									<td></td>
 									<td></td>
 								</tr>
+							</form>
+						</table>
+					</div>
+                    </div>
+			</div>
+			<br><br>
+			<div class="card shadow">
+				<div class="card-header py-3">
+					<p class="text-primary m-0 font-weight-bold">Form Generation Log</p>
+				</div>
+				<div class="card-body">
+					<div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+						<table class="table dataTable my-0" id="dataTable">
+							<tbody>
 								<?php
 									// Connecting to the database
 									$conn = new mysqli($servername, $username, $password, $dbname);
@@ -259,80 +273,110 @@
 										$table_columns = "";
 										
 										//Initial details of the HTML page
-										$html_file = "<!DOCTYPE html>
+										$html_file = '<!DOCTYPE html>
 													<html>
-													<head>
-														<title>".$event_name."</title>
-														<link rel=\"stylesheet\" href=\"../../assets/bootstrap/css/bootstrap.min.css\">
-													</head>
-													<body>";
+														<head>
+															<title>'.ucwords($event_name).'</title>
+															<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+															<link rel="icon" type="image/png" sizes="600x600" href="../../assets/img/Logo_White.png">
+															<link href="vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
+															<link href="vendor/font-awesome-4.7/css/font-awesome.min.css" rel="stylesheet" media="all">
+															<link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i" rel="stylesheet">
+															<link href="vendor/select2/select2.min.css" rel="stylesheet" media="all">
+															<link href="vendor/datepicker/daterangepicker.css" rel="stylesheet" media="all">
+															<link href="css/main.css" rel="stylesheet" media="all">
+														</head>
+													<body>
+														<div class="page-wrapper bg-blue p-t-100 p-b-100 font-robo">
+															<div class="wrapper wrapper--w680">
+																<div class="card card-1">
+																	<div class="card-heading"></div>
+																	<div class="card-body">
+																		<h2 class="title">Registration for '.ucwords($event_name).'</h2>';
 											//Form section starts here
-											$html_file = $html_file."<form action=\"../entry.php\" method=\"post\" style=\"width: 40%;margin-left: 30%;margin-right: 30%\">";
-											$html_file = $html_file."<input type=\"hidden\" name=\"event_name\" value=\"".$event_name."\">";
-											$html_file = $html_file."<h1>".$event_name."</h1>";
+											$html_file = $html_file.'<form action="../entry.php" method="post" >';
+											$html_file = $html_file.'<input type="hidden" name="event_name" value="'.$event_name.'">';
 											if($event_type=="individual"){
-												$html_file = $html_file."<div class=\"form-group\">
-												<label>Participant name:</label>
-												<input type=\"text\" name=\"participant_name\" class=\"form-control\">
+												$html_file = $html_file."<div class=\"input-group\">
+												<input type=\"text\" placeholder=\"Participant name\" name=\"participant_name\" class=\"input--style-1\">
 												</div>";
 												$table_columns = $table_columns."participant_name VARCHAR(255),";
 												foreach($fields as $selected){
-													$html_file = $html_file."<div class=\"form-group\">
-													<label>".$display_prompts[$selected]."</label> 
-													<input type=\"text\" name=\"".$selected."\"class=\"form-control\">
+													$html_file = $html_file."<div class=\"input-group\">
+													<input type=\"text\" placeholder=\"".ucwords($display_prompts[$selected])."\" name=\"".$selected."\"class=\"input--style-1\">
 													</div>";
 													$table_columns = $table_columns.$selected." VARCHAR(255),";
 												}
-											}else{
+											}
+											else{
 												$number_participants = (int)$number_participants;
 												for ($i=0;$i<$number_participants;$i++){
 													$participant_number = $i+1;
-													$html_file = $html_file."<h5 align=\"center\">Participant - ".$participant_number."</h5>";
-													$html_file = $html_file."<div class=\"form-group\">
-													<label>Participant name:</label>
-													<input type=\"text\" name=\"participant_name".$participant_number."\" class=\"form-control\">
+													/*if(i>0){
+														$html_file = $html_file.'<div class="card card-1">';
+														$html_file = $html_file.'<div class="card-body">';
+													}*/
+													$html_file = $html_file.'<h3 class="title">Details for Participant - '.$participant_number.'</h3>';
+													$html_file = $html_file."<div class=\"input-group\">
+													<input type=\"text\" placeholder=\"Name of Member ".$participant_number."\" name=\"participant_name".$participant_number."\" class=\"input--style-1\">
 													</div>";
 													$table_columns = $table_columns."participant_name".$participant_number." VARCHAR(255),";
 													foreach($fields as $selected){
-													$html_file = $html_file." <div class=\"form-group\">
-													<label>".$display_prompts[$selected]."</label>
-													<input type=\"text\" name=\"".$selected.$participant_number."\" class=\"form-control\">
-													</div>";
-													$table_columns = $table_columns.$selected.$participant_number." VARCHAR(255),";
+														$html_file = $html_file." <div class=\"input-group\">
+														<input type=\"text\" placeholder=\"".ucwords($display_prompts[$selected])." of Member ".$participant_number."\" name=\"".$selected.$participant_number."\" class=\"input--style-1\">
+														</div><br>";
+														$table_columns = $table_columns.$selected.$participant_number." VARCHAR(255),";
 													}
+													/*if(i==0){
+														$html_file = $html_file.'</div></div>';
+													}*/
 												}
 											}
 
 											//table columns for the new table generated and query to create also generated
 											$table_columns=substr($table_columns, 0, -1);
-											$creation_query = "CREATE TABLE IF NOT EXISTS ".$event_name." (".$table_columns.");";
+											$creation_query = "CREATE TABLE IF NOT EXISTS event_".str_replace(" ","_",$event_name)." (".$table_columns.");";
 											$submit_stmt = $conn->prepare($creation_query);
 										if (!$submit_stmt) {
 											echo "Prepare failed: (" . $conn->errno . ") " . $conn->error . "<br>";
 										}
 										$submit_stmt->execute();
-										echo ("<br>Table created successfully for the new form<br>");
+										echo ("<tr><td>Successfully created table in database for the new form</td></tr>");
 
 											//Closing section
-											$html_file = $html_file."<input type=\"submit\" class=\"btn btn-primary mb-2\">
-											</form>
-											<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js\" integrity=\"sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa\" crossorigin=\"anonymous\"></script>
-											</body>
-											</html>";
+											$html_file = $html_file.'		<div class="p-t-20">
+																			<input type="submit" class="btn btn--radius btn--green">
+																		</div>
+																	</form>
+																</div>
+															</div>
+														</div>
+													</div>
+													<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js\" integrity=\"sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa\" crossorigin=\"anonymous\"></script>
+												</body>
+											</html>';
 
 											fwrite($file, $html_file);
 											fclose($file);
-											echo ("<br>Form created successfully<br>");
-											echo "<br><a href='".$form_file."'>Click here</a>";
+											echo "<tr><td>Successfully Form Created</td></tr>";
+											echo "<tr><td><a target=\"_blank\" href='".$form_file."'>Click here to visit the form</a></td></tr>";
 									}
 								?>
-							</form>
+
+							</tbody>
 						</table>
 					</div>
-                    </div>
-                </div>
+				</div>
+			</div>
 		</div>
 	</div>
+     <footer class="bg-white sticky-footer">
+     	<div class="container my-auto">
+               <div class="text-center my-auto copyright"><span>SVCE ACM Student Chapter</span></div>
+          </div>
+     </footer>
+    </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a></div>
+
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
