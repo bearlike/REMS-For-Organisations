@@ -1,6 +1,15 @@
 <?php
 $form_location="../../public/Generated Forms/";
 include("../header.php");
+$display_prompts=array('regno' => 'Registration Number' ,
+						'dept' => 'Department',
+						'year' => 'Year',
+						'college' => 'College Name',
+						'github' => 'Github Profile link',
+						'email' => 'E-mail Address',
+						'phoneno' => 'Contact number',
+						'linkedin' => 'Linkedin Profile URL'
+						 );
 ?>
 
 <!DOCTYPE html>
@@ -64,6 +73,20 @@ include("../header.php");
 		 </div>
 
 		 <div class="form-check">
+		  <input class="form-check-input" type="checkbox" name="fields[]" value="email">
+		  <label class="form-check-label">
+		    E-mail address
+		  </label>
+		 </div>
+
+		 <div class="form-check">
+		  <input class="form-check-input" type="checkbox" name="fields[]" value="phoneno">
+		  <label class="form-check-label">
+		    Contact Number
+		  </label>
+		 </div>
+
+		 <div class="form-check">
 		  <input class="form-check-input" type="checkbox" name="fields[]" value="college">
 		  <label class="form-check-label">
 		    College
@@ -74,6 +97,13 @@ include("../header.php");
 		  <input class="form-check-input" type="checkbox" name="fields[]" value="github">
 		  <label class="form-check-label">
 		    GitHub profile link
+		  </label>
+		 </div>
+
+		 <div class="form-check">
+		  <input class="form-check-input" type="checkbox" name="fields[]" value="linkedin">
+		  <label class="form-check-label">
+		    Linkedin Profile Link
 		  </label>
 		 </div>
 
@@ -121,7 +151,7 @@ include("../header.php");
 					$table_columns = $table_columns."participant_name VARCHAR(255),";
 					foreach($fields as $selected){
 						$html_file = $html_file."<div class=\"form-group\">
-						<label>".$selected."</label> 
+						<label>".$display_prompts[$selected]."</label> 
 						<input type=\"text\" name=\"".$selected."\"class=\"form-control\">
 						</div>";
 						$table_columns = $table_columns.$selected." VARCHAR(255),";
@@ -138,7 +168,7 @@ include("../header.php");
 						$table_columns = $table_columns."participant_name".$participant_number." VARCHAR(255),";
 						foreach($fields as $selected){
 						$html_file = $html_file." <div class=\"form-group\">
-						<label>".$selected."</label>
+						<label>".$display_prompts[$selected]."</label>
 						<input type=\"text\" name=\"".$selected.$participant_number."\" class=\"form-control\">
 						</div>";
 						$table_columns = $table_columns.$selected.$participant_number." VARCHAR(255),";
