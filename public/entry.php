@@ -1,5 +1,5 @@
 <?php
-	include("../header.php");
+	include("../members/header.php");
 	$new_dbname="svcehost_forms";
 	//Connecting to the database;
 	$conn = new mysqli($servername, $username, $password, $new_dbname);
