@@ -1,5 +1,6 @@
 <?php
 	include("../header.php");
+	$new_dbname="svcehost_forms";
 	$form_location="../../public/Generated Forms/";
 	$display_prompts=array(
 						'regno' => 'Registration Number' ,
@@ -259,7 +260,7 @@
 							<tbody>
 								<?php
 									// Connecting to the database
-									$conn = new mysqli($servername, $username, $password, $dbname);
+									$conn = new mysqli($servername, $username, $password, $new_dbname);
 									if ($conn->connect_error) {
 										die("Connection failed: " . $conn->connect_error); // IF-Fail to Connect
 									}
