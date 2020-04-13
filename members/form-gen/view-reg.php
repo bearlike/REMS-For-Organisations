@@ -124,7 +124,7 @@
             <?php include("../navigation.php"); ?>
             <div class="container-fluid">
                 <div class="d-sm-flex justify-content-between align-items-center mb-4">
-                    <h3 class="text-dark mb-0">View Registrations</h3><a class="btn btn-primary btn-sm d-none d-sm-inline-block" role="button" href="<?php if(isset($_GET['event'])){echo "toCSV.php?event=".$event;}else{echo "#";}  ?>" target="_blank"><i class="fas fa-download fa-sm text-white-50"></i>&nbsp;Download CSV&nbsp;</a></div>
+                    <h3 class="text-dark mb-0">View Registrations</h3><a class="btn btn-primary btn-sm d-none d-sm-inline-block" role="button" href="<?php if(isset($_GET['event'])){echo "toCSV.php?event=".$event."\" target=\"_blank\"";}else{echo "#";}  ?>"><i class="fas fa-download fa-sm text-white-50"></i>&nbsp;Download CSV&nbsp;</a></div>
                 <div class="row">
                     <div class="col-md-6 col-xl-3 mb-4">
                         <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="GET">
