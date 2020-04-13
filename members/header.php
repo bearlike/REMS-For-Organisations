@@ -5,7 +5,7 @@
 */
       session_start();
       if (!$_SESSION['uname']){
-            header('Location: member-login.php');    
+            header('Location: /cms/members/member-login.php');    
       }
       else{
             if($_SESSION['remember']==0){
@@ -16,7 +16,7 @@
                   $mins = $secs / 60;
                   if($mins > 30){
                         session_destroy();
-                        header('Location: member-login.php');
+                        header('Location: /cms/members/member-login.php');
                   }
             }
             $loginUser = $_SESSION['uname'];
