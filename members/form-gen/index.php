@@ -205,7 +205,7 @@
 										$fields=$_POST["fields"];
 										$form_file = $form_location.$event_name."-form.html";
 										$file = fopen($form_file,"w");
-										$table_columns = "";
+										$table_columns = "id int NOT NULL AUTO_INCREMENT PRIMARY KEY, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,";
 										
 										//Initial details of the HTML page
 										$html_file = '<!DOCTYPE html>
@@ -271,6 +271,7 @@
 											//table columns for the new table generated and query to create also generated
 											$table_columns=substr($table_columns, 0, -1);
 											$creation_query = "CREATE TABLE IF NOT EXISTS event_".str_replace(" ","_",$event_name)." (".$table_columns.");";
+											// echo $creation_query."<br>"; 
 											$submit_stmt = $conn->prepare($creation_query);
 										if (!$submit_stmt) {
 											echo "Prepare failed: (" . $conn->errno . ") " . $conn->error . "<br>";
