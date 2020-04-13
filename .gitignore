@@ -8,7 +8,7 @@ members/CDS_Admin/Uploaded files/
 public/Generated Certificate/
 
 # Generated Certificate
-public/Generated Forms/
+public/Generated Forms/*.html
 
 # Test and Log Files
 test-*.php
