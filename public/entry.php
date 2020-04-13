@@ -1,7 +1,8 @@
 <?php
 	include("../header.php");
+	$new_dbname="svcehost_forms";
 	//Connecting to the database;
-	$conn = new mysqli($servername, $username, $password, $dbname);
+	$conn = new mysqli($servername, $username, $password, $new_dbname);
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error); // IF-Fail to Connect
 	}
