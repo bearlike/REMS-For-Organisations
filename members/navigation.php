@@ -16,12 +16,19 @@ echo '		<!--  Navigation Panel starts !-->
 						<li class="nav-item" role="presentation"><a class="nav-link" href="/cms/members/cds-admin.php"><i class="fas fa-medal"></i><span>&nbsp;Certificate Generator</span></a><a class="nav-link" href="/cms/members/mailer.php"><i class="fas fa-mail-bulk"></i><span>&nbsp;Bulk Mailer</span></a></li>
 						<hr class="sidebar-divider">
 						<div class="sidebar-heading">
-							<p class="mb-0">Admin Stuff</p>
+							<p class="mb-0">Events</p>
 						</div>
 						<li class="nav-item" role="presentation"><a class="nav-link" href="/cms/members/form-gen/"><i class="fab fa-wpforms"></i><span>&nbsp;Form Generator</span></a></li>
+						<li class="nav-item" role="presentation"><a class="nav-link" href="/cms/members/form-gen/view-reg.php"><i class="fa fa-eye"></i><span>&nbsp;View Registration</span></a></li>
+						<hr class="sidebar-divider">
+						<div class="sidebar-heading">
+							<p class="mb-0">Admin Stuff</p>
+						</div>
 						<li class="nav-item" role="presentation"><a class="nav-link" href="/cms/members/db-manage.php"><i class="fas fa-database"></i><span>&nbsp;Maintainance</span></a></li>
 						<hr class="sidebar-divider">
+
 					</ul>
+					
 					<div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
 				</div>
 			</nav>

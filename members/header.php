@@ -25,6 +25,7 @@
             $username = 'root';
             $password = '';
             $dbname = 'svcehost_cms';
+            $formDB="svcehost_forms";
             /* database credentials END */
             $_SESSION['loginTime'] = date("Y-m-d H:i:s", time());
       }
