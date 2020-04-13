@@ -1,4 +1,5 @@
 <?php
+	error_reporting(E_ALL ^ E_NOTICE); 
 	include("../header.php");
 	$new_dbname="svcehost_forms";
 	$form_location="../../public/Generated Forms/";
@@ -40,10 +41,10 @@
                     <div class="card-body">
                         <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
 					    <table class="table dataTable my-0" id="dataTable">
-							<form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post" style="width: 60%;margin-left: 20%;margin-right: 20%">
-								<tr>
+							<form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post" style="width: 60%;margin-left: 20%;margin-right: 20%" onSubmit="return validate_form();">
+								<tr id="alert_name">
 									<th>Event name</th>
-									<td><input type="text" class="form-control" name="event_name"/></td>
+									<td onclick="reverse_red('name')"><input type="text" class="form-control" name="event_name" id="input_name"/></td>
 									<td></td>
 								</tr>
 
@@ -51,13 +52,13 @@
 									<th>Choose Type</th>
 									<td>
 										<div class="form-check">
-											<input class="form-check-input" type="radio" name="event_type" value="individual" checked>
+											<input class="form-check-input" type="radio" name="event_type" value="individual" onclick="disable_dropdown()" checked>
 											<label class="form-check-label">
 												Individual
 											</label>
 										</div>
 										<div class="form-check">
-											<input class="form-check-input" type="radio" name="event_type" value="team">
+											<input class="form-check-input" type="radio" name="event_type" value="team" onclick="enable_dropdown()">
 											<label class="form-check-label">
 												Team
 											</label>
@@ -65,11 +66,19 @@
 									</td>
 									<td></td>
 								</tr>
-
+								<script type="text/javascript">
+									function disable_dropdown(){
+										document.getElementById("number_participants").disabled=true;
+									}
+									function enable_dropdown(){
+										document.getElementById("number_participants").disabled=false;
+									}
+								</script>
 								<tr>
 									<th>Choose Number of Members (If Team)</th>
 									<td>
-										<select class="form-control" name="number_participants">
+										<select class="form-control" name="number_participants" id="number_participants" disabled>
+											<option value="1">1</option>
 											<option value="2">2</option>
 											<option value="3">3</option>
 											<option value="4">4</option>
@@ -79,9 +88,9 @@
 									<td></td>
 								</tr>
 								
-								<tr>
+								<tr id="alert_fields">
 									<th>Choose the Fields Needed</th>
-									<td>
+									<td onclick="reverse_red('fields')">
 										<div class="form-check">
 											<input class="form-check-input" type="checkbox" value="regno" name="fields[]">
 											<label class="form-check-label">
@@ -149,6 +158,28 @@
 								</tr>
 							</form>
 						</table>
+						<script type="text/javascript">
+							function validate_form(){
+								var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+								var checkedOne = Array.prototype.slice.call(checkboxes).some(x => x.checked);
+
+								var event_length = document.getElementById("input_name").value.replace(" ","").length;
+								var name_row = document.getElementById("alert_name");
+								if(!event_length){
+									name_row.style.backgroundColor = "rgba(255,0,0,0.1)";
+								}
+								var fields_row = document.getElementById("alert_fields");
+								if(!checkedOne){
+									fields_row.style.backgroundColor = "rgba(255,0,0,0.1)";
+								}
+								
+								return checkedOne;
+							}
+							function reverse_red(x){
+								var row = document.getElementById("alert_"+x);
+								row.style.backgroundColor = "rgba(255,255,255,0)";
+							}
+						</script>
 					</div>
                     </div>
 			</div>
