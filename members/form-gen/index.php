@@ -13,6 +13,24 @@
 						'phoneno' => 'Contact number',
 						'linkedin' => 'Linkedin Profile URL'
 					);
+	$year_dropdown = '
+			<option value="1">1</option>
+			<option value="2">2</option>
+			<option value="3">3</option>
+			<option value="4">4</option>
+			</select>';
+
+	$department_dropdown = '<option value="Automobile Engineering">Automobile Engineering</option>
+							<option value="Biotechnology">Biotechnology</option>
+							<option value="Chemical Engineering">Chemical Engineering</option>
+							<option value="Computer Science and Engineering">Computer Science and Engineering</option>
+							<option value="Civil Engineering">Civil Engineering</option>
+							<option value="Electronics and Communication Engineering">Electronics and Communication Engineering</option>
+							<option value="Electrical and Electronics Engineering">Electrical and Electronics Engineering</option>
+							<option value="Information technology">Information Technology</option>
+							<option value="Marine Engineering">Marine Engineering</option>
+							<option value="Mechanical Engineering">Machanical Engineering</option>
+							</select>'
 ?>
 
 <html>
@@ -232,14 +250,21 @@
 											$html_file = $html_file.'<form action="../entry.php" method="post" >';
 											$html_file = $html_file.'<input type="hidden" name="event_name" value="'.$event_name.'">';
 											if($event_type=="individual"){
-												$html_file = $html_file."<div class=\"input-group\">
-												<input type=\"text\" placeholder=\"Participant name\" name=\"participant_name\" class=\"input--style-1\">
-												</div>";
+												$html_file = $html_file.'<div class="input-group">
+												<input type="text" placeholder="Participant name" name="participant_name" class="input--style-1">
+												</div>';
 												$table_columns = $table_columns."participant_name VARCHAR(255),";
 												foreach($fields as $selected){
-													$html_file = $html_file."<div class=\"input-group\">
-													<input type=\"text\" placeholder=\"".ucwords($display_prompts[$selected])."\" name=\"".$selected."\"class=\"input--style-1\">
-													</div>";
+													if($selected == "year"){
+														$html_file = $html_file.'<div class="input-group"><div class="rs-select2 js-select-simple select--no-search"><select name="'.$selected.'"><option disabled="disabled" selected="selected">'.ucwords($display_prompts[$selected]).'</option>'.$year_dropdown.'<div class="select-dropdown"></div></div></div>';
+													}else if($selected == "dept"){
+														$html_file=$html_file.'<div class="input-group"><div class="rs-select2 js-select-simple select--no-search"><select name="'.$selected.'">
+							<option disabled="disabled" selected="selected">'.ucwords($display_prompts[$selected]).'</option>	'.$department_dropdown.'<div class="select-dropdown"></div></div></div>';
+													}else{
+														$html_file = $html_file.'<div class="input-group">
+													<input type="text" placeholder="'.ucwords($display_prompts[$selected]).'" name="'.$selected.'" class="input--style-1">
+													</div>';
+													}
 													$table_columns = $table_columns.$selected." VARCHAR(255),";
 												}
 											}
@@ -247,19 +272,21 @@
 												$number_participants = (int)$number_participants;
 												for ($i=0;$i<$number_participants;$i++){
 													$participant_number = $i+1;
-													/*if(i>0){
-														$html_file = $html_file.'<div class="card card-1">';
-														$html_file = $html_file.'<div class="card-body">';
-													}*/
 													$html_file = $html_file.'<h3 class="title">Details for Participant - '.$participant_number.'</h3>';
-													$html_file = $html_file."<div class=\"input-group\">
-													<input type=\"text\" placeholder=\"Name of Member ".$participant_number."\" name=\"participant_name".$participant_number."\" class=\"input--style-1\">
-													</div>";
+													$html_file = $html_file.'<div class="input-group">
+													<input type="text" placeholder="Name of Member '.$participant_number.'" name="participant_name'.$participant_number.'" class="input--style-1">
+													</div>';
 													$table_columns = $table_columns."participant_name".$participant_number." VARCHAR(255),";
 													foreach($fields as $selected){
-														$html_file = $html_file." <div class=\"input-group\">
-														<input type=\"text\" placeholder=\"".ucwords($display_prompts[$selected])." of Member ".$participant_number."\" name=\"".$selected.$participant_number."\" class=\"input--style-1\">
-														</div><br>";
+														if($selected=="year"){
+															$html_file = $html_file.'<div class="input-group"><div class="rs-select2 js-select-simple select--no-search"><select name="'.$selected.$participant_number.'"><option disabled="disabled" selected="selected">'.ucwords($display_prompts[$selected]).' of Member '.$participant_number. '</option>'.$year_dropdown.'<div class="select-dropdown"></div></div></div>';
+														}else if($selected=='dept'){
+															$html_file = $html_file.'<div class="input-group"><div class="rs-select2 js-select-simple select--no-search"><select name="'.$selected.$participant_number.'"><option disabled="disabled" selected="selected">'.ucwords($display_prompts[$selected]).' of Member '.$participant_number. '</option>'.$department_dropdown.'<div class="select-dropdown"></div></div></div>';
+														}
+														else{$html_file = $html_file.' <div class="input-group">
+														<input type="text" placeholder="'.ucwords($display_prompts[$selected]).' of Member '.$participant_number.'" name="'.$selected.$participant_number.'" class="input--style-1">
+														</div><br>';
+														}
 														$table_columns = $table_columns.$selected.$participant_number." VARCHAR(255),";
 													}
 													/*if(i==0){
@@ -271,7 +298,6 @@
 											//table columns for the new table generated and query to create also generated
 											$table_columns=substr($table_columns, 0, -1);
 											$creation_query = "CREATE TABLE IF NOT EXISTS event_".str_replace(" ","_",$event_name)." (".$table_columns.");";
-											// echo $creation_query."<br>"; 
 											$submit_stmt = $conn->prepare($creation_query);
 										if (!$submit_stmt) {
 											echo "Prepare failed: (" . $conn->errno . ") " . $conn->error . "<br>";
@@ -288,7 +314,15 @@
 															</div>
 														</div>
 													</div>
-													<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js\" integrity=\"sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa\" crossorigin=\"anonymous\"></script>
+													    <!-- Jquery JS-->
+													    <script src="vendor/jquery/jquery.min.js"></script>
+													    <!-- Vendor JS-->
+													    <script src="vendor/select2/select2.min.js"></script>
+													    <script src="vendor/datepicker/moment.min.js"></script>
+													    <script src="vendor/datepicker/daterangepicker.js"></script>
+
+													    <!-- Main JS-->
+													    <script src="js/global.js"></script>
 												</body>
 											</html>';
 
