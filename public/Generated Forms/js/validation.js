@@ -1,6 +1,23 @@
-console.log("Imported");
+
+
+var error_message = {
+	regno : 'Example - 170501068',
+	email: 'Example - example@example.com',
+	phoneno: 'Must be 10 digits long',
+	github: 'Example - https://github.com/user-name',
+	linkedin: 'Example - https://www.linkedin.com/in/user-name'
+};
+
+var value_expression = {
+	regno: /^[0-9]{9}$/,
+	email: /^[a-zA-Z0-9.\-_]*@[a-zA-Z0-9]*\.[A-Za-z0-9.]*$/,
+	phoneno: /^[0-9]{10}$/,
+	github: /^https:\/\/github\.com\/[A-za-z-_0-9]*$/,
+	linkedin: /^(https:\/\/www.)|(www.)linkedin.com\/[a-zA-Z\/-0-9]*$/
+};
+
+
 function verify(){
-	console.log("Called");
 	var form_elements = document.getElementById("entry_form").elements;
 	var name = document.getElementsByClassName("name");
 	var regno = document.getElementsByClassName("regno");
@@ -10,17 +27,37 @@ function verify(){
 	var email = document.getElementsByClassName("email");
 	var phoneno = document.getElementsByClassName("phoneno");
 	var linkedin = document.getElementsByClassName("linkedin");
-	console.log(form_elements);
+
 
 	empty_flag =  verify_empty(form_elements);
-	regno_flag =  verify_regno(regno);
-	email_flag =   verify_email(email);
-	phoneno_flag =  verify_phoneno(phoneno);
-	github_flag =  verify_github(github);
-	linkedin_flag =  verify_linkedin(linkedin);
+	regno_flag =  verify_pattern(value_expression.regno,regno,error_message.regno);
+	email_flag =   verify_pattern(value_expression.email,email,error_message.email);
+	phoneno_flag =  verify_pattern(value_expression.phoneno,phoneno,error_message.phoneno);
+	github_flag =  verify_pattern(value_expression.github,github,error_message.github);
+	linkedin_flag =  verify_pattern(value_expression.linkedin,linkedin,error_message.linkedin);
 	form_verified = empty_flag && regno_flag && email_flag && phoneno_flag && github_flag && linkedin_flag;
-	console.log(form_verified);
+
+
 	return form_verified;
+}
+
+function verify_pattern(pattern,comps,error_message){
+	var regex = pattern;
+	var flag=true;
+	if(comps.length!=0){
+		for(var i=0;i<comps.length;i++){
+			var test = regex.test(comps[i].value);
+			var p = document.getElementById(comps[i].name);
+			if(test==false){
+				flag=false;
+				p.innerHTML = "* Incorrect format | "+error_message;
+				p.style.display = "block";
+			}else{
+				p.style.display = "none";
+			}
+		}
+	}
+	return flag;
 }
 
 function verify_empty(eles){
@@ -43,102 +80,4 @@ function verify_empty(eles){
 	return flag;
 }
 
-function verify_regno(regnos){
-	var regex = /^[0-9]{9}$/;
-	var flag=true;
-	if(regnos.length!=0){
-		for(var i=0;i<regnos.length;i++){
-			var test = regex.test(regnos[i].value);
-			var p = document.getElementById(regnos[i].name);
-			if(test==false){
-				flag=false;
-				p.innerHTML = "* Incorrect format | Example: 170501068";
-				p.style.display = "block";
-			}else{
-				p.style.display = "none";
-			}
-		}
-	}
-	console.log("Regno verification:"+flag);
-	return flag;
-}
 
-function verify_email(emails){
-	var regex = /^[a-zA-Z0-9.\-_]*@[a-zA-Z0-9]*\.[A-Za-z0-9.]*$/;
-	var flag=true;
-	if(emails.length!=0){
-		for(var i=0;i<emails.length;i++){
-			var test = regex.test(emails[i].value);
-			var p = document.getElementById(emails[i].name);
-			if(test==false){
-				flag=false;
-				p.innerHTML = "* Incorrect format | Example: example@example.com";
-				p.style.display = "block";
-			}else{
-				p.style.display = "none";
-			}
-		}
-	}
-	console.log("Email verification:"+flag);
-	return flag;
-}
-
-function verify_phoneno(phonenos){
-	var regex = /^[0-9]{10}$/;
-	var flag=true;
-	if(phonenos.length!=0){
-		for(var i=0;i<phonenos.length;i++){
-			var test = regex.test(phonenos[i].value);
-			var p = document.getElementById(phonenos[i].name);
-			if(test==false){
-				flag=false;
-				p.innerHTML = "* Incorrect format | Must be 10 digits long";
-				p.style.display = "block";
-			}else{
-				p.style.display = "none";
-			}
-		}
-	}
-	console.log("Phone number verification:"+flag);
-	return flag;
-}
-
-function verify_github(githubs){
-	var regex = /^https:\/\/github\.com\/[A-za-z-_0-9]*$/;
-	var flag=true;
-	if(githubs.length!=0){
-		for(var i=0;i<githubs.length;i++){
-			var test = regex.test(githubs[i].value);
-			var p = document.getElementById(githubs[i].name);
-			if(test==false){
-				flag=false;
-				p.innerHTML = "* Incorrect URL | Example: https://github.com/user-name";
-				p.style.display = "block";
-			}else{
-				p.style.display = "none";
-			}
-		}
-	}
-	console.log("GitHub Link verification:"+flag);
-	return flag;
-}
-
-function verify_linkedin(linkedins){
-	var regex = /^(https:\/\/www.)|(www.)linkedin.com\/[a-zA-Z\/-0-9]*$/;
-	var flag=true;
-	if(linkedins.length!=0){
-		for(var i=0;i<linkedins.length;i++){
-			var test = regex.test(linkedins[i].value);
-			var p = document.getElementById(linkedins[i].name);
-			if(test==false){
-				flag=false;
-				p.innerHTML = "* Incorrect URL | Example: https://www.linkedin.com/in/user-name";
-				p.style.display = "block";
-			}else{
-				p.style.display = "none";
-			}
-		}
-	}
-	console.log("Linkedin Link verification:"+flag);
-	return flag;
-}
