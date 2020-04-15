@@ -16,3 +16,4 @@ test-*.php
 
 # Ignore Secrets (API Keys)
 members/secrets_.php
+*.zip
