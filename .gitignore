@@ -15,4 +15,4 @@ test-*.php
 *.log
 
 # Ignore Secrets (API Keys)
-members/secrets.php
+members/secrets_.php
