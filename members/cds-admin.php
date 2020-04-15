@@ -5,7 +5,8 @@ include("header.php");
 /* Directory Path Variables START */
 $Generated_Certificate = '../public/Generated Certificate/';
 $Uploaded_Files = "CDS_Admin/Uploaded files/";
-$Certificate_Template_Path = "CDS_Admin/Certificate Templates/";
+$Certificate_Template = "CDS_Admin/Certificate Templates/";
+$Empty_Template = "CDS_Admin/Certificate Templates/Participation.png";
 $Fonts_Path = "CDS_Admin/Fonts/";
 /* Directory Path Variables END */
 ?>
@@ -46,16 +47,11 @@ $Fonts_Path = "CDS_Admin/Fonts/";
                     <br>
                     <input type="text" name="date" class="form-control border-1 small" style="width: 68%;max-width:15em;" placeholder="Enter the Date of the event" required />
                     <br>
-                    <select class="form-control border-1 small" style="width: 68%;max-width:15em;" name ="eventType" required>
-                        <option value = "0">Intra-College Event</option>
-                        <option value = "1">Inter-College Event</option>
-                    </select>
-                    <br>
-                    <select class="form-control border-1 small" style="width: 68%;max-width:15em;" name ="Type" required>
-                        <option value = "Participation">Participaion Certificates</option>
-                        <option value = "Winner">Winner Certificates</option>
-                        <option value = "Runner">Runner Certificates</option>
-                    </select>
+                    <!-- <label>Select event type:</label> -->
+                         <select class="form-control border-1 small" style="width: 68%;max-width:15em;" name ="eventType" required>
+                           <option value = "0">Intra-College Event</option>
+                           <option value = "1">Inter-College Event</option>
+                         </select>
                     <br>
                     <input class="btn btn-primary" type="submit" name="submit" />
                 </form>
@@ -69,6 +65,7 @@ $Fonts_Path = "CDS_Admin/Fonts/";
 <?php
     /* Driver */
     if (isset($_POST["submit"])) {
+        echo "<title><head>Processing......</head></title>";
         if (isset($_FILES["file"])) {
             if ($_FILES["file"]["error"] > 0) {
                 echo "<b>Return Code</b>: " . $_FILES["file"]["error"] . "<br />";
@@ -128,6 +125,7 @@ $Fonts_Path = "CDS_Admin/Fonts/";
                                             echo "<th>College</th>";
                                         }
                                    ?>
+
                                     <th>Position</th>	
                                     <th>Event Name</th>	
                                     <th>Certificate Link</th>
@@ -135,8 +133,7 @@ $Fonts_Path = "CDS_Admin/Fonts/";
                                 <tbody>
 <?php
 	if (isset($_POST["submit"])){
-        $Certificate_Template = $Certificate_Template_Path.$_POST["Type"].".png";
-        $im_template = imagecreatefrompng($Certificate_Template);
+        $im_template = imagecreatefrompng($Empty_Template);
 		$font_light = $Fonts_Path.'Raleway/Raleway-Light.ttf';
 		$font_regular = $Fonts_Path.'Raleway/Raleway-Regular.ttf';
 		$font_semibold = $Fonts_Path.'Raleway/Raleway-SemiBold.ttf';
@@ -190,14 +187,24 @@ $Fonts_Path = "CDS_Admin/Fonts/";
                     $submit_stmt->execute();
                 }
     	       else{
-                    $im = imagecreatefrompng($Certificate_Template);
+                    $im = imagecreatefrompng($Certificate_Template.$position.".png");
                     $college = ucwords($data[8]);
-                    $sentence = "of ".$college." for participating in ".$event_name_main." conducted by SVCE ACM Student Chapter from ".$date_main;
+                    $sentence_participant = "of ".$college." for participating in ".$event_name_main." conducted by SVCE ACM Student Chapter from ".$date_main;
+                    $sentence_winner = "of ".$college." for Winning ".$event_name_main." conducted by SVCE ACM Student Chapter from ".$date_main;
+                    $sentence_runner = "of ".$college." for being the Runner in ".$event_name_main." conducted by SVCE ACM Student Chapter from ".$date_main;
+                    if($position=="Winner"){
+
+                    	$sentence=$sentence_winner;
+                    }else if($position=="Runner"){
+                    	$sentence=$sentence_runner;
+                    }else{
+                    	$sentence=$sentence_participant;
+                    }
                     $words = explode(" ",$sentence);
                     $sentences = array("","","","");
                     $no_of_sentences = 3;
                     $sent=0;
-                    $line_limit =60;
+                    $line_limit =58;
                     $x =0 ;
                     while($x<sizeof($words)){
                         $letters = strlen($words[$x]) ;
