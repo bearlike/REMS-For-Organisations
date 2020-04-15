@@ -1,10 +1,6 @@
 <?php
     if (!empty( $_GET)) {
-        // Runtime Variables
-        $servername = "localhost";
-        $username = "root";
-        $password = "";
-        $dbname = "svcehost_cms";
+        include("pheader.php");
         // Create connection
         $conn = new mysqli($servername, $username, $password, $dbname);
         // Check connection
