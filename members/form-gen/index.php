@@ -74,7 +74,8 @@
 								<script type="text/javascript">
 									function preview_description(){
 										var myWindow = window.open("", "_blank");
-										var generated_html = '<html><head><title>Preview page</title><body><div id="content"></div><script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"><\/script><script>document.getElementById("content").innerHTML =marked("'+document.getElementById('event_desc').value+'");<\/script></body></html>';
+										var markdown_text = document.getElementById('event_desc').value.replace(/\r?\n|\r/g, "\\n");
+										var generated_html = '<html><head><title>Preview page</title><body><div id="content"></div><script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"><\/script><script>document.getElementById("content").innerHTML =marked("'+markdown_text+'");<\/script></body></html>';
 										myWindow.document.write(generated_html);
 									}
 								</script>
