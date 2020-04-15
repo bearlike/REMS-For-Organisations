@@ -19,6 +19,7 @@ echo '		<!--  Navigation Panel starts !-->
 							<p class="mb-0">Events</p>
 						</div>
 						<li class="nav-item" role="presentation"><a class="nav-link" href="/cms/members/form-gen/"><i class="fab fa-wpforms"></i><span>&nbsp;Form Generator</span></a></li>
+						<li class="nav-item" role="presentation"><a class="nav-link" href="/cms/members/link-short.php"><i class="fas fa-link"></i><span>&nbsp;Link Shortner</span></a></li>
 						<li class="nav-item" role="presentation"><a class="nav-link" href="/cms/members/form-gen/view-reg.php"><i class="fa fa-eye"></i><span>&nbsp;View Registration</span></a></li>
 						<hr class="sidebar-divider">
 						<div class="sidebar-heading">
