@@ -74,7 +74,8 @@
 								<script type="text/javascript">
 									function preview_description(){
 										var myWindow = window.open("", "_blank");
-										myWindow.document.write(document.getElementById('event_desc').value);
+										var generated_html = '<html><head><title>Preview page</title><body><div id="content"></div><script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"><\/script><script>document.getElementById("content").innerHTML =marked("'+document.getElementById('event_desc').value+'");<\/script></body></html>';
+										myWindow.document.write(generated_html);
 									}
 								</script>
 								<tr>
@@ -257,7 +258,7 @@
 																	<div class="card-heading"></div>
 																	<div class="card-body">
 																		<h2 class="title">Registration for '.ucwords($event_name).'</h2>
-																		<div style="margin-bottom:10px;">'.$_POST["event_description"].'</div>';
+																		<div style="margin-bottom:10px;" id="event_description"></div>';
 											//Form section starts here
 											$html_file = $html_file.'<form action="../entry.php" method="post" onSubmit="return verify()" id="entry_form">';
 											$html_file = $html_file.'<input type="hidden" name="event_name" value="'.$event_name.'">';
@@ -337,6 +338,10 @@
 													    <script src="vendor/datepicker/moment.min.js"></script>
 													    <script src="vendor/datepicker/daterangepicker.js"></script>
 													    <script src="js/validation.js"></script>
+													    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+													    <script>
+															document.getElementById("event_description").innerHTML =marked("'.$_POST["event_description"].'");
+														</script>
 
 													    <!-- Main JS-->
 													    <script src="js/global.js"></script>
