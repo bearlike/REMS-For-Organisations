@@ -13,3 +13,6 @@ public/Generated Forms/*.html
 # Test and Log Files
 test-*.php
 *.log
+
+# Ignore Secrets (API Keys)
+members/secrets.php
