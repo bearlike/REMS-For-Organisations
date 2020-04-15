@@ -251,6 +251,7 @@
 															<link href="vendor/select2/select2.min.css" rel="stylesheet" media="all">
 															<link href="vendor/datepicker/daterangepicker.css" rel="stylesheet" media="all">
 															<link href="css/main.css" rel="stylesheet" media="all">
+															<link href="css/custom.css" rel="stylesheet" media="all">
 														</head>
 													<body>
 														<div class="page-wrapper bg-blue p-t-100 p-b-100 font-robo">
@@ -259,7 +260,7 @@
 																	<div class="card-heading"></div>
 																	<div class="card-body">
 																		<h2 class="title">Registration for '.ucwords($event_name).'</h2>
-																		<div style="margin-bottom:10px;" id="event_description"></div>';
+																		<div id="event_description" class="desc"></div><br>';
 											//Form section starts here
 											$html_file = $html_file.'<form action="../entry.php" method="post" onSubmit="return verify()" id="entry_form">';
 											$html_file = $html_file.'<input type="hidden" name="event_name" value="'.$event_name.'">';
@@ -322,7 +323,7 @@
 										}
 										$submit_stmt->execute();
 										echo ("<tr><td>Successfully created table in database for the new form</td></tr>");
-
+											$markdown_text = preg_replace('/\r?\n|\r/', "\\n",$_POST["event_description"]);
 											//Closing section
 											$html_file = $html_file.'		<div class="p-t-20">
 																			<input type="submit" class="btn btn--radius btn--green">
@@ -341,7 +342,7 @@
 													    <script src="js/validation.js"></script>
 													    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 													    <script>
-															document.getElementById("event_description").innerHTML =marked("'.$_POST["event_description"].'");
+															document.getElementById("event_description").innerHTML =marked("'.$markdown_text.'");
 														</script>
 
 													    <!-- Main JS-->
