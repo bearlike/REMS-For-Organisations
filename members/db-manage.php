@@ -112,7 +112,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>View Registrants: SVCE-ACM</title>
+    <title>Database Management: SVCE-ACM</title>
     <link rel="icon" type="image/png" sizes="600x600" href="../assets/img/Logo_White.png">
     <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
@@ -125,7 +125,7 @@
             <?php include("navigation.php"); ?>
             <div class="container-fluid">
                 <div class="d-sm-flex justify-content-between align-items-center mb-4">
-                    <h3 class="text-dark mb-0">View Registrations</h3><a class="btn btn-primary btn-sm d-none d-sm-inline-block" role="button" href="<?php if(isset($_GET['event'])){echo "toCSV.php?event=".$event."\" target=\"_blank\"";}else{echo "#";}  ?>"><i class="fas fa-download fa-sm text-white-50"></i>&nbsp;Download CSV&nbsp;</a></div>
+                    <h3 class="text-dark mb-0">Manage Databases</h3><a class="btn btn-primary btn-sm d-none d-sm-inline-block" role="button" href="<?php if(isset($_GET['event'])){echo "toCSV.php?event=".$event."\" target=\"_blank\"";}else{echo "#";}  ?>"><i class="fas fa-download fa-sm text-white-50"></i>&nbsp;Download CSV&nbsp;</a></div>
                 <div class="row">
                     <div class="col-md-6 col-xl-3 mb-4">
                         <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="GET">
