@@ -36,6 +36,7 @@
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="text-center">
+                                        <h6 class="text-dark mb-2">SVCE-ACM Student Chapter</h6>
                                         <h4 class="text-dark mb-4">Members Portal</h4>
                                     </div>
                                     <form class="user" action="validate.php" method="POST">
@@ -46,7 +47,6 @@
                                                 <div class="form-check"><input class="form-check-input custom-control-input" name="remember" value="1" type="checkbox" id="formCheck-1"><label class="form-check-label custom-control-label" for="formCheck-1">Remember Me</label></div>
                                             </div>
                                         </div><button class="btn btn-primary btn-block text-white btn-user" type="submit">Login</button>
-                                        <hr><a class="btn btn-primary btn-block text-white btn-google btn-user" role="button"><i class="fab fa-google"></i>&nbsp; Login with Google</a>
                                         <hr>
                                     </form>
                                     <div class="text-center"><a class="small" href="#">Forgot Password?</a></div>
