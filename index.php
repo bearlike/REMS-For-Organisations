@@ -24,6 +24,7 @@
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="text-center">
+                                        <h6 class="text-dark mb-2">SVCE-ACM Student Chapter</h6>
                                         <h4 class="text-dark mb-2">Certificate Distribution System (CDS)</h4>
                                         <p class="mb-4">We're here to make your life much easier. Just enter the event name and watch then watch happen!</p>
                                     </div>

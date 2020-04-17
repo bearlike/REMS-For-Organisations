@@ -21,6 +21,8 @@ if (!empty( $_POST)) {
     $password = "";
     $dbname = "svcehost_cms";
     $uname = NULL;
+    /* Include Secret Keys such as APIs and override default database credentials */
+    include("secrets_.php");
 
     // Create connection
     $conn = new mysqli($servername, $username, $password, $dbname);
@@ -49,6 +51,9 @@ if (!empty( $_POST)) {
     else {
         $_SESSION['uname'] = $_POST['uname'];
         $_SESSION['password'] = $_POST['password'];
+        if(empty(($_POST['remember']))){
+            $_POST['remember']=0;
+        }
         if ($_POST['remember']==1){
             $_SESSION['remember']=1;
             echo "remembered";

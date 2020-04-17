@@ -5,7 +5,8 @@ include("header.php");
 /* Directory Path Variables START */
 $Generated_Certificate = '../public/Generated Certificate/';
 $Uploaded_Files = "CDS_Admin/Uploaded files/";
-$Certificate_Template = "CDS_Admin/Certificate Templates/Empty Certificate.png";
+$Certificate_Template = "CDS_Admin/Certificate Templates/";
+$Empty_Template = "CDS_Admin/Certificate Templates/Participation.png";
 $Fonts_Path = "CDS_Admin/Fonts/";
 /* Directory Path Variables END */
 ?>
@@ -132,7 +133,7 @@ $Fonts_Path = "CDS_Admin/Fonts/";
                                 <tbody>
 <?php
 	if (isset($_POST["submit"])){
-        $im_template = imagecreatefrompng($Certificate_Template);
+        $im_template = imagecreatefrompng($Empty_Template);
 		$font_light = $Fonts_Path.'Raleway/Raleway-Light.ttf';
 		$font_regular = $Fonts_Path.'Raleway/Raleway-Regular.ttf';
 		$font_semibold = $Fonts_Path.'Raleway/Raleway-SemiBold.ttf';
@@ -186,14 +187,24 @@ $Fonts_Path = "CDS_Admin/Fonts/";
                     $submit_stmt->execute();
                 }
     	       else{
-                    $im = imagecreatefrompng($Certificate_Template);
+                    $im = imagecreatefrompng($Certificate_Template.$position.".png");
                     $college = ucwords($data[8]);
-                    $sentence = "of ".$college." for participating in ".$event_name_main." conducted by SVCE ACM Student Chapter from ".$date_main;
+                    $sentence_participant = "of ".$college." for participating in ".$event_name_main." conducted by SVCE ACM Student Chapter from ".$date_main;
+                    $sentence_winner = "of ".$college." for Winning ".$event_name_main." conducted by SVCE ACM Student Chapter from ".$date_main;
+                    $sentence_runner = "of ".$college." for being the Runner in ".$event_name_main." conducted by SVCE ACM Student Chapter from ".$date_main;
+                    if($position=="Winner"){
+
+                    	$sentence=$sentence_winner;
+                    }else if($position=="Runner"){
+                    	$sentence=$sentence_runner;
+                    }else{
+                    	$sentence=$sentence_participant;
+                    }
                     $words = explode(" ",$sentence);
                     $sentences = array("","","","");
                     $no_of_sentences = 3;
                     $sent=0;
-                    $line_limit =60;
+                    $line_limit =58;
                     $x =0 ;
                     while($x<sizeof($words)){
                         $letters = strlen($words[$x]) ;
