@@ -1,19 +1,23 @@
 <?php
 	include("../header.php");
-	$conn = new mysqli($servername, $username, $password, $formDB);
+	$conn = new mysqli($servername, $username, $password, $_GET['db']);
     // Check connection
     if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
+       header('Location: ../pages/error.php?error=Cannot connect to the server/database');
     }
 
-    $table_name = $_GET["event"];
+    $tablename = $_GET["table"];
     $id = $_GET["id"];
 
-    $delete_query = "DELETE FROM ".$table_name." WHERE id='".$id."';";
+    $delete_query = "DELETE FROM ".$tablename." WHERE id='".$id."';";
     $submit_stmt = $conn->prepare($delete_query);
     if (!$submit_stmt) {
-        echo "Prepare failed: (" . $conn->errno . ") " . $conn->error . "<br>";
+        header('Location: ../pages/error.php?error=Error while executing the query');
     }
     $submit_stmt->execute();
-	header('Location: ../db-manage.php?event='.$_GET["event"].'&dbname='.$_GET['dbname']);
+     if($_GET['db']==$dbname)
+         $dbc=1;
+     else
+         $dbc=2;
+	header('Location: ../db-manage.php?db='.$dbc.'&table='.$tablename);
 ?>

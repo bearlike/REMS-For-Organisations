@@ -1,16 +1,16 @@
 <?php
 include("../header.php");
-	$conn = new mysqli($servername, $username, $password, $formDB);
+	$conn = new mysqli($servername, $username, $password, $_POST['db']);
     // Check connection
     if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
+        header('Location: ../pages/error.php?error='.$conn->connect_error);
     }
 	$attribute_list = "";
 	$values_list = "";
-	$tablename = $_POST["event_name"];
+	$tablename = $_POST["table"];
 	foreach ($_POST as $name => $value) { 
-		//Include all attributes except event_name because it is for the table name
-		if ($name != "event_name" && $name!="dbname") {
+		//Include all attributes except table because it is for the table name
+		if ($name != "table" && $name!="db") {
 			$attribute_list = $attribute_list . "`" . $name . "`" . ",";
 			$values_list = $values_list . "\"" . $value . "\"" . ",";
 		}
@@ -19,14 +19,18 @@ include("../header.php");
 	$attribute_list = substr($attribute_list, 0, -1);
 	$values_list = substr($values_list, 0, -1);
 	$entry_query = "INSERT INTO " . $tablename . "(" . $attribute_list . ") VALUES (" . $values_list . ");";
-	// echo $entry_query;
+	//echo $entry_query;
 
 	$submit_stmt = $conn->prepare($entry_query);
 	if (!$submit_stmt) {
-		echo "Prepare failed: (" . $conn->errno . ") " . $conn->error . "<br>";
+		header('Location: ../pages/error.php?error='.$conn->error);
 	}
+     if($_POST['db']==$dbname)
+         $dbc=1;
+     else
+         $dbc=2;
 	$submit_stmt->execute();
-	echo("Value inserted successfully");
+	// echo("Value inserted successfully");
 	// echo ("<br> Value inserted successfully");
-	header('Location: ../db-manage.php?event='.$_POST["event_name"].'&dbname='.$_POST["dbname"]);
+	header('Location: ../db-manage.php?db='.$dbc.'&table='.$tablename);
 ?>
