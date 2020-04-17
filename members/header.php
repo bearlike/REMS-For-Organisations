@@ -26,6 +26,8 @@
             $password = '';
             $dbname = 'svcehost_cms';
             $formDB="svcehost_forms";
+            /* Include Secret Keys such as APIs and override default database credentials */
+            include("secrets_.php");
             /* database credentials END */
             $_SESSION['loginTime'] = date("Y-m-d H:i:s", time());
       }

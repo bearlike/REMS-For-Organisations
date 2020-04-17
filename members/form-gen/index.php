@@ -13,6 +13,24 @@
 						'phoneno' => 'Contact number',
 						'linkedin' => 'Linkedin Profile URL'
 					);
+	$year_dropdown = '
+			<option value="1">1</option>
+			<option value="2">2</option>
+			<option value="3">3</option>
+			<option value="4">4</option>
+			</select>';
+
+	$department_dropdown = '<option value="Automobile Engineering">Automobile Engineering</option>
+							<option value="Biotechnology">Biotechnology</option>
+							<option value="Chemical Engineering">Chemical Engineering</option>
+							<option value="Computer Science and Engineering">Computer Science and Engineering</option>
+							<option value="Civil Engineering">Civil Engineering</option>
+							<option value="Electronics and Communication Engineering">Electronics and Communication Engineering</option>
+							<option value="Electrical and Electronics Engineering">Electrical and Electronics Engineering</option>
+							<option value="Information technology">Information Technology</option>
+							<option value="Marine Engineering">Marine Engineering</option>
+							<option value="Mechanical Engineering">Machanical Engineering</option>
+							</select>'
 ?>
 
 <html>
@@ -47,7 +65,20 @@
 									<td onclick="reverse_red('name')"><input type="text" class="form-control" name="event_name" id="input_name"/></td>
 									<td></td>
 								</tr>
-
+								<tr id="alert_name">
+									<th>Event description
+										<div style="margin-top: 10px;"><button type="button" class="btn btn-primary" onclick="preview_description()">Preview</button></div></th>
+									<td><textarea class="form-control" name="event_description" id="event_desc"></textarea></td>
+									<td></td>
+								</tr>
+								<script type="text/javascript">
+									function preview_description(){
+										var myWindow = window.open("", "_blank");
+										var markdown_text = document.getElementById('event_desc').value.replace(/\r?\n|\r/g, "\\n");
+										var generated_html = '<html><head><title>Preview page</title><body><div id="content"></div><script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"><\/script><script>document.getElementById("content").innerHTML =marked("'+markdown_text+'");<\/script></body></html>';
+										myWindow.document.write(generated_html);
+									}
+								</script>
 								<tr>
 									<th>Choose Type</th>
 									<td>
@@ -220,6 +251,7 @@
 															<link href="vendor/select2/select2.min.css" rel="stylesheet" media="all">
 															<link href="vendor/datepicker/daterangepicker.css" rel="stylesheet" media="all">
 															<link href="css/main.css" rel="stylesheet" media="all">
+															<link href="css/custom.css" rel="stylesheet" media="all">
 														</head>
 													<body>
 														<div class="page-wrapper bg-blue p-t-100 p-b-100 font-robo">
@@ -227,19 +259,29 @@
 																<div class="card card-1">
 																	<div class="card-heading"></div>
 																	<div class="card-body">
-																		<h2 class="title">Registration for '.ucwords($event_name).'</h2>';
+																		<h2 class="title">Registration for '.ucwords($event_name).'</h2>
+																		<div id="event_description" class="desc"></div><br>';
 											//Form section starts here
-											$html_file = $html_file.'<form action="../entry.php" method="post" >';
+											$html_file = $html_file.'<form action="../entry.php" method="post" onSubmit="return verify()" id="entry_form">';
 											$html_file = $html_file.'<input type="hidden" name="event_name" value="'.$event_name.'">';
 											if($event_type=="individual"){
-												$html_file = $html_file."<div class=\"input-group\">
-												<input type=\"text\" placeholder=\"Participant name\" name=\"participant_name\" class=\"input--style-1\">
-												</div>";
+												$html_file = $html_file.'<p id="participant_name" style="color:red;font-size:12px;" ></p>
+												<div class="input-group">
+												<input type="text" placeholder="Participant name" name="participant_name" class="input--style-1">
+												</div>';
 												$table_columns = $table_columns."participant_name VARCHAR(255),";
 												foreach($fields as $selected){
-													$html_file = $html_file."<div class=\"input-group\">
-													<input type=\"text\" placeholder=\"".ucwords($display_prompts[$selected])."\" name=\"".$selected."\"class=\"input--style-1\">
-													</div>";
+													if($selected == "year"){
+														$html_file = $html_file.'<p id="'.$selected.'" style="color:red;font-size:12px;" ></p>
+														<div class="input-group"><div class="rs-select2 js-select-simple select--no-search"><select name="'.$selected.'" class="'.$selected.'"><option disabled="disabled" selected="selected" value="">'.ucwords($display_prompts[$selected]).'</option>'.$year_dropdown.'<div class="select-dropdown"></div></div></div>';
+													}else if($selected == "dept"){
+														$html_file=$html_file.'<p id="'.$selected.'" style="color:red;font-size:12px;" ></p><div class="input-group"><div class="rs-select2 js-select-simple select--no-search"><select name="'.$selected.'" class="'.$selected.'">
+							<option disabled="disabled" selected="selected" value="">'.ucwords($display_prompts[$selected]).'</option>	'.$department_dropdown.'<div class="select-dropdown"></div></div></div>';
+													}else{
+														$html_file = $html_file.'<p id="'.$selected.'" style="color:red;font-size:12px;" ></p><div class="input-group">
+													<input type="text" placeholder="'.ucwords($display_prompts[$selected]).'" name="'.$selected.'" class="input--style-1 '.$selected.'">
+													</div>';
+													}
 													$table_columns = $table_columns.$selected." VARCHAR(255),";
 												}
 											}
@@ -247,19 +289,23 @@
 												$number_participants = (int)$number_participants;
 												for ($i=0;$i<$number_participants;$i++){
 													$participant_number = $i+1;
-													/*if(i>0){
-														$html_file = $html_file.'<div class="card card-1">';
-														$html_file = $html_file.'<div class="card-body">';
-													}*/
 													$html_file = $html_file.'<h3 class="title">Details for Participant - '.$participant_number.'</h3>';
-													$html_file = $html_file."<div class=\"input-group\">
-													<input type=\"text\" placeholder=\"Name of Member ".$participant_number."\" name=\"participant_name".$participant_number."\" class=\"input--style-1\">
-													</div>";
+													$html_file = $html_file.'
+													<p id="participant_name'.$participant_number.'" style="color:red;font-size:12px;" ></p>
+													<div class="input-group">
+													<input type="text" placeholder="Name of Member '.$participant_number.'" name="participant_name'.$participant_number.'" class="input--style-1">
+													</div>';
 													$table_columns = $table_columns."participant_name".$participant_number." VARCHAR(255),";
 													foreach($fields as $selected){
-														$html_file = $html_file." <div class=\"input-group\">
-														<input type=\"text\" placeholder=\"".ucwords($display_prompts[$selected])." of Member ".$participant_number."\" name=\"".$selected.$participant_number."\" class=\"input--style-1\">
-														</div><br>";
+														if($selected=="year"){
+															$html_file = $html_file.'<p id="'.$selected.$participant_number.'" style="color:red;font-size:12px;" ></p><div class="input-group"><div class="rs-select2 js-select-simple select--no-search"><select name="'.$selected.$participant_number.'"  class="'.$selected.'"><option disabled="disabled" selected="selected" value="">'.ucwords($display_prompts[$selected]).' of Member '.$participant_number. '</option>'.$year_dropdown.'<div class="select-dropdown"></div></div></div>';
+														}else if($selected=='dept'){
+															$html_file = $html_file.'<p id="'.$selected.$participant_number.'" style="color:red;font-size:12px;" ></p><div class="input-group"><div class="rs-select2 js-select-simple select--no-search"><select name="'.$selected.$participant_number.'"  class="'.$selected.'"><option disabled="disabled" selected="selected" value="">'.ucwords($display_prompts[$selected]).' of Member '.$participant_number. '</option>'.$department_dropdown.'<div class="select-dropdown"></div></div></div>';
+														}
+														else{$html_file = $html_file.' <p id="'.$selected.$participant_number.'" style="color:red;font-size:12px;" ></p><div class="input-group">
+														<input type="text" placeholder="'.ucwords($display_prompts[$selected]).' of Member '.$participant_number.'" name="'.$selected.$participant_number.'" class="input--style-1 '.$selected.'">
+														</div><br>';
+														}
 														$table_columns = $table_columns.$selected.$participant_number." VARCHAR(255),";
 													}
 													/*if(i==0){
@@ -271,14 +317,13 @@
 											//table columns for the new table generated and query to create also generated
 											$table_columns=substr($table_columns, 0, -1);
 											$creation_query = "CREATE TABLE IF NOT EXISTS event_".str_replace(" ","_",$event_name)." (".$table_columns.");";
-											// echo $creation_query."<br>"; 
 											$submit_stmt = $conn->prepare($creation_query);
 										if (!$submit_stmt) {
 											echo "Prepare failed: (" . $conn->errno . ") " . $conn->error . "<br>";
 										}
 										$submit_stmt->execute();
 										echo ("<tr><td>Successfully created table in database for the new form</td></tr>");
-
+											$markdown_text = preg_replace('/\r?\n|\r/', "\\n",$_POST["event_description"]);
 											//Closing section
 											$html_file = $html_file.'		<div class="p-t-20">
 																			<input type="submit" class="btn btn--radius btn--green">
@@ -288,7 +333,20 @@
 															</div>
 														</div>
 													</div>
-													<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js\" integrity=\"sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa\" crossorigin=\"anonymous\"></script>
+													    <!-- Jquery JS-->
+													    <script src="vendor/jquery/jquery.min.js"></script>
+													    <!-- Vendor JS-->
+													    <script src="vendor/select2/select2.min.js"></script>
+													    <script src="vendor/datepicker/moment.min.js"></script>
+													    <script src="vendor/datepicker/daterangepicker.js"></script>
+													    <script src="js/validation.js"></script>
+													    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+													    <script>
+															document.getElementById("event_description").innerHTML =marked("'.$markdown_text.'");
+														</script>
+
+													    <!-- Main JS-->
+													    <script src="js/global.js"></script>
 												</body>
 											</html>';
 
