@@ -44,7 +44,7 @@
      <?php include("navigation.php"); ?>            
             <div class="container-fluid">
                 <div class="d-sm-flex justify-content-between align-items-center mb-4">
-                    <h3 class="text-dark mb-0">Welcome!</h3><a class="btn btn-primary btn-sm d-none d-sm-inline-block" role="button" href="https://github.com/K-Kraken/cms-for-organisations/issues" style="background-color: #ce1126;border-color: #e5053a;"><i class="fas fa-bug fa-sm text-white-50"></i>&nbsp;Raise a Issue</a></div>
+                    <h3 class="text-dark mb-0">Welcome!</h3><a class="btn btn-danger btn-sm d-none d-sm-inline-block" role="button" href="https://github.com/K-Kraken/cms-for-organisations/issues" style="background-color: #ce1126;border-color: #e5053a;"><i class="fas fa-bug fa-sm text-white-50"></i>&nbsp;Raise a Issue</a></div>
                 <div
                     class="row">
                     <div class="col-md-6 col-xl-4 mb-4">
