@@ -1,4 +1,4 @@
-<?php   
+<?php
     include("../header.php");
 	// Dictionary on what to replace what with what
 	$display_prompts=array(
@@ -90,7 +90,7 @@
         $event = $_GET['event'];
         $sql = "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`='".$formDB."' AND `TABLE_NAME`='".$event."'";
         $columns = $conn->query($sql); // COLUMN_NAME
-        $i=0;   
+        $i=0;
         foreach ($columns as $row) {
             $colArr[$i]=$row['COLUMN_NAME'];
             $i++;
@@ -108,7 +108,7 @@
 ?>
 <html>
 
-<head>
+<head id="head_tag">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>View Registrants: SVCE-ACM</title>
@@ -122,6 +122,7 @@
 <body id="page-top">
     <div id="wrapper">
             <?php include("../navigation.php"); ?>
+            <script src="../../assets/js/dark-mode.js"></script>
             <div class="container-fluid">
                 <div class="d-sm-flex justify-content-between align-items-center mb-4">
                     <h3 class="text-dark mb-0">View Registrations</h3><a class="btn btn-primary btn-sm d-none d-sm-inline-block" role="button" href="<?php if(isset($_GET['event'])){echo "toCSV.php?event=".$event."\" target=\"_blank\"";}else{echo "#";}  ?>"><i class="fas fa-download fa-sm text-white-50"></i>&nbsp;Download CSV&nbsp;</a></div>
@@ -216,7 +217,7 @@
                                 </tfoot>
                             </table>
                         </div>
-                        
+
                         <div class="row">
                             <div class="col-md-6 align-self-center">
                                 <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite"></p>
@@ -228,15 +229,15 @@
                                         <input type="hidden" name="event" value="<?php echo $_GET['event']; ?>"/>
                                         <input type="hidden" name="perPage" value="<?php echo $perPage; ?>"/>
                                         <?php
-                                            // Generate buttons for choosing pages 
+                                            // Generate buttons for choosing pages
                                             for ($x=1; $x<=$totalPages; $x++){
-                                                if($x==$page){ 
+                                                if($x==$page){
                                                     echo '<li class="page-item active"><button name="page" value="'.$x.'" class="page-link">'.$x.'</button></li>';
                                                 }
                                                 else{
                                                     echo '<li class="page-item"><button name="page" value="'.$x.'" class="page-link">'.$x.'</button></li>';
                                                 }
-                                             } 
+                                             }
                                         ?>
 
                                         <li class="page-item <?php if($page==$totalPages){echo 'disabled';} ?>"><button name="page" value="<?php echo ($page+1); ?>" class="page-link" aria-label="Next"><span aria-hidden="true">»</span></button></li>
@@ -244,7 +245,7 @@
                                 </nav>
                             </form>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>

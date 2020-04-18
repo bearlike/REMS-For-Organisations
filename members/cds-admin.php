@@ -1,5 +1,5 @@
 <html>
-<?php 
+<?php
 error_reporting(E_ALL & ~E_NOTICE);
 include("header.php");
 /* Directory Path Variables START */
@@ -10,7 +10,7 @@ $Empty_Template = "CDS_Admin/Certificate Templates/Participation.png";
 $Fonts_Path = "CDS_Admin/Fonts/";
 /* Directory Path Variables END */
 ?>
-<head>
+<head id="head_tag">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <?php
@@ -30,7 +30,8 @@ $Fonts_Path = "CDS_Admin/Fonts/";
 
 <body id="page-top" >
     <div id="wrapper">
-     <?php include("navigation.php"); ?>            
+     <?php include("navigation.php"); ?>
+     <script src="../assets/js/dark-mode.js"></script>
         <div class="container-fluid">
                 <div class="d-sm-flex justify-content-between align-items-center mb-4">
                     <h3 class="text-dark mb-0">Certificate Generation</h3><a class="btn btn-primary btn-sm d-none d-sm-inline-block" role="button" href="CDS_Admin/Sample_headers.csv"><i class="fas fa-download fa-sm text-white-50"></i>&nbsp;Download Sample CSV for CDS&nbsp;</a></div>
@@ -61,7 +62,7 @@ $Fonts_Path = "CDS_Admin/Fonts/";
                     <div class="card-header py-3">
                         <p class="text-primary m-0 font-weight-bold">Metadata</p>
                     </div>
-                    <div class="card-body">                   
+                    <div class="card-body">
 <?php
     /* Driver */
     if (isset($_POST["submit"])) {
@@ -69,21 +70,21 @@ $Fonts_Path = "CDS_Admin/Fonts/";
         if (isset($_FILES["file"])) {
             if ($_FILES["file"]["error"] > 0) {
                 echo "<b>Return Code</b>: " . $_FILES["file"]["error"] . "<br />";
-            } 
+            }
             else {
                 echo "<b>Upload</b>: " . $_FILES["file"]["name"] . "<br />";
                 echo "<b>Type</b>: " . $_FILES["file"]["type"] . "<br />";
                 echo "<b>Size</b>: " . round (($_FILES["file"]["size"] / 1024),2) . " Kb<br />";
                 if (file_exists("upload/" . $_FILES["file"]["name"])) {
                     echo $_FILES["file"]["name"] . " already exists. ";
-                } 
+                }
                 else {
                     $storagename = $_FILES["file"]["name"];
                     move_uploaded_file($_FILES["file"]["tmp_name"], $Uploaded_Files . $storagename);
                     // echo "<b>Stored in</b>: " . "Uploaded files/" . $_FILES["file"]["name"] . "<br />";
                 }
             }
-        } 
+        }
         else {
             echo "No file selected <br />";
         }
@@ -115,8 +116,8 @@ $Fonts_Path = "CDS_Admin/Fonts/";
                         <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
                             <table class="table dataTable my-0" id="dataTable">
                                 <thead>
-                                    <th>ID</th>	
-                                    <th>Name</th>	
+                                    <th>ID</th>
+                                    <th>Name</th>
                                     <?php
                                         if($_POST["eventType"]==0) {
                                             echo "<th>Registration Number</th>";
@@ -126,8 +127,8 @@ $Fonts_Path = "CDS_Admin/Fonts/";
                                         }
                                    ?>
 
-                                    <th>Position</th>	
-                                    <th>Event Name</th>	
+                                    <th>Position</th>
+                                    <th>Event Name</th>
                                     <th>Certificate Link</th>
                                 </thead>
                                 <tbody>
@@ -237,12 +238,12 @@ $Fonts_Path = "CDS_Admin/Fonts/";
                     }
                     $submit_stmt->execute();
                }
-                if($_POST["eventType"]==0){	            
+                if($_POST["eventType"]==0){
                     echo '<tr><td>' . $participant_id . ' </td><td> ' . $participant_name . '</td><td> ' . $registration_number . '</td><td> ' . $position . '</td><td> ' . $event_name . '</td><td> <a href="' . $cert_link . '">Link</a></td></tr>';
-                }	            
+                }
                 else {
                     echo '<tr><td>' . $participant_id . ' </td><td> ' . $participant_name . '</td><td> ' . $college . '</td><td> ' . $position . '</td><td> ' . $event_name . '</td><td> <a href="' . $cert_link . '">Link</a></td></tr>';
-                }                
+                }
                 $submit_stmt->close();
 	        }
             fclose($handle);
@@ -257,7 +258,7 @@ $Fonts_Path = "CDS_Admin/Fonts/";
 
             </div>
         </div>
-        
+
         <footer class="bg-white sticky-footer">
             <div class="container my-auto">
                 <div class="text-center my-auto copyright"><span>SVCE ACM Student Chapter</span></div>
