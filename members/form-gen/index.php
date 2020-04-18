@@ -51,7 +51,6 @@
 <body id="page-top">
     <div id="wrapper">
 		<?php include("../navigation.php"); ?>
-		<script src="../../assets/js/dark-mode.js"></script>
 		<div class="container-fluid">
 			<div class="card shadow">
                     <div class="card-header py-3">

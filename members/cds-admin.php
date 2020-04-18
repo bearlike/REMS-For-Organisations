@@ -31,7 +31,6 @@ $Fonts_Path = "CDS_Admin/Fonts/";
 <body id="page-top" >
     <div id="wrapper">
      <?php include("navigation.php"); ?>
-     <script src="../assets/js/dark-mode.js"></script>
         <div class="container-fluid">
                 <div class="d-sm-flex justify-content-between align-items-center mb-4">
                     <h3 class="text-dark mb-0">Certificate Generation</h3><a class="btn btn-primary btn-sm d-none d-sm-inline-block" role="button" href="CDS_Admin/Sample_headers.csv"><i class="fas fa-download fa-sm text-white-50"></i>&nbsp;Download Sample CSV for CDS&nbsp;</a></div>
@@ -255,7 +254,6 @@ $Fonts_Path = "CDS_Admin/Fonts/";
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
 

@@ -17,7 +17,6 @@
 <body id="page-top">
     <div id="wrapper">
     <?php include("navigation.php"); ?>
-    <script src="../assets/js/dark-mode.js"></script>
     <div class="container-fluid">
                 <h3 class="text-dark mb-1">Bulk Mailer</h3>
                 <form>
