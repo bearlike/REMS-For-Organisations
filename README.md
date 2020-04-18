@@ -44,19 +44,15 @@ A two-ended system (Both for **admin** and **public**) that'll automatically  ge
 
 
 
-## Screenshot
+## Screenshots (Click to enlarge)
 
 ```bash
 Tested on Apache/2.4.41 (Win64) OpenSSL/1.1.1c PHP/7.3.11 with 10.4.8-MariaDB
 ```
-
-<img src="/docs/images/cds-public.png" width="650"/>
-
-<img src="/docs/images/cds-admin.png" width="650"/>
-
-<img src="/docs/images/cert.png" width="650"/>
-
-
+### Certificate Distribution System (CDS)
+| CDS Public (Collection)      | CDS Public (Generation)      | Generated Certificates       |
+| ------------- | ----------- | ------------- |
+| <img src="/docs/images/cds-public.png" width="650"/>   | <img src="/docs/images/cds-admin.png" width="650"/> |  <img src="/docs/images/cert.png" width="650"/> |
 
 
 
