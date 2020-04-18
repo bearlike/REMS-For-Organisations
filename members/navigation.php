@@ -1,6 +1,7 @@
 <?php
-$startPath='/cms';
-echo '		<!--  Navigation Panel starts !-->
+
+echo '
+			<!--  Navigation Panel starts !-->
 			<nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
 				<div class="container-fluid d-flex flex-column p-0">
 					<a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
@@ -28,9 +29,8 @@ echo '		<!--  Navigation Panel starts !-->
 						</div>
 						<li class="nav-item" role="presentation"><a class="nav-link" href="'.$startPath.'/members/db-manage.php"><i class="fas fa-database"></i><span>&nbsp;Maintainance</span></a></li>
 						<hr class="sidebar-divider">
-
 					</ul>
-					
+
 					<div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
 				</div>
 			</nav>
@@ -59,6 +59,9 @@ echo '		<!--  Navigation Panel starts !-->
 							</div>
 							</form>
 						</div>
+					</li>
+					<li class="nav-item dropdown no-arrow mx-1" role="presentation">
+						<a class="nav-link" id="mode_toggler" onClick="change_mode(sessionStorage.toChange)"><i class="fas fa-sun"></i></a>
 					</li>
 					<li class="nav-item dropdown no-arrow mx-1" role="presentation">
 						<div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="badge badge-danger badge-counter">3+</span><i class="fas fa-bell fa-fw"></i></a>
@@ -105,5 +108,6 @@ echo '		<!--  Navigation Panel starts !-->
 			</div>
 			</nav>
 		<!--  Navigation panel ends   !-->
+		<script src="/cms/assets/js/dark-mode.js"></script>
 ';
 ?>

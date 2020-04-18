@@ -24,7 +24,7 @@ if(!empty($_POST)){
                "authorization: ".$shortcm_authorization,
                "content-type: application/json"
           ) ,
-          ));          
+          ));
      }
      else {
           $URLPath=" ";
@@ -44,7 +44,7 @@ if(!empty($_POST)){
                "authorization: ".$shortcm_authorization,
                "content-type: application/json"
           ) ,
-          ));          
+          ));
      }
      $response = curl_exec($curl);
      $err = curl_error($curl);
@@ -55,14 +55,14 @@ if(!empty($_POST)){
      }
      else {
           $obj=json_decode($response, true);
-          $shortURL=$obj['shortURL']; 
+          $shortURL=$obj['shortURL'];
      }
 }
 else{
      $noPost=1;
 }
 ?>
-<head>
+<head id="head_tag">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>Link Shortener: SVCE-ACM CMS</title>
@@ -75,7 +75,7 @@ else{
 
 <body id="page-top">
     <div id="wrapper">
-    <?php include("navigation.php"); ?>            
+    <?php include("navigation.php"); ?>
     <div class="container-fluid">
 			<div class="card shadow">
                     <div class="card-header py-3">
@@ -107,7 +107,7 @@ else{
                                         </tr>
                                         <tr>
 									<td>
-										<input type="submit" style="margin-top: 1em;" name="submit" class="btn btn-primary mb-2">		
+										<input type="submit" style="margin-top: 1em;" name="submit" class="btn btn-primary mb-2">
 									</td>
 									<td></td>
 									<td></td>
@@ -117,13 +117,14 @@ else{
 					</div>
                     </div>
 			</div>
-			<br><br>
-        <footer class="bg-white sticky-footer">
-            <div class="container my-auto">
-                <div class="text-center my-auto copyright"><span>SVCE ACM Student Chapter</span></div>
-            </div>
-        </footer>
-    </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a></div>
+		</div>
+     </div>
+     <footer class="bg-white sticky-footer">
+          <div class="container my-auto">
+               <div class="text-center my-auto copyright"><span>SVCE ACM Student Chapter</span></div>
+          </div>
+     </footer>
+    <a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>

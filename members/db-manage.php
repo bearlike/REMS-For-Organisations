@@ -1,4 +1,4 @@
-<?php   
+<?php
     include("header.php");
 	// Dictionary on what to replace what with what
     $table="Choose an table";
@@ -45,7 +45,7 @@
         $sql = "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`='".$db."' AND `TABLE_NAME`='".$table."'";
         // echo $sql;   // For testing
         $columns = $conn->query($sql); // COLUMN_NAME
-        $i=0;   
+        $i=0;
         foreach ($columns as $row) {
             $colArr[$i]=$row['COLUMN_NAME'];
             $i++;
@@ -58,13 +58,13 @@
         // Find the starting element for the current $page
         $startPage = $perPage*($page-1);
         $sql = "select * from ".$table." order by id limit ".$startPage.",".$perPage.";";
-        // echo "<br>".$sql;    // For testing 
+        // echo "<br>".$sql;    // For testing
         $registrants  = $conn->query($sql);
     }
 ?>
 <html>
 
-<head>
+<head id="head_tag">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>Database Management: SVCE-ACM</title>
@@ -137,14 +137,14 @@
                                         </select>&nbsp;</label></div>
                                         </div>
                                         <div class="col-md-6">
-                                            <!-- 
+                                            <!--
                                                 <div class="text-md-right dataTables_filter" id="dataTable_filter"><label><input type="search" name="search" class="form-control form-control-sm" aria-controls="dataTable" placeholder="Search ID"></label></div>
                                             -->
-                                            </form> 
+                                            </form>
                                         </div>
                                     </div>
                         <div class="table-responsive-xl table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
-                            <table class="table dataTable my-0 table-striped" id="dataTable">
+                            <table class="table dataTable table-sm my-0 table-striped" id="dataTable">
                                 <thead>
                                     <tr>
                                         <?php
@@ -211,7 +211,7 @@
                                 </tfoot>
                             </table>
                         </div>
-                        
+
                         <div class="row">
                             <div class="col-md-6 align-self-center">
                                 <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite"></p>
@@ -223,15 +223,15 @@
                                         <input type="hidden" name="table" value="<?php echo $_GET['table']; ?>"/>
                                         <input type="hidden" name="perPage" value="<?php echo $perPage; ?>"/>
                                         <?php
-                                            // Generate buttons for choosing pages 
+                                            // Generate buttons for choosing pages
                                             for ($x=1; $x<=$totalPages; $x++){
-                                                if($x==$page){ 
+                                                if($x==$page){
                                                     echo '<li class="page-item active"><button name="page" value="'.$x.'" class="page-link">'.$x.'</button></li>';
                                                 }
                                                 else{
                                                     echo '<li class="page-item"><button name="page" value="'.$x.'" class="page-link">'.$x.'</button></li>';
                                                 }
-                                             } 
+                                             }
                                         ?>
 
                                         <li class="page-item <?php if($page==$totalPages){echo 'disabled';} ?>"><button name="page" value="<?php echo ($page+1); ?>" class="page-link" aria-label="Next"><span aria-hidden="true">»</span></button></li>
@@ -239,7 +239,7 @@
                                 </nav>
                             </form>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
