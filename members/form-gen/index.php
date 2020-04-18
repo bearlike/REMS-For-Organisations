@@ -1,5 +1,5 @@
 <?php
-	error_reporting(E_ALL ^ E_NOTICE); 
+	error_reporting(E_ALL ^ E_NOTICE);
 	include("../header.php");
 	$new_dbname="svcehost_forms";
 	$form_location="../../public/Generated Forms/";
@@ -35,7 +35,7 @@
 
 <html>
 
-<head>
+<head id="head_tag">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>From Generator: SVCE-ACM</title>
@@ -67,7 +67,7 @@
 								</tr>
 								<tr id="alert_name">
 									<th>Event description
-										<div style="margin-top: 10px;"><button type="button" class="btn btn-primary" onclick="preview_description()">Preview</button></div></th>
+										<div style="margin-top: 10px;"><button type="button" class="btn btn-sm btn-primary" onclick="preview_description()">Preview</button></div></th>
 									<td><textarea class="form-control" name="event_description" id="event_desc"></textarea></td>
 									<td></td>
 								</tr>
@@ -118,7 +118,7 @@
 									</td>
 									<td></td>
 								</tr>
-								
+
 								<tr id="alert_fields">
 									<th>Choose the Fields Needed</th>
 									<td onclick="reverse_red('fields')">
@@ -182,7 +182,7 @@
 								</tr>
 								<tr>
 									<td>
-										<input type="submit" style="margin-top: 1em;" name="submit" class="btn btn-primary mb-2">		
+										<input type="submit" style="margin-top: 1em;" name="submit" class="btn btn-primary mb-2">
 									</td>
 									<td></td>
 									<td></td>
@@ -203,7 +203,7 @@
 								if(!checkedOne){
 									fields_row.style.backgroundColor = "rgba(255,0,0,0.1)";
 								}
-								
+
 								return checkedOne;
 							}
 							function reverse_red(x){
@@ -237,7 +237,7 @@
 										$form_file = $form_location.$event_name."-form.html";
 										$file = fopen($form_file,"w");
 										$table_columns = "id int NOT NULL AUTO_INCREMENT PRIMARY KEY, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,";
-										
+
 										//Initial details of the HTML page
 										$html_file = '<!DOCTYPE html>
 													<html>
@@ -362,6 +362,7 @@
 					</div>
 				</div>
 			</div>
+			<br><br>
 		</div>
 	</div>
      <footer class="bg-white sticky-footer">

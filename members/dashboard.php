@@ -1,4 +1,4 @@
-<?php 
+<?php
     include("header.php");
     $conn1 = new mysqli($servername, $username, $password, $dbname);
     // Check connection
@@ -28,7 +28,7 @@
 ?>
 <html>
 
-<head>
+<head id="head_tag">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>Dashboard: SVCE-ACM CMS</title>
@@ -41,7 +41,7 @@
 
 <body id="page-top">
     <div id="wrapper">
-     <?php include("navigation.php"); ?>            
+     <?php include("navigation.php"); ?>
             <div class="container-fluid">
                 <div class="d-sm-flex justify-content-between align-items-center mb-4">
                     <h3 class="text-dark mb-0">Welcome!</h3><a class="btn btn-danger btn-sm d-none d-sm-inline-block" role="button" href="https://github.com/K-Kraken/cms-for-organisations/issues" style="background-color: #ce1126;border-color: #e5053a;"><i class="fas fa-bug fa-sm text-white-50"></i>&nbsp;Raise a Issue</a></div>
