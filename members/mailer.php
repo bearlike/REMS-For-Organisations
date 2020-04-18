@@ -1,7 +1,7 @@
 <?php include("header.php"); ?>
 <html>
 
-<head>
+<head id="head_tag">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>Bulk Mailer: SVCE-ACM CMS</title>
@@ -16,7 +16,8 @@
 
 <body id="page-top">
     <div id="wrapper">
-    <?php include("navigation.php"); ?>            
+    <?php include("navigation.php"); ?>
+    <script src="../assets/js/dark-mode.js"></script>
     <div class="container-fluid">
                 <h3 class="text-dark mb-1">Bulk Mailer</h3>
                 <form>

@@ -1,5 +1,5 @@
 <?php
-	error_reporting(E_ALL ^ E_NOTICE); 
+	error_reporting(E_ALL ^ E_NOTICE);
 	include("../header.php");
 	$new_dbname="svcehost_forms";
 	$form_location="../../public/Generated Forms/";
@@ -35,7 +35,7 @@
 
 <html>
 
-<head>
+<head id="head_tag">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>From Generator: SVCE-ACM</title>
@@ -51,6 +51,7 @@
 <body id="page-top">
     <div id="wrapper">
 		<?php include("../navigation.php"); ?>
+		<script src="../../assets/js/dark-mode.js"></script>
 		<div class="container-fluid">
 			<div class="card shadow">
                     <div class="card-header py-3">
@@ -118,7 +119,7 @@
 									</td>
 									<td></td>
 								</tr>
-								
+
 								<tr id="alert_fields">
 									<th>Choose the Fields Needed</th>
 									<td onclick="reverse_red('fields')">
@@ -182,7 +183,7 @@
 								</tr>
 								<tr>
 									<td>
-										<input type="submit" style="margin-top: 1em;" name="submit" class="btn btn-primary mb-2">		
+										<input type="submit" style="margin-top: 1em;" name="submit" class="btn btn-primary mb-2">
 									</td>
 									<td></td>
 									<td></td>
@@ -203,7 +204,7 @@
 								if(!checkedOne){
 									fields_row.style.backgroundColor = "rgba(255,0,0,0.1)";
 								}
-								
+
 								return checkedOne;
 							}
 							function reverse_red(x){
@@ -237,7 +238,7 @@
 										$form_file = $form_location.$event_name."-form.html";
 										$file = fopen($form_file,"w");
 										$table_columns = "id int NOT NULL AUTO_INCREMENT PRIMARY KEY, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,";
-										
+
 										//Initial details of the HTML page
 										$html_file = '<!DOCTYPE html>
 													<html>

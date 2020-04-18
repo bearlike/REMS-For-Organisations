@@ -24,7 +24,7 @@ if(!empty($_POST)){
                "authorization: ".$shortcm_authorization,
                "content-type: application/json"
           ) ,
-          ));          
+          ));
      }
      else {
           $URLPath=" ";
@@ -44,7 +44,7 @@ if(!empty($_POST)){
                "authorization: ".$shortcm_authorization,
                "content-type: application/json"
           ) ,
-          ));          
+          ));
      }
      $response = curl_exec($curl);
      $err = curl_error($curl);
@@ -55,14 +55,14 @@ if(!empty($_POST)){
      }
      else {
           $obj=json_decode($response, true);
-          $shortURL=$obj['shortURL']; 
+          $shortURL=$obj['shortURL'];
      }
 }
 else{
      $noPost=1;
 }
 ?>
-<head>
+<head id="head_tag">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>Link Shortener: SVCE-ACM CMS</title>
@@ -75,7 +75,8 @@ else{
 
 <body id="page-top">
     <div id="wrapper">
-    <?php include("navigation.php"); ?>            
+    <?php include("navigation.php"); ?>
+    <script src="../assets/js/dark-mode.js"></script>
     <div class="container-fluid">
 			<div class="card shadow">
                     <div class="card-header py-3">
@@ -107,7 +108,7 @@ else{
                                         </tr>
                                         <tr>
 									<td>
-										<input type="submit" style="margin-top: 1em;" name="submit" class="btn btn-primary mb-2">		
+										<input type="submit" style="margin-top: 1em;" name="submit" class="btn btn-primary mb-2">
 									</td>
 									<td></td>
 									<td></td>
