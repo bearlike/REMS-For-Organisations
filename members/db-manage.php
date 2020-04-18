@@ -144,7 +144,7 @@
                                         </div>
                                     </div>
                         <div class="table-responsive-xl table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
-                            <table class="table dataTable my-0 table-striped" id="dataTable">
+                            <table class="table dataTable table-sm my-0 table-striped" id="dataTable">
                                 <thead>
                                     <tr>
                                         <?php
