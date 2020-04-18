@@ -79,6 +79,7 @@ if ($conn->connect_error) {
 
                 $mail = new PHPMailer();  // create a new object
                 $mail->IsSMTP();
+                $mail->isHTML(true);
                 $mail->SMTPDebug = 0;
                 $mail->SMTPAuth = true;
                 $mail->SMTPSecure = 'ssl';
