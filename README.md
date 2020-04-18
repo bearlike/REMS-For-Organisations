@@ -32,21 +32,15 @@ What things you need to run the software:
 ### Installation
 
 1. Create and Import the CMS Database dump for  **MySQL-MariaDB** from [here](/docs/files/Sample_CMS_Database.sql) 
-  
 2. Create a Forms Database.
-  
 3. Copy the files from this repository to a location in the root directory of the web server
-  
 4. Rename `member/secrets.php_` to `member/secrets.php`
-  
 5. Update your database credentials, databases names (CMS and Forms) and API Keys in `member/secrets.php` and `public/cds-public.php`
-  
 6. With your Web Server and MySQL server running, visit the site
-	  - ```
-      	Default Username: admin
-     Default Password: admin
-        ```
-    
+   - ```
+      Default Username: admin
+      Default Password: admin
+     ```
 7. If any error occurs, check your configurations in `member/secrets.php` and `public/cds-public.php` and try again
 
 
