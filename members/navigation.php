@@ -1,6 +1,7 @@
 <?php
-$startPath='/cms';
-echo '		<!--  Navigation Panel starts !-->
+
+echo '
+			<!--  Navigation Panel starts !-->
 			<nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
 				<div class="container-fluid d-flex flex-column p-0">
 					<a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
@@ -107,5 +108,6 @@ echo '		<!--  Navigation Panel starts !-->
 			</div>
 			</nav>
 		<!--  Navigation panel ends   !-->
+		<script src="/cms/assets/js/dark-mode.js"></script>
 ';
 ?>

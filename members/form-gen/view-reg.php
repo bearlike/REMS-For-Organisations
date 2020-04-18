@@ -122,7 +122,6 @@
 <body id="page-top">
     <div id="wrapper">
             <?php include("../navigation.php"); ?>
-            <script src="../../assets/js/dark-mode.js"></script>
             <div class="container-fluid">
                 <div class="d-sm-flex justify-content-between align-items-center mb-4">
                     <h3 class="text-dark mb-0">View Responses</h3><a class="btn btn-primary btn-sm d-none d-sm-inline-block" role="button" href="<?php if(isset($_GET['event'])){echo "toCSV.php?event=".$event."\" target=\"_blank\"";}else{echo "#";}  ?>"><i class="fas fa-download fa-sm text-white-50"></i>&nbsp;Download CSV&nbsp;</a></div>

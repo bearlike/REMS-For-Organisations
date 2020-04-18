@@ -28,8 +28,14 @@
 }
 
 .card{
-    background-color: #171717;
-    border-color: #171717;
+    background-color: #191919;
+    border: 0px solid black;
+    box-shadow: 0px 0px 0px #000 !important;
+    color: #9ea1b6 !important;
+}
+
+.card .text-dark{
+    color: #9ea1b6 !important;
 }
 
 .card-header{
@@ -48,13 +54,13 @@
 }
 
 .dropdown-menu{
-    background-color: #171717 !important;
-    border-color: #171717;
+    background-color: #202020 !important;
+    border-color: #202020;
 }
 
 .dropdown-item{
     color: #ffffff !important;
-    border-color: #171717 !important;
+    border-color: #202020 !important;
 }
 
 .dropdown-item:hover{
@@ -74,5 +80,13 @@
 }
 
 .bg-light{
-    background-color: #171717 !important;
+    background-color: #202020 !important;
+}
+
+.text-black-50{
+    color: #ffffff !important;
+}
+
+.error:after, .error:before{
+    background: #282828;
 }
