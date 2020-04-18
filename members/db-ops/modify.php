@@ -12,7 +12,7 @@
         $sql = "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`='".$db."' AND `TABLE_NAME`='".$table."'";
         // echo $sql;   // For testing
         $columns = $conn->query($sql); // COLUMN_NAME
-        $i=0;   
+        $i=0;
         foreach ($columns as $row) {
             $colArr[$i]=$row['COLUMN_NAME'];
             $i++;
@@ -37,7 +37,7 @@
                 $updateSQL=$updateSQL.", ".$key."="."\"".$value."\"";
         }
         $updateSQL=$updateSQL." WHERE id=".$id;
-        echo $updateSQL."<br><br>"; 
+        echo $updateSQL."<br><br>";
         if($db==$dbname)
             $dbc=1;
         else
@@ -45,7 +45,7 @@
         if ($conn->query($updateSQL) === TRUE) {
             echo "Record updated successfully";
             header('Location: ../db-manage.php?db='.$dbc.'&table='.$table);
-        } 
+        }
         else {
             header('Location: ../pages/error.php?error='.$conn->error);
         }
@@ -54,7 +54,7 @@
 ?>
 <html>
 
-<head>
+<head id="head_tag">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>Modify Row: SVCE-ACM</title>
@@ -70,6 +70,7 @@
 <body id="page-top">
     <div id="wrapper">
 		<?php include("../navigation.php"); ?>
+        <script src="../../assets/js/dark-mode.js"></script>
 		<div class="container-fluid">
 			<div class="card shadow">
                     <div class="card-header py-3">
@@ -79,7 +80,7 @@
                         <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
 					    <table class="table dataTable table-sm" id="dataTable">
 							<form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post" style="width: 60%;margin-left: 20%;margin-right: 20%" onSubmit="return validate_form();">
-                                    <?php   
+                                    <?php
                                         foreach ($colArr as $col){
                                         	if($col!='id' && $col!='timestamp'){
                                                 echo '<tr>';
@@ -103,7 +104,7 @@
                                         <input type="hidden" name="db" value="<?php echo $db;  ?>" ?>
                                         <input type="hidden" name="table" value="<?php echo $table;  ?>" ?>
                                         <input type="hidden" name="id" value="<?php echo $id;  ?>" ?>
-										<input type="submit" style="margin-top: 1em;" value="Modify Values" name="submit" class="btn btn-md btn-primary mb-2">		
+										<input type="submit" style="margin-top: 1em;" value="Modify Values" name="submit" class="btn btn-md btn-primary mb-2">
 									</td>
 									<td></td>
 									<td></td>
