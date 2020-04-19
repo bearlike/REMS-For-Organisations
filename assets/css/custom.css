@@ -13,7 +13,29 @@
   }
 }
 
+.alert-success{
+    width: 60%;
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
 #mode_toggler{
     font-size: 22px !important;
     color: #f0e609;
+}
+
+.center{
+    text-align:center !important;
+}
+
+.link_copy{
+    display: inline-flex;
+    width: 100%;
+}
+
+.link_copy a{
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+    font-size: 20px;
 }

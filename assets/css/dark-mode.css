@@ -90,3 +90,12 @@
 .error:after, .error:before{
     background: #282828;
 }
+
+.alert-success{
+    background-color: #0B4444;
+    border-color: #0B4444;
+    color: #ffffff;
+}
+#mail_shortened{
+    background-color: #282828;
+}
