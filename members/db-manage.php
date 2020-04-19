@@ -143,14 +143,14 @@
                                             </form>
                                         </div>
                                     </div>
-                        <div class="table-responsive-xl table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                        <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
                             <table class="table dataTable table-sm my-0 table-striped" id="dataTable">
                                 <thead>
                                     <tr>
                                         <?php
                                             if(!(empty($_GET['table']))){
                                                 foreach ($colArr as $col){
-                                                    echo "<th>".$col."</th>";
+                                                    echo "<th>".$col."&nbsp;&nbsp;</th>";
                                                 }
                                                 echo "<th></th>";
                                             }
@@ -243,6 +243,7 @@
                     </div>
                 </div>
             </div>
+            <br><br>
         </div>
         <footer class="bg-white sticky-footer">
             <div class="container my-auto">
