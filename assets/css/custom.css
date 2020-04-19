@@ -27,3 +27,15 @@
 .center{
     text-align:center !important;
 }
+
+.link_copy{
+    display: inline-flex;
+    width: 100%;
+}
+
+.link_copy a{
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+    font-size: 20px;
+}

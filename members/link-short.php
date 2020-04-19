@@ -98,9 +98,9 @@ else{
                                         <tr>
                                               <td></td>
                                              <td>
-                                                  <div style="input,button {float: left;}">
-                                                       <input class="form-control" style="background-color: #f8f9fc; float: left;" type="text" value="<?php if($noPost==0){ echo $shortURL;} else { echo " "; }   ?>" id="shortURL_" readonly>
-                                                       <button class="btn btn-primary btn-sm d-none d-sm-inline-block" onclick="copyToClipboard()">Copy text</button>
+                                                  <div class="link_copy" style="input,button {float: left;}">
+                                                       <input class="form-control" style="background-color: #f8f9fc; float: left; width:90%;" type="text" value="<?php if($noPost==0){ echo $shortURL;} else { echo " "; }   ?>" id="shortURL_" readonly>
+                                                       <a class="" onclick="copyToClipboard()"><i class="far fa-copy"></i></a>
                                                   </div>
                                              </td>
                                              <td></td>
@@ -119,6 +119,10 @@ else{
 			</div>
 		</div>
      </div>
+     <div id="mail_shortened">
+
+     </div>
+
      <footer class="bg-white sticky-footer">
           <div class="container my-auto">
                <div class="text-center my-auto copyright"><span>SVCE ACM Student Chapter</span></div>
@@ -137,7 +141,9 @@ else{
                copyText.select();
                copyText.setSelectionRange(0, 99999); /*For mobile devices*/
                document.execCommand("copy");
-               alert("Shortened URL is copied to your clipboard: "+copyText.value);
+               document.getElementById("mail_shortened").innerHTML=`<div class="alert alert-success" role="alert">
+                         Link has been copied to your clipboard
+                       </div>`;
           }
     </script>
 </body>
