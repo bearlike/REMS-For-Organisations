@@ -42,11 +42,13 @@ $tableNames = $conn->query($sql);
                     <h5 style="margin-top: 0;padding-top: 15px;">Choose the mailing list(s)</h5>
                     <div class="form-row" id="choose-list" style="margin-left: 10px;margin-top: 0px;margin-right: 10px;padding-top: 0px;">
                         <div class="col">
+                            <select name="mailing_list" class="form-control border-1 small" style="width:40%">
                             <?php
                             foreach ($tableNames as $row) {
-                                echo '<div class="form-check"><input class="form-check-input" type="radio" name="mailing_list" value="'.$row["Tables_in_".$mailerDB].'"><label class="form-check-label">'.ucwords(str_replace("_"," ",$row["Tables_in_".$mailerDB])).'</label></div>';
+                                echo '<option value="'.$row["Tables_in_".$mailerDB].'">'.ucwords(str_replace("_"," ",$row["Tables_in_".$mailerDB])).'</option>';
                             }
                             ?>
+                        </select>
                         </div>
                     </div>
                     <div class="form-row" id="subject" style="margin-left: 10px;margin-top: 14px;margin-right: 10px;">

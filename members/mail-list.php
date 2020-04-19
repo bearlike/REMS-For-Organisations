@@ -25,13 +25,15 @@ if ($conn->connect_error) {
 <body id="page-top">
     <div id="wrapper">
      <?php include("navigation.php"); ?>
-        <div class="container-fluid">
+        <div class="container-fluid" >
                 <style>
                 .upload-btn-wrapper input[type=file] {
                     opacity: 0;
                 }
                 </style>
-                <div class="" style="padding-bottom: 19px;">
+                <h3 class="text-dark mb-1" >Mailing List Generator</h3>
+
+                <div class="" style="padding-bottom: 30px; padding-top:30px">
                 <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post" enctype="multipart/form-data">
                     <input type="file" name="file" id="file" required />
                     <br><br>
