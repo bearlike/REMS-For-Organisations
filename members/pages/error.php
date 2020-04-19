@@ -25,7 +25,7 @@
        <div class="container-fluid">
             <div class="text-center mt-5">
                 <h2><strong>Uh-Oh!</strong></h2>
-                <img src="../../assets/img/robot-err.png" style="padding-top:1.2em;padding-bottom:1.2em;">
+                <img src="../../assets/img/robot-err.png" height="250rem" style="padding-top:1.2em;padding-bottom:1.2em;">
                 <p class="text-black-50 mb-0">There was an error while operating with the database. <br><b>Server says:</b> <?php echo $_GET["error"]; ?><br><br><a href="javascript:history.back()">Go Back?</a>&nbsp;</p>
             </div>
         </div>
@@ -39,9 +39,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
-    <script src="assets/js/bs-init.js"></script>
+    <script src="../../assets/js/bs-init.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
-    <script src="assets/js/theme.js"></script>
+    <script src="../../assets/js/theme.js"></script>
 </body>
 
 </html>

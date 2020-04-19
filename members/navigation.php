@@ -108,6 +108,5 @@ echo '
 			</div>
 			</nav>
 		<!--  Navigation panel ends   !-->
-		<script src="/cms/assets/js/dark-mode.js"></script>
-';
+		<script src="'.$startPath.'/assets/js/dark-mode.js"></script>';
 ?>
