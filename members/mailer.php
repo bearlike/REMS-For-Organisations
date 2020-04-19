@@ -55,18 +55,18 @@ if ($conn->connect_error) {
                     </div>
                     <div class="form-row" id="subject" style="margin-left: 10px;margin-top: 14px;margin-right: 10px;">
                         <div class="col">
-                            <div class="form-group"><input class="form-control form-control" type="text" placeholder="Button label" required="" name="mail_button_label" id="mail_button_label"></div>
+                            <div class="form-group"><input class="form-control form-control" type="text" placeholder="Button label" required="" name="mail_button_label" id="mail_button_label" value="<?php echo $buttonLabel; ?>"></div>
                         </div>
                         <div class="col">
-                            <div class="form-group"><input class="form-control form-control" type="text" placeholder="Button URL" required="" name="mail_button_url" id="mail_button_url"></div>
+                            <div class="form-group"><input class="form-control form-control" type="text" placeholder="Button URL" required="" name="mail_button_url" id="mail_button_url" value="<?php echo $buttonURL; ?>"></div>
                         </div>
                     </div>
                     <div class="form-row" id="subject" style="margin-left: 10px;margin-top: 14px;margin-right: 10px;">
                         <div class="col">
-                            <div class="form-group"><input class="form-control form-control" type="text" placeholder="Logo URL" required="" name="mail_logo_url" id="mail_logo_url"></div>
+                            <div class="form-group"><input class="form-control form-control" type="text" placeholder="Logo URL" required="" name="mail_logo_url" id="mail_logo_url" value="<?php echo $logoURL; ?>"></div>
                         </div>
                         <div class="col">
-                            <div class="form-group"><input class="form-control form-control" type="text" placeholder="Cover Image URL" required="" name="mail_coverimg_url" id="mail_coverimg_url"></div>
+                            <div class="form-group"><input class="form-control form-control" type="text" placeholder="Cover Image URL" required="" name="mail_coverimg_url" id="mail_coverimg_url" value="<?php echo $coverURL; ?>"></div>
                         </div>
                     </div>
                     <div class="form-row" id="body" style="margin-left: 10px;margin-top: 14px;margin-right: 10px;">
@@ -83,12 +83,6 @@ if ($conn->connect_error) {
                         </div>
                     </div>
                 </form>
-                <script>
-                    document.getElementById("mail_button_label").value="Click here";
-                    document.getElementById("mail_button_url").value="https://svce.cc";
-                    document.getElementById("mail_logo_url").value="https://svce.acm.org/images/logos/svce_acm_2.png";
-                    document.getElementById("mail_coverimg_url").value="https://i1.createsend1.com/ei/t/D0/3B3/085/040656/csfinal/assg3.jpeg";
-                </script>
             </div>
             <?php
             if (isset($_POST["submit"])){
