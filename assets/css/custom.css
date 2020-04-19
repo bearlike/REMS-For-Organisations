@@ -13,6 +13,12 @@
   }
 }
 
+.alert-success{
+    width: 60%;
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
 #mode_toggler{
     font-size: 22px !important;
     color: #f0e609;
