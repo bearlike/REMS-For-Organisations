@@ -1,4 +1,6 @@
-<?php include("header.php");
+<?php
+include("header.php");
+include("mailer-templates/make_mail.php");
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -38,8 +40,7 @@ if ($conn->connect_error) {
                     <div class="form-row" id="choose-list" style="margin-left: 10px;margin-top: 0px;margin-right: 10px;padding-top: 0px;">
                         <div class="col">
                             <div class="form-check"><input class="form-check-input" type="radio" name="mailing_list" value="test_list"><label class="form-check-label">Test mailing list</label></div>
-                            <div class="form-check"><input class="form-check-input" type="radio" name="mailing_list" value="test_list"><label class="form-check-label">Test mailing list</label></div>
-                            <div class="form-check"><input class="form-check-input" type="radio" name="mailing_list" value="test_list"><label class="form-check-label">Test mailing list</label></div>
+                            <div class="form-check"><input class="form-check-input" type="radio" name="mailing_list" value="private_list"><label class="form-check-label">Private mailing list</label></div>
                         </div>
                     </div>
                     <div class="form-row" id="subject" style="margin-left: 10px;margin-top: 14px;margin-right: 10px;">
@@ -47,25 +48,63 @@ if ($conn->connect_error) {
                             <div class="form-group"><input class="form-control form-control" type="text" placeholder="Subject" required="" name="mail_subject"></div>
                         </div>
                     </div>
+                    <div class="form-row" id="subject" style="margin-left: 10px;margin-top: 14px;margin-right: 10px;">
+                        <div class="col">
+                            <div class="form-group"><input class="form-control form-control" type="text" placeholder="Title of the E-mail" required="" name="mail_title" id="mail_title"></div>
+                        </div>
+                    </div>
+                    <div class="form-row" id="subject" style="margin-left: 10px;margin-top: 14px;margin-right: 10px;">
+                        <div class="col">
+                            <div class="form-group"><input class="form-control form-control" type="text" placeholder="Button label" required="" name="mail_button_label" id="mail_button_label"></div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group"><input class="form-control form-control" type="text" placeholder="Button URL" required="" name="mail_button_url" id="mail_button_url"></div>
+                        </div>
+                    </div>
+                    <div class="form-row" id="subject" style="margin-left: 10px;margin-top: 14px;margin-right: 10px;">
+                        <div class="col">
+                            <div class="form-group"><input class="form-control form-control" type="text" placeholder="Logo URL" required="" name="mail_logo_url" id="mail_logo_url"></div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group"><input class="form-control form-control" type="text" placeholder="Cover Image URL" required="" name="mail_coverimg_url" id="mail_coverimg_url"></div>
+                        </div>
+                    </div>
                     <div class="form-row" id="body" style="margin-left: 10px;margin-top: 14px;margin-right: 10px;">
                         <div class="col">
-                            <div class="form-group"><textarea class="form-control form-control" placeholder="Mail Body" required="" style="height: 350px;min-height: 250px;" name="mail_body"></textarea></div>
+                            <div class="form-group"><textarea class="form-control form-control" placeholder="Mail Body" required="" style="height: 350px;min-height: 250px;" name="mail_body" id="mail_body"></textarea></div>
                         </div>
                     </div>
                     <div class="form-row" id="submit-btn" style="margin-left: 10px;margin-top: 14px;margin-right: 10px;">
-                        <div class="col">
+                        <div class="col center">
                             <div class="form-group"><button class="btn btn-primary" type="submit" name="submit">&nbsp;<i class="fa fa-send"></i>&nbsp; &nbsp; &nbsp;Send Message&nbsp; &nbsp;</button></div>
+                        </div>
+                        <div class="col center">
+                            <div class="form-group"><button class="btn btn-primary" type="button" onClick="preview()">&nbsp;<i class="fas fa-eye"></i>&nbsp; &nbsp; &nbsp;Preview message&nbsp; &nbsp;</button></div>
                         </div>
                     </div>
                 </form>
+                <script>
+                    document.getElementById("mail_button_label").value="Click here";
+                    document.getElementById("mail_button_url").value="https://svce.cc";
+                    document.getElementById("mail_logo_url").value="https://svce.acm.org/images/logos/svce_acm_2.png";
+                    document.getElementById("mail_coverimg_url").value="https://i1.createsend1.com/ei/t/D0/3B3/085/040656/csfinal/assg3.jpeg";
+                </script>
             </div>
             <?php
             if (isset($_POST["submit"])){
 
                 $mailing_list = $_POST["mailing_list"];
+
                 $mail_subject = $_POST["mail_subject"];
+
+                $mail_title = $_POST["mail_title"];
+                $mail_button_label = $_POST["mail_button_label"];
+                $mail_button_url = $_POST["mail_button_url"];
+                $mail_logo_url = $_POST["mail_logo_url"];
+                $mail_coverimg_url = $_POST["mail_coverimg_url"];
                 $mail_body = $_POST["mail_body"];
 
+                $mail_generated=make_mail($mail_body,$mail_title,$mail_button_url,$mail_button_label,$mail_logo_url,$mail_coverimg_url);
                 $get_columns_sql = "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`='".$mailerDB."' AND `TABLE_NAME`='".$mailing_list."'";
                 $columns = $conn->query($get_columns_sql); // COLUMN_NAME
                 $i=0;
@@ -89,7 +128,7 @@ if ($conn->connect_error) {
                 $mail->Password = $mailerPassword;
                 $mail->SetFrom($mailerUname, "Organizing team");
                 $mail->Subject = $mail_subject;
-                $mail->Body = $mail_body;
+                $mail->Body = $mail_generated;
                 foreach ($list as $row){
                         $mail->AddBCC($row['email']);
                 }
@@ -102,6 +141,21 @@ if ($conn->connect_error) {
                 	}
             }
              ?>
+
+        <script src="mailer-templates/preview_mail.js"></script>
+        <script>
+            function preview(){
+                var myWindow = window.open("", "_blank");
+                var body = document.getElementById("mail_body").value;
+                var title = document.getElementById("mail_title").value;
+                var button_link = document.getElementById("mail_button_url").value;
+                var button_label = document.getElementById("mail_button_label").value;
+                var logourl = document.getElementById("mail_logo_url").value;
+                var coverimgurl = document.getElementById("mail_coverimg_url").value;
+                var email = preview_email(body,title,button_link,button_label,logourl,coverimgurl);
+                myWindow.document.write(email);
+            }
+        </script>
         </div>
         <footer class="bg-white sticky-footer">
             <div class="container my-auto">
@@ -117,6 +171,7 @@ if ($conn->connect_error) {
     <script src="../assets/js/bs-init.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
     <script src="../assets/js/theme.js"></script>
+
 </body>
 
 </html>
