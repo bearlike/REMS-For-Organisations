@@ -40,7 +40,7 @@
                                         <h4 class="text-dark mb-4">Members Portal</h4>
                                     </div>
                                     <form class="user" action="validate.php" method="POST">
-                                        <div class="form-group"><input class="form-control form-control-user" type="text" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter Username..." name="uname" required></div>
+                                        <div class="form-group"><input type="hidden" value="unknown" name="ipadd" id="ipadd" /><input class="form-control form-control-user" type="text" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter Username..." name="uname" required></div>
                                         <div class="form-group"><input class="form-control form-control-user" type="password" id="exampleInputPassword" placeholder="Password (Shhh....)" name="password" required></div>
                                         <div class="form-group">
                                             <div class="custom-control custom-checkbox small">
@@ -64,6 +64,30 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
     <script src="../assets/js/theme.js"></script>
+    <script>
+        /* To retrieve client IP Address */
+        function populatePre(url) {
+            const regex = /ip=[0-9]+.[0-9]+.[0-9]+.[0-9]+/gm;
+            var xhr = new XMLHttpRequest();
+            xhr.onload = function() {
+                while ((m = regex.exec(this.responseText)) !== null) {
+                    // This is necessary to avoid infinite loops with zero-width matches
+                    if (m.index === regex.lastIndex) {
+                        regex.lastIndex++;
+                    }
+                    // The result can be accessed through the `m`-variable.
+                    m.forEach((match, groupIndex) => {
+                        var ip = match.replace("ip=", "");
+                        document.getElementById('ipadd').value = (ip);
+                    });
+                }
+            };
+            xhr.open('GET', url);
+            xhr.send();
+        }
+        populatePre("https://www.cloudflare.com/cdn-cgi/trace");    
+    </script>
+
 </body>
 
 </html>
