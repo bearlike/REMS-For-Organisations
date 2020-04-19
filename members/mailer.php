@@ -14,7 +14,10 @@ $conn = new mysqli($servername, $username, $password, $mailerDB);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
+$sql = "show TABLES from ".$mailerDB;
+$tableNames = $conn->query($sql);
 ?>
+
 <html>
 
 <head id="head_tag">
@@ -39,8 +42,13 @@ if ($conn->connect_error) {
                     <h5 style="margin-top: 0;padding-top: 15px;">Choose the mailing list(s)</h5>
                     <div class="form-row" id="choose-list" style="margin-left: 10px;margin-top: 0px;margin-right: 10px;padding-top: 0px;">
                         <div class="col">
-                            <div class="form-check"><input class="form-check-input" type="radio" name="mailing_list" value="test_list"><label class="form-check-label">Test mailing list</label></div>
-                            <div class="form-check"><input class="form-check-input" type="radio" name="mailing_list" value="private_list"><label class="form-check-label">Private mailing list</label></div>
+                            <select name="mailing_list" class="form-control border-1 small" style="width:40%">
+                            <?php
+                            foreach ($tableNames as $row) {
+                                echo '<option value="'.$row["Tables_in_".$mailerDB].'">'.ucwords(str_replace("_"," ",$row["Tables_in_".$mailerDB])).'</option>';
+                            }
+                            ?>
+                        </select>
                         </div>
                     </div>
                     <div class="form-row" id="subject" style="margin-left: 10px;margin-top: 14px;margin-right: 10px;">
