@@ -3,7 +3,7 @@
 * Username and Password Validator
 * For CMS For Organisations
 */
-session_start(); 
+session_start();
 if (!empty($_SESSION)) {
     if($_SESSION['remember']==0){
         session_destroy();
@@ -26,7 +26,7 @@ if (!empty( $_POST)) {
 
     // Create connection
     $conn = new mysqli($servername, $username, $password, $dbname);
-
+  
     // Check connection
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
@@ -42,10 +42,10 @@ if (!empty( $_POST)) {
             $flag=false;
         }
     }
-    
-    if ($flag==false) {       
-        $conn->close();     
-        echo "Unsuccessful";  
+
+    if ($flag==false) {
+        $conn->close();
+        echo "Unsuccessful";
         header('Location: member-login.php');
     }
     else {
@@ -57,7 +57,7 @@ if (!empty( $_POST)) {
         if ($_POST['remember']==1){
             $_SESSION['remember']=1;
             echo "remembered";
-        } 
+        }
         else{
             $_SESSION['remember']=0;
             echo "not remembered";

@@ -3,12 +3,12 @@
     $conn1 = new mysqli($servername, $username, $password, $dbname);
     // Check connection
     if ($conn1->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
+        die("Connection failed: " . $conn1->connect_error);
     }
     $conn2 = new mysqli($servername, $username, $password, $formDB);
     // Check connection
     if ($conn2->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
+        die("Connection failed: " . $conn1->connect_error);
     }
     $resultc = $conn1->query('SELECT CONCAT("event_",LOWER(REPLACE((SELECT `event_name` FROM `events` order by `date` desc limit 1)," ","_"))) as code');
     $rowc = $resultc->fetch_row();

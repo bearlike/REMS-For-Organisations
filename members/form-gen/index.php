@@ -67,7 +67,7 @@
 								</tr>
 								<tr id="alert_name">
 									<th>Event description
-										<div style="margin-top: 10px;"><button type="button" class="btn btn-sm btn-primary" onclick="preview_description()">Preview</button></div></th>
+										<div style="margin-top: 10px;"><button type="button" class="btn btn-primary" onclick="preview_description()">Preview</button></div></th>
 									<td><textarea class="form-control" name="event_description" id="event_desc"></textarea></td>
 									<td></td>
 								</tr>
@@ -362,7 +362,6 @@
 					</div>
 				</div>
 			</div>
-			<br><br>
 		</div>
 	</div>
      <footer class="bg-white sticky-footer">

@@ -5,7 +5,7 @@
 */
       session_start();
       if (!$_SESSION['uname']){
-            header('Location: /cms/members/member-login.php');    
+            header('Location: /cms/members/member-login.php');
       }
       else{
             if($_SESSION['remember']==0){
@@ -27,9 +27,9 @@
             $dbname = 'svcehost_cms';
             $formDB="svcehost_forms";
             /* Include Secret Keys such as APIs and override default database credentials */
-            include("secrets_.php");
+            include("secrets.php");
             /* database credentials END */
             $_SESSION['loginTime'] = date("Y-m-d H:i:s", time());
       }
-     
+
 ?>

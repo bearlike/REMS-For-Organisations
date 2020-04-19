@@ -98,9 +98,9 @@ else{
                                         <tr>
                                               <td></td>
                                              <td>
-                                                  <div class="link_copy" style="input,button {float: left;}">
-                                                       <input class="form-control" style="background-color: #f8f9fc; float: left; width:90%;" type="text" value="<?php if($noPost==0){ echo $shortURL;} else { echo " "; }   ?>" id="shortURL_" readonly>
-                                                       <a class="" onclick="copyToClipboard()"><i class="far fa-copy"></i></a>
+                                                  <div style="input,button {float: left;}">
+                                                       <input class="form-control" style="background-color: #f8f9fc; float: left;" type="text" value="<?php if($noPost==0){ echo $shortURL;} else { echo " "; }   ?>" id="shortURL_" readonly>
+                                                       <button class="btn btn-primary btn-sm d-none d-sm-inline-block" onclick="copyToClipboard()">Copy text</button>
                                                   </div>
                                              </td>
                                              <td></td>
@@ -117,18 +117,13 @@ else{
 					</div>
                     </div>
 			</div>
-		</div>
-     </div>
-     <div id="mail_shortened">
-
-     </div>
-
-     <footer class="bg-white sticky-footer">
-          <div class="container my-auto">
-               <div class="text-center my-auto copyright"><span>SVCE ACM Student Chapter</span></div>
-          </div>
-     </footer>
-    <a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a></div>
+			<br><br>
+        <footer class="bg-white sticky-footer">
+            <div class="container my-auto">
+                <div class="text-center my-auto copyright"><span>SVCE ACM Student Chapter</span></div>
+            </div>
+        </footer>
+    </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
@@ -141,9 +136,7 @@ else{
                copyText.select();
                copyText.setSelectionRange(0, 99999); /*For mobile devices*/
                document.execCommand("copy");
-               document.getElementById("mail_shortened").innerHTML=`<div class="alert alert-success" role="alert">
-                         Link has been copied to your clipboard
-                       </div>`;
+               alert("Shortened URL is copied to your clipboard: "+copyText.value);
           }
     </script>
 </body>

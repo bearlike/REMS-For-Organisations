@@ -254,7 +254,6 @@ $Fonts_Path = "CDS_Admin/Fonts/";
                         </div>
                     </div>
                 </div>
-                <br><br>
             </div>
         </div>
 
