@@ -74,7 +74,7 @@ if (!empty($_POST)) {
 		if ($conn->connect_error) {
 			die("Connection failed: " . $conn->connect_error);
 		}
-		$Log = "Looged in Successfully from " . $_POST['ipadd'];
+		$Log = "Logged in Successfully from " . $_POST['ipadd'];
 		$LogSQL = 'CALL enterLog("' . $_POST['uname'] . '","' . $Log . '");';
 		echo $LogSQL;
 		if ($conn->query($LogSQL) === TRUE) {
