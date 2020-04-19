@@ -56,6 +56,7 @@ if(!empty($_POST)){
      else {
           $obj=json_decode($response, true);
           $shortURL=$obj['shortURL'];
+          logActivity($_SESSION['uname'], 'In Link-Short, [' . $OrignalURL . '] -> [' . $shortURL . '] shortend');
      }
 }
 else{
@@ -98,7 +99,7 @@ else{
                                         <tr>
                                               <td></td>
                                              <td>
-                                                  <div class="link_copy" style="input,button {float: left;}">
+                                                  <div class="link_copy">
                                                        <input class="form-control" style="background-color: #f8f9fc; float: left; width:90%;" type="text" value="<?php if($noPost==0){ echo $shortURL;} else { echo " "; }   ?>" id="shortURL_" readonly>
                                                        <a class="" onclick="copyToClipboard()"><i class="far fa-copy"></i></a>
                                                   </div>

@@ -15,7 +15,10 @@ echo '
 						<div class="sidebar-heading">
 							<p class="mb-0">Media &amp; marketing</p>
 						</div>
-						<li class="nav-item" role="presentation"><a class="nav-link" href="'.$startPath.'/members/cds-admin.php"><i class="fas fa-medal"></i><span>&nbsp;Certificate Generator</span></a><a class="nav-link" href="'.$startPath.'/members/mailer.php"><i class="fas fa-mail-bulk"></i><span>&nbsp;Bulk Mailer</span></a></li>
+						<li class="nav-item" role="presentation">
+						<a class="nav-link" href="'.$startPath.'/members/cds-admin.php"><i class="fas fa-medal"></i><span>&nbsp;Certificate Generator</span></a>
+						<a class="nav-link" href="'.$startPath.'/members/mailer.php"><i class="fas fa-mail-bulk"></i><span>&nbsp;Bulk Mailer</span></a>
+						<a class="nav-link" href="'.$startPath.'/members/mail-list.php"><i class="fas fa-list"></i><span>&nbsp;Update Mailing list</span></a></li>
 						<hr class="sidebar-divider">
 						<div class="sidebar-heading">
 							<p class="mb-0">Events</p>
