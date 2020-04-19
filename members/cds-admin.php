@@ -76,11 +76,13 @@ $Fonts_Path = "CDS_Admin/Fonts/";
                 echo "<b>Size</b>: " . round (($_FILES["file"]["size"] / 1024),2) . " Kb<br />";
                 if (file_exists("upload/" . $_FILES["file"]["name"])) {
                     echo $_FILES["file"]["name"] . " already exists. ";
+                    logActivity($_SESSION['uname'], 'In CDS-Admin, [' . $_FILES["file"]["name"] . '] already exists for certificate generation.');
                 }
                 else {
                     $storagename = $_FILES["file"]["name"];
                     move_uploaded_file($_FILES["file"]["tmp_name"], $Uploaded_Files . $storagename);
                     // echo "<b>Stored in</b>: " . "Uploaded files/" . $_FILES["file"]["name"] . "<br />";
+                    logActivity($_SESSION['uname'], 'In CDS-Admin, [' . $_FILES["file"]["name"] . '] file uploaded for certificate generation.');
                 }
             }
         }

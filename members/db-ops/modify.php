@@ -44,6 +44,7 @@
             $dbc=2;
         if ($conn->query($updateSQL) === TRUE) {
             echo "Record updated successfully";
+            logActivity($_SESSION['uname'], 'Modified column for [id=' . $id . '] in [table=' . $table . '] of [db=' . $db . ']');
             header('Location: ../db-manage.php?db='.$dbc.'&table='.$table);
         }
         else {

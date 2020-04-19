@@ -7,11 +7,6 @@
 -- Server version: 10.4.8-MariaDB
 -- PHP Version: 7.3.11
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
-SET time_zone = "+00:00";
-
 
 DELIMITER $$
 --
@@ -24,6 +19,10 @@ END$$
 CREATE PROCEDURE `CheckUser` (IN `pUser` VARCHAR(255), IN `pPassword` VARCHAR(255))  BEGIN
 	SELECT COUNT(*) as code FROM login WHERE LoginName=pUser && PasswordHash=SHA(pPassword);
 END$$
+
+CREATE PROCEDURE `enterLog` (IN `pUser` VARCHAR(50), IN `pLog` VARCHAR(255))  NO SQL
+    COMMENT 'Logs User Actions'
+INSERT INTO logging (userid, log) VALUES (pUser, pLog)$$
 
 CREATE PROCEDURE `GetUser` (IN `pEmail` VARCHAR(255))  NO SQL
 BEGIN
@@ -92,7 +91,18 @@ INSERT INTO `login` (`id`, `LoginName`, `PasswordHash`, `Email`, `FullName`) VAL
 (1, 'admin', 'd033e22ae348aeb5660fc2140aec35850c4da997', 'test@test.com', 'admin');
 
 -- --------------------------------------------------------
+--
+-- Table structure for table `logging`
+--
 
+CREATE TABLE `logging` (
+  `id` int(11) NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `userid` varchar(50) NOT NULL COMMENT 'Username',
+  `log` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Logs user activity';
+
+-- --------------------------------------------------------
 --
 -- Indexes for table `certificates`
 --
@@ -113,23 +123,31 @@ ALTER TABLE `login`
   ADD UNIQUE KEY `LoginName` (`LoginName`),
   ADD UNIQUE KEY `Email` (`Email`),
   ADD UNIQUE KEY `FullName` (`FullName`);
-
+--
+-- Indexes for table `logging`
+--
+ALTER TABLE `logging`
+  ADD PRIMARY KEY (`id`);
 --
 -- AUTO_INCREMENT for table `certificates`
 --
 ALTER TABLE `certificates`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- AUTO_INCREMENT for table `login`
 --
 ALTER TABLE `login`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 COMMIT;
-
+--
+-- AUTO_INCREMENT for table `logging`
+--
+ALTER TABLE `logging`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
