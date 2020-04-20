@@ -41,7 +41,29 @@ $Fonts_Path = "CDS_Admin/Fonts/";
                 </style>
                 <div class="" style="padding-bottom: 19px;">
                 <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post" enctype="multipart/form-data">
-                    <input type="file" name="file" id="file" required />
+                    <div style="display:inline-flex">
+                        <input type="file" id="myFile" name="file" style="display: none" required />
+                                        <input id="spnFilePath" class="form-control border-1 small" style="width: 100%;max-width:15em;" placeholder="Selected certificate list" disabled>
+                                       <a class="btn btn-primary btn-sm link" id="btnFileUpload"><i
+                                                 class="fa fa-upload" aria-hidden="true"></i></a>
+                        </div>
+                                       <!-- <span id="spnFilePath"></span> -->
+                                       <script type="text/javascript">
+                                            // To hide the ugly file upload input and replace it with a button
+                                            window.onload = function() {
+                                                 var fileupload = document.getElementById("myFile");
+                                                 var filePath = document.getElementById("spnFilePath");
+                                                 var button = document.getElementById("btnFileUpload");
+                                                 button.onclick = function() {
+                                                      fileupload.click();
+                                                 };
+                                                 fileupload.onchange = function() {
+                                                      var fileName = fileupload.value.split('\\')[fileupload.value
+                                                           .split('\\').length - 1];
+                                                      filePath.value =  fileName;
+                                                 };
+                                            };
+                                       </script>
                     <br><br>
                     <input type="text" name="event_name" class="form-control border-1 small" style="width: 68%;max-width:15em;" placeholder="Enter the Event Name" required />
                     <br>

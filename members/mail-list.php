@@ -36,7 +36,29 @@ if ($conn->connect_error) {
 
                <div class="" style="padding-bottom: 30px; padding-top:30px">
                     <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post" enctype="multipart/form-data">
-                         <input type="file" name="file" id="file" required />
+                        <div style="display:inline-flex">
+                            <input type="file" id="myFile" name="file" style="display: none" required />
+                                            <input id="spnFilePath" class="form-control border-1 small" style="width: 100%;max-width:15em;" placeholder="Selected Mailing list file" disabled>
+                                           <a class="btn btn-primary btn-sm link" id="btnFileUpload"><i
+                                                     class="fa fa-upload" aria-hidden="true"></i></a>
+                            </div>
+                                           <!-- <span id="spnFilePath"></span> -->
+                                           <script type="text/javascript">
+                                                // To hide the ugly file upload input and replace it with a button
+                                                window.onload = function() {
+                                                     var fileupload = document.getElementById("myFile");
+                                                     var filePath = document.getElementById("spnFilePath");
+                                                     var button = document.getElementById("btnFileUpload");
+                                                     button.onclick = function() {
+                                                          fileupload.click();
+                                                     };
+                                                     fileupload.onchange = function() {
+                                                          var fileName = fileupload.value.split('\\')[fileupload.value
+                                                               .split('\\').length - 1];
+                                                          filePath.value =  fileName;
+                                                     };
+                                                };
+                                           </script>
                          <br><br>
                          <input type="text" name="mailer_name" class="form-control border-1 small"
                               style="width: 68%;max-width:15em;" placeholder="Enter the Mailer Name" required />
@@ -63,13 +85,13 @@ if ($conn->connect_error) {
                                 echo "<b>Size</b>: " . round(($_FILES["file"]["size"] / 1024), 2) . " Kb<br />";
                                 if (file_exists("upload/" . $_FILES["file"]["name"])) {
                                     echo $_FILES["file"]["name"] . " already exists. ";
-                                    logActivity($_SESSION['uname'], 'In Mail-List, [' . $_FILES["file"]["name"] . '] already exists for Mail Listing [name='.$_POST["mailer_name"].']');                                
+                                    logActivity($_SESSION['uname'], 'In Mail-List, [' . $_FILES["file"]["name"] . '] already exists for Mail Listing [name='.$_POST["mailer_name"].']');
                                 } else {
                                     $storagename = $_FILES["file"]["name"];
                                     move_uploaded_file($_FILES["file"]["tmp_name"], $Uploaded_Files . $storagename);
                                     // echo "<b>Stored in</b>: " . "Uploaded files/" . $_FILES["file"]["name"] . "<br />";
                                     logActivity($_SESSION['uname'], 'In Mail-List, [' . $_FILES["file"]["name"] . '] file uploaded for Mail Listing [name='.$_POST["mailer_name"].']');
-                                    
+
                                 }
                             }
                         } else {
