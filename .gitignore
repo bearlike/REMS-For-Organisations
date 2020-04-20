@@ -17,4 +17,7 @@ test-*.php
 # Ignore Secrets (API Keys)
 members/secrets_.php
 *.zip
-members/test.php
+
+# Ignore User Profile Picture upload
+assets/img/avatars/users/*
+
