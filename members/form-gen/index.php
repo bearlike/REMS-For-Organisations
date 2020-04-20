@@ -1,7 +1,6 @@
 <?php
 	error_reporting(E_ALL ^ E_NOTICE);
 	include("../header.php");
-	$new_dbname="svcehost_forms";
 	$form_location="../../public/Generated Forms/";
 	$display_prompts=array(
 						'regno' => 'Registration Number' ,
@@ -20,212 +19,240 @@
 			<option value="4">4</option>
 			</select>';
 
-	$department_dropdown = '<option value="Automobile Engineering">Automobile Engineering</option>
-							<option value="Biotechnology">Biotechnology</option>
-							<option value="Chemical Engineering">Chemical Engineering</option>
-							<option value="Computer Science and Engineering">Computer Science and Engineering</option>
-							<option value="Civil Engineering">Civil Engineering</option>
-							<option value="Electronics and Communication Engineering">Electronics and Communication Engineering</option>
-							<option value="Electrical and Electronics Engineering">Electrical and Electronics Engineering</option>
-							<option value="Information technology">Information Technology</option>
-							<option value="Marine Engineering">Marine Engineering</option>
-							<option value="Mechanical Engineering">Machanical Engineering</option>
-							</select>'
+	$department_dropdown = '	<option value="Automobile Engineering">Automobile Engineering</option>
+						<option value="Biotechnology">Biotechnology</option>
+						<option value="Chemical Engineering">Chemical Engineering</option>
+						<option value="Computer Science and Engineering">Computer Science and Engineering</option>
+						<option value="Civil Engineering">Civil Engineering</option>
+						<option value="Electronics and Communication Engineering">Electronics and Communication Engineering</option>
+						<option value="Electrical and Electronics Engineering">Electrical and Electronics Engineering</option>
+						<option value="Information technology">Information Technology</option>
+						<option value="Marine Engineering">Marine Engineering</option>
+						<option value="Mechanical Engineering">Machanical Engineering</option>
+						</select>'
 ?>
 
 <html>
 
 <head id="head_tag">
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>From Generator: SVCE-ACM</title>
-    <link rel="icon" type="image/png" sizes="600x600" href="../../assets/img/Logo_White.png">
-    <link rel="stylesheet" href="../../assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="../../assets/fonts/fontawesome5-overrides.min.css">
-    <link rel="stylesheet" href="../../assets/css/custom.css">
+     <meta charset="utf-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+     <title>From Generator: SVCE-ACM</title>
+     <link rel="icon" type="image/png" sizes="600x600" href="../../assets/img/Logo_White.png">
+     <link rel="stylesheet" href="../../assets/bootstrap/css/bootstrap.min.css">
+     <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+     <link rel="stylesheet" href="../../assets/fonts/fontawesome5-overrides.min.css">
+     <link rel="stylesheet" href="../../assets/css/custom.css">
 </head>
 
 <body id="page-top">
-    <div id="wrapper">
-		<?php include("../navigation.php"); ?>
-		<div class="container-fluid">
-			<div class="card shadow">
+     <div id="wrapper">
+          <?php include("../navigation.php"); ?>
+          <div class="container-fluid">
+               <div class="card shadow">
                     <div class="card-header py-3">
-                        <p class="text-primary m-0 font-weight-bold">Form Generator</p>
+                         <p class="text-primary m-0 font-weight-bold">Form Generator</p>
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
-					    <table class="table dataTable my-0" id="dataTable">
-							<form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post" style="width: 60%;margin-left: 20%;margin-right: 20%" onSubmit="return validate_form();">
-								<tr id="alert_name">
-									<th>Event name</th>
-									<td onclick="reverse_red('name')"><input type="text" class="form-control" name="event_name" id="input_name"/></td>
-									<td></td>
-								</tr>
-								<tr id="alert_name">
-									<th>Event description
-										<div style="margin-top: 10px;"><button type="button" class="btn btn-sm btn-primary" onclick="preview_description()">Preview</button></div></th>
-									<td><textarea class="form-control" name="event_description" id="event_desc"></textarea></td>
-									<td></td>
-								</tr>
-								<script type="text/javascript">
-									function preview_description(){
-										var myWindow = window.open("", "_blank");
-										var markdown_text = document.getElementById('event_desc').value.replace(/\r?\n|\r/g, "\\n");
-										var generated_html = '<html><head><title>Preview page</title><body><div id="content"></div><script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"><\/script><script>document.getElementById("content").innerHTML =marked("'+markdown_text+'");<\/script></body></html>';
-										myWindow.document.write(generated_html);
-									}
-								</script>
-								<tr>
-									<th>Choose Type</th>
-									<td>
-										<div class="form-check">
-											<input class="form-check-input" type="radio" name="event_type" value="individual" onclick="disable_dropdown()" checked>
-											<label class="form-check-label">
-												Individual
-											</label>
-										</div>
-										<div class="form-check">
-											<input class="form-check-input" type="radio" name="event_type" value="team" onclick="enable_dropdown()">
-											<label class="form-check-label">
-												Team
-											</label>
-										</div>
-									</td>
-									<td></td>
-								</tr>
-								<script type="text/javascript">
-									function disable_dropdown(){
-										document.getElementById("number_participants").disabled=true;
-									}
-									function enable_dropdown(){
-										document.getElementById("number_participants").disabled=false;
-									}
-								</script>
-								<tr>
-									<th>Choose Number of Members (If Team)</th>
-									<td>
-										<select class="form-control" name="number_participants" id="number_participants" disabled>
-											<option value="1">1</option>
-											<option value="2">2</option>
-											<option value="3">3</option>
-											<option value="4">4</option>
-											<option value="5">5</option>
-										</select>
-									</td>
-									<td></td>
-								</tr>
+                         <div class="table-responsive table mt-2" id="dataTable" role="grid"
+                              aria-describedby="dataTable_info">
+                              <table class="table dataTable my-0" id="dataTable">
+                                   <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post"
+                                        style="width: 60%;margin-left: 20%;margin-right: 20%"
+                                        onSubmit="return validate_form();">
+                                        <tr id="alert_name">
+                                             <th>Event name</th>
+                                             <td onclick="reverse_red('name')"><input type="text" class="form-control"
+                                                       name="event_name" id="input_name" /></td>
+                                             <td></td>
+                                        </tr>
+                                        <tr id="alert_name">
+                                             <th>Event description
+                                                  <div style="margin-top: 10px;"><button type="button"
+                                                            class="btn btn-sm btn-primary"
+                                                            onclick="preview_description()">Preview</button></div>
+                                             </th>
+                                             <td><textarea class="form-control" name="event_description"
+                                                       id="event_desc"></textarea></td>
+                                             <td></td>
+                                        </tr>
+                                        <script type="text/javascript">
+                                        function preview_description() {
+                                             var myWindow = window.open("", "_blank");
+                                             var markdown_text = document.getElementById('event_desc').value.replace(
+                                                  /\r?\n|\r/g, "\\n");
+                                             var generated_html =
+                                                  '<html><head><title>Preview page</title><body><div id="content"></div><script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"><\/script><script>document.getElementById("content").innerHTML =marked("' +
+                                                  markdown_text + '");<\/script></body></html>';
+                                             myWindow.document.write(generated_html);
+                                        }
+                                        </script>
+                                        <tr>
+                                             <th>Choose Type</th>
+                                             <td>
+                                                  <div class="form-check">
+                                                       <input class="form-check-input" type="radio" name="event_type"
+                                                            value="individual" onclick="disable_dropdown()" checked>
+                                                       <label class="form-check-label">
+                                                            Individual
+                                                       </label>
+                                                  </div>
+                                                  <div class="form-check">
+                                                       <input class="form-check-input" type="radio" name="event_type"
+                                                            value="team" onclick="enable_dropdown()">
+                                                       <label class="form-check-label">
+                                                            Team
+                                                       </label>
+                                                  </div>
+                                             </td>
+                                             <td></td>
+                                        </tr>
+                                        <script type="text/javascript">
+                                        function disable_dropdown() {
+                                             document.getElementById("number_participants").disabled = true;
+                                        }
 
-								<tr id="alert_fields">
-									<th>Choose the Fields Needed</th>
-									<td onclick="reverse_red('fields')">
-										<div class="form-check">
-											<input class="form-check-input" type="checkbox" value="regno" name="fields[]">
-											<label class="form-check-label">
-												Registration Number
-											</label>
-										</div>
+                                        function enable_dropdown() {
+                                             document.getElementById("number_participants").disabled = false;
+                                        }
+                                        </script>
+                                        <tr>
+                                             <th>Choose Number of Members (If Team)</th>
+                                             <td>
+                                                  <select class="form-control" name="number_participants"
+                                                       id="number_participants" disabled>
+                                                       <option value="1">1</option>
+                                                       <option value="2">2</option>
+                                                       <option value="3">3</option>
+                                                       <option value="4">4</option>
+                                                       <option value="5">5</option>
+                                                  </select>
+                                             </td>
+                                             <td></td>
+                                        </tr>
 
-										<div class="form-check">
-											<input class="form-check-input" type="checkbox" name="fields[]" value="dept">
-											<label class="form-check-label">
-												Department
-											</label>
-										</div>
+                                        <tr id="alert_fields">
+                                             <th>Choose the Fields Needed</th>
+                                             <td onclick="reverse_red('fields')">
+                                                  <div class="form-check">
+                                                       <input class="form-check-input" type="checkbox" value="regno"
+                                                            name="fields[]">
+                                                       <label class="form-check-label">
+                                                            Registration Number
+                                                       </label>
+                                                  </div>
 
-										<div class="form-check">
-											<input class="form-check-input" type="checkbox" name="fields[]" value="year">
-											<label class="form-check-label">
-												Year
-											</label>
-										</div>
+                                                  <div class="form-check">
+                                                       <input class="form-check-input" type="checkbox" name="fields[]"
+                                                            value="dept">
+                                                       <label class="form-check-label">
+                                                            Department
+                                                       </label>
+                                                  </div>
 
-										<div class="form-check">
-											<input class="form-check-input" type="checkbox" name="fields[]" value="email">
-											<label class="form-check-label">
-												E-mail address
-											</label>
-										</div>
+                                                  <div class="form-check">
+                                                       <input class="form-check-input" type="checkbox" name="fields[]"
+                                                            value="year">
+                                                       <label class="form-check-label">
+                                                            Year
+                                                       </label>
+                                                  </div>
 
-										<div class="form-check">
-											<input class="form-check-input" type="checkbox" name="fields[]" value="phoneno">
-											<label class="form-check-label">
-												Contact Number
-											</label>
-										</div>
+                                                  <div class="form-check">
+                                                       <input class="form-check-input" type="checkbox" name="fields[]"
+                                                            value="email">
+                                                       <label class="form-check-label">
+                                                            E-mail address
+                                                       </label>
+                                                  </div>
 
-										<div class="form-check">
-											<input class="form-check-input" type="checkbox" name="fields[]" value="college">
-											<label class="form-check-label">
-												College
-											</label>
-										</div>
+                                                  <div class="form-check">
+                                                       <input class="form-check-input" type="checkbox" name="fields[]"
+                                                            value="phoneno">
+                                                       <label class="form-check-label">
+                                                            Contact Number
+                                                       </label>
+                                                  </div>
 
-										<div class="form-check">
-											<input class="form-check-input" type="checkbox" name="fields[]" value="github">
-											<label class="form-check-label">
-												GitHub Profile link
-											</label>
-										</div>
+                                                  <div class="form-check">
+                                                       <input class="form-check-input" type="checkbox" name="fields[]"
+                                                            value="college">
+                                                       <label class="form-check-label">
+                                                            College
+                                                       </label>
+                                                  </div>
 
-										<div class="form-check">
-											<input class="form-check-input" type="checkbox" name="fields[]" value="linkedin">
-											<label class="form-check-label">
-												LinkedIn Profile Link
-											</label>
-										</div>
-									</td>
-									<td></td>
-								</tr>
-								<tr>
-									<td>
-										<input type="submit" style="margin-top: 1em;" name="submit" class="btn btn-primary mb-2">
-									</td>
-									<td></td>
-									<td></td>
-								</tr>
-							</form>
-						</table>
-						<script type="text/javascript">
-							function validate_form(){
-								var checkboxes = document.querySelectorAll('input[type="checkbox"]');
-								var checkedOne = Array.prototype.slice.call(checkboxes).some(x => x.checked);
+                                                  <div class="form-check">
+                                                       <input class="form-check-input" type="checkbox" name="fields[]"
+                                                            value="github">
+                                                       <label class="form-check-label">
+                                                            GitHub Profile link
+                                                       </label>
+                                                  </div>
 
-								var event_length = document.getElementById("input_name").value.replace(" ","").length;
-								var name_row = document.getElementById("alert_name");
-								if(!event_length){
-									name_row.style.backgroundColor = "rgba(255,0,0,0.1)";
-								}
-								var fields_row = document.getElementById("alert_fields");
-								if(!checkedOne){
-									fields_row.style.backgroundColor = "rgba(255,0,0,0.1)";
-								}
+                                                  <div class="form-check">
+                                                       <input class="form-check-input" type="checkbox" name="fields[]"
+                                                            value="linkedin">
+                                                       <label class="form-check-label">
+                                                            LinkedIn Profile Link
+                                                       </label>
+                                                  </div>
+                                             </td>
+                                             <td></td>
+                                        </tr>
+                                        <tr>
+                                             <td>
+                                                  <input type="submit" style="margin-top: 1em;" name="submit"
+                                                       class="btn btn-primary mb-2">
+                                             </td>
+                                             <td></td>
+                                             <td></td>
+                                        </tr>
+                                   </form>
+                              </table>
+                              <script type="text/javascript">
+                              function validate_form() {
+                                   var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                                   var checkedOne = Array.prototype.slice.call(checkboxes).some(x => x.checked);
 
-								return checkedOne;
-							}
-							function reverse_red(x){
-								var row = document.getElementById("alert_"+x);
-								row.style.backgroundColor = "rgba(255,255,255,0)";
-							}
-						</script>
-					</div>
+                                   var event_length = document.getElementById("input_name").value.replace(" ", "")
+                                        .length;
+                                   var name_row = document.getElementById("alert_name");
+                                   if (!event_length) {
+                                        name_row.style.backgroundColor = "rgba(255,0,0,0.1)";
+                                   }
+                                   var fields_row = document.getElementById("alert_fields");
+                                   if (!checkedOne) {
+                                        fields_row.style.backgroundColor = "rgba(255,0,0,0.1)";
+                                   }
+
+                                   return checkedOne;
+                              }
+
+                              function reverse_red(x) {
+                                   var row = document.getElementById("alert_" + x);
+                                   row.style.backgroundColor = "rgba(255,255,255,0)";
+                              }
+                              </script>
+                         </div>
                     </div>
-			</div>
-			<br><br>
-			<div class="card shadow">
-				<div class="card-header py-3">
-					<p class="text-primary m-0 font-weight-bold">Form Generation Log</p>
-				</div>
-				<div class="card-body">
-					<div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
-						<table class="table dataTable my-0" id="dataTable">
-							<tbody>
-								<?php
+               </div>
+               <br><br>
+               <div class="card shadow">
+                    <div class="card-header py-3">
+                         <p class="text-primary m-0 font-weight-bold">Form Generation Log</p>
+                    </div>
+                    <div class="card-body">
+                         <div class="table-responsive table mt-2" id="dataTable" role="grid"
+                              aria-describedby="dataTable_info">
+                              <table class="table dataTable my-0" id="dataTable">
+                                   <tbody>
+                                        <?php
 									// Connecting to the database
-									$conn = new mysqli($servername, $username, $password, $new_dbname);
+									$conn = new mysqli($servername, $username, $password, $formDB);
 									if ($conn->connect_error) {
 										die("Connection failed: " . $conn->connect_error); // IF-Fail to Connect
 									}
@@ -236,6 +263,7 @@
 										$fields=$_POST["fields"];
 										$form_file = $form_location.$event_name."-form.html";
 										$file = fopen($form_file,"w");
+										logActivity($_SESSION['uname'], 'Generated a form for ['. $event_name.']');
 										$table_columns = "id int NOT NULL AUTO_INCREMENT PRIMARY KEY, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,";
 
 										//Initial details of the HTML page
@@ -357,27 +385,28 @@
 									}
 								?>
 
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
-			<br><br>
-		</div>
-	</div>
+                                   </tbody>
+                              </table>
+                         </div>
+                    </div>
+               </div>
+               <br><br>
+          </div>
+     </div>
      <footer class="bg-white sticky-footer">
-     	<div class="container my-auto">
+          <div class="container my-auto">
                <div class="text-center my-auto copyright"><span>SVCE ACM Student Chapter</span></div>
           </div>
      </footer>
-    </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a></div>
+     </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a></div>
 
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
-	<script src="../../assets/js/bs-init.js"></script>
-	<script src="../../assets/js/theme.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" crossorigin="anonymous"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
+     <script src="../../assets/js/bs-init.js"></script>
+     <script src="../../assets/js/theme.js"></script>
 </body>
+
 </html>
