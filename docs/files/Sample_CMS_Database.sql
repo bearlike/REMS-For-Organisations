@@ -2,11 +2,15 @@
 -- Link: https://github.com/K-Kraken/cms-for-organisations
 -- --------------------------------------------------------------
 -- Name: SQL Dump
--- version 4.9.1
+-- Made on version 4.9.1
 -- Generation Time: Apr 09, 2020 at 09:13 AM
 -- Server version: 10.4.8-MariaDB
 -- PHP Version: 7.3.11
+--
 
+--
+-- Database: `main_cms_database` represented by $dbname in the secrets.php
+--
 
 DELIMITER $$
 --
@@ -20,9 +24,11 @@ CREATE PROCEDURE `CheckUser` (IN `pUser` VARCHAR(255), IN `pPassword` VARCHAR(25
 	SELECT COUNT(*) as code FROM login WHERE LoginName=pUser && PasswordHash=SHA(pPassword);
 END$$
 
-CREATE PROCEDURE `enterLog` (IN `pUser` VARCHAR(50), IN `pLog` VARCHAR(255))  NO SQL
+CREATE PROCEDURE `enterLog` (IN `pUser` VARCHAR(50), IN `pLog` VARCHAR(255)) NO SQL
     COMMENT 'Logs User Actions'
-INSERT INTO logging (userid, log) VALUES (pUser, pLog)$$
+BEGIN
+INSERT INTO logging (userid, log) VALUES (pUser, pLog);
+END$$
 
 CREATE PROCEDURE `GetUser` (IN `pEmail` VARCHAR(255))  NO SQL
 BEGIN
@@ -35,22 +41,22 @@ DELIMITER ;
 
 --
 -- Table structure for table `certificates`
+-- Certicates generated are stored here
 --
 
 CREATE TABLE `certificates` (
   `id` int(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `regno` varchar(255) DEFAULT NULL,
-  `college` varchar(255) DEFAULT NULL,
   `dept` varchar(40) DEFAULT NULL,
   `year` int(10) DEFAULT NULL,
   `section` varchar(10) DEFAULT NULL,
   `email` varchar(255) NOT NULL,
   `position` varchar(255) NOT NULL,
   `cert_link` varchar(255) NOT NULL,
-  `event_name` varchar(255) NOT NULL
+  `event_name` varchar(255) NOT NULL,
+  `college` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
 
 -- --------------------------------------------------------
 
@@ -62,35 +68,11 @@ CREATE TABLE `events` (
   `id` int(255) NOT NULL,
   `event_name` varchar(255) NOT NULL,
   `date` date NOT NULL,
-  `isInter` tinyint(1) NOT NULL COMMENT 'True, if its an inter-college event'
+  `isInter` tinyint(1) NOT NULL COMMENT 'True if it''s an inter-college event'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
 
 -- --------------------------------------------------------
 
---
--- Table structure for table `login`
---
-
-CREATE TABLE `login` (
-  `id` int(11) NOT NULL,
-  `LoginName` varchar(40) NOT NULL,
-  `PasswordHash` varchar(255) NOT NULL,
-  `Email` varchar(255) NOT NULL,
-  `FullName` varchar(80) DEFAULT NULL,
-  `IsAdmin`	tinyint(1) DEFAULT NULL  COMMENT 'TTrue, if user needs admin privileges'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping default admin user into table `login` 
--- Username: admin
--- Password: admin
---
-
-INSERT INTO `login` (`id`, `LoginName`, `PasswordHash`, `Email`, `FullName`) VALUES
-(1, 'admin', 'd033e22ae348aeb5660fc2140aec35850c4da997', 'test@test.com', 'admin');
-
--- --------------------------------------------------------
 --
 -- Table structure for table `logging`
 --
@@ -103,6 +85,35 @@ CREATE TABLE `logging` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Logs user activity';
 
 -- --------------------------------------------------------
+
+--
+-- Table structure for table `login`
+--
+
+CREATE TABLE `login` (
+  `id` int(11) NOT NULL,
+  `LoginName` varchar(40) NOT NULL COMMENT 'Hash of the Password',
+  `PasswordHash` varchar(255) NOT NULL COMMENT 'Hash of the Password',
+  `Email` varchar(255) NOT NULL,
+  `FullName` varchar(80) DEFAULT NULL,
+  `IsAdmin` tinyint(1) DEFAULT 0 COMMENT 'True, user needs admin privileges',
+  `FirstName` varchar(40) DEFAULT NULL COMMENT 'First Name of the user',
+  `LastName` varchar(40) DEFAULT NULL COMMENT 'Last Name of the user',
+  `Address` varchar(255) DEFAULT NULL COMMENT 'Address',
+  `Phno` varchar(40) DEFAULT NULL COMMENT 'phone Number of User',
+  `Signature` varchar(255) DEFAULT NULL COMMENT 'Email Signature',
+  `imgsrc` varchar(255) DEFAULT '../image2.png' COMMENT 'Profile Image URL'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping default `admin` user for table `login`
+-- Username: admin
+-- Password: admin
+--
+
+INSERT INTO `login` (`id`, `LoginName`, `PasswordHash`, `Email`, `FullName`, `IsAdmin`, `FirstName`, `LastName`, `Address`, `Phno`, `Signature`, `imgsrc`) VALUES
+(3, 'admin', 'd033e22ae348aeb5660fc2140aec35850c4da997', 'krishna.alagiri03@gmail.com', 'admin', 1, NULL, NULL, NULL, NULL, NULL, '../image2.png');
+
 --
 -- Indexes for table `certificates`
 --
@@ -116,6 +127,12 @@ ALTER TABLE `events`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `logging`
+--
+ALTER TABLE `logging`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `login`
 --
 ALTER TABLE `login`
@@ -123,31 +140,29 @@ ALTER TABLE `login`
   ADD UNIQUE KEY `LoginName` (`LoginName`),
   ADD UNIQUE KEY `Email` (`Email`),
   ADD UNIQUE KEY `FullName` (`FullName`);
---
--- Indexes for table `logging`
---
-ALTER TABLE `logging`
-  ADD PRIMARY KEY (`id`);
+
 --
 -- AUTO_INCREMENT for table `certificates`
 --
 ALTER TABLE `certificates`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `logging`
+--
+ALTER TABLE `logging`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `login`
 --
 ALTER TABLE `login`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
---
--- AUTO_INCREMENT for table `logging`
---
-ALTER TABLE `logging`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
