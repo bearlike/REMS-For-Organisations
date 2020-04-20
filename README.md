@@ -34,8 +34,8 @@ What things you need to run the software:
 1. Create and Import the CMS Database dump for  **MySQL-MariaDB** from [here](/docs/files/Sample_CMS_Database.sql) 
 2. Create a Forms Database.
 3. Copy the files from this repository to a location in the root directory of the web server
-4. Rename `member/secrets.php_` to `member/secrets.php`
-5. Update your database credentials, databases names (CMS and Forms) and API Keys in `member/secrets.php` and `public/cds-public.php`
+4. Rename `member/secrets.php_` to `member/secrets_.php`
+5. Update your database credentials, databases names (CMS and Forms) and API Keys in `member/secrets_.php` and `public/cds-public.php`
 6. With your Web Server and MySQL server running, visit the site
    - ```
       Default Username: admin
@@ -70,9 +70,17 @@ This is an interface for the databases that are used. The administrator can upda
 
 This tool is used to generate forms for events. Initially, the specifications of the event must be selected and a form is generated with the designated fields and a **table is automatically created in `forms-db`**. The form also has **built-in validation** for all the fields (emails, URLs, etc) and **Markdown support** for event descriptions. Once the form is sent out, the entered values are updated in the database. 
 
-| Form Generator                                           | Sample Generated Form                                    |
+| Form Generator Interface                                 | Sample Generated Form                                    |
 | -------------------------------------------------------- | -------------------------------------------------------- |
 | <img src="https://i.imgur.com/mxOyjaP.png" width="650"/> | <img src="https://i.imgur.com/RnTQ3Jq.png" width="650"/> |
+
+### Bulk Mailer
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus semper, felis vel elementum tincidunt, arcu tellus ultricies justo, at imperdiet est purus ut nibh. Nunc tortor orci, pulvinar vel luctus ut, finibus sit amet ipsum. In condimentum nulla massa, eget vehicula ex ultricies feugiat. Proin et tristique odio. Nam a tortor pharetra, commodo dolor eu, rutrum augue. Cras vel porta erat, et congue elit. Aenean vel neque ac enim bibendum venenatis sed a tortor.  
+  
+| Bulk Mailer Interface                                    | Sample Sent Mail                                         |
+| -------------------------------------------------------- | -------------------------------------------------------- |
+| <img src="https://i.imgur.com/M5fIT6H.png" width="650"/> | <img src="https://i.imgur.com/WFY81vT.jpg" width="650"/> |
 
 ### View Responses
 
@@ -107,6 +115,12 @@ Perhaps our most desired feature, it gives an option to toggle the page between 
 | **Krishna Alagiri** | [K-Kraken](https://github.com/K-Kraken/) |
 | **Mahalakshumi V**  | [mahavisvanathan](https://github.com/mahavisvanathan/) |
 
+
+## Outside Contributors
+
+| Authors             | Profile Links                            | PR                                                         |
+| ------------------- | :--------------------------------------- | :-----------------------------------------------------------------------|
+| **Dhiraj V**        | [dhirajv2000](https://github.com/dhirajv2000) | [#28](https://github.com/K-Kraken/cms-for-organisations/pull/28)   |
 
 
 ## Acknowledgments
