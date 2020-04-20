@@ -27,6 +27,7 @@
          // Insert record
          $query = "UPDATE svcehost_cms.login SET imgsrc='$name' where LoginName = '$loginUser'";
          mysqli_query($conn,$query);
+         logActivity($_SESSION['uname'], "In Profile Editor, Update in [db=".$dbname."] SET [imgsrc=".$name."] ");
 
          // Upload file
          move_uploaded_file($_FILES['file']['tmp_name'],$target_dir.$name);
@@ -45,39 +46,41 @@
          $image_src = "../assets/img/avatars/users/".$image;
    }
    //user details form
-   if(isset($_POST['user_settings'])){
-   $email          =$_POST['email'];
-   $firstname      =$_POST['first_name'];
-   $lastname       =$_POST['last_name'];
-   $query = "UPDATE svcehost_cms.login SET lastname='$lastname', FirstName='$firstname', Email='$email' where LoginName = '$loginUser'";
+   if(isset($_POST['user_settings'])) {
+          $email          =$_POST['email'];
+          $firstname      =$_POST['first_name'];
+          $lastname       =$_POST['last_name'];
+          $query = "UPDATE svcehost_cms.login SET lastname='$lastname', FirstName='$firstname', Email='$email' where LoginName = '$loginUser'";
 
-   if (!mysqli_query($conn, $query)) {
-      header('Location: ../pages/error.php?error=' . mysqli_error($conn));
-   }
-   }
-   // contact details form
-   if(isset($_POST['contact_settings'])){
-   $address         =$_POST['address'];
-   $phno            =$_POST['phno'];
+          if (!mysqli_query($conn, $query)) {
+               header('Location: ../pages/error.php?error=' . mysqli_error($conn));
+          }
+          logActivity($_SESSION['uname'], "In Profile Editor, Update in [db=".$dbname."] SET [lastname=".$lastname.", FirstName=".$firstname.", Email=".$email."] ");
+     }
+     // contact details form
+     if(isset($_POST['contact_settings'])){
+          $address         =$_POST['address'];
+          $phno            =$_POST['phno'];
 
-   $query = "UPDATE svcehost_cms.login SET Address='$address', Phno='$phno' where LoginName = '$loginUser'";
+          $query = "UPDATE svcehost_cms.login SET Address='$address', Phno='$phno' where LoginName = '$loginUser'";
 
-   if (!mysqli_query($conn, $query)) {
-      header('Location: ../pages/error.php?error=' . mysqli_error($conn));
-   }
-   }
+          if (!mysqli_query($conn, $query)) {
+               header('Location: ../pages/error.php?error=' . mysqli_error($conn));
+          }
+          logActivity($_SESSION['uname'], "In Profile Editor, Update in [db=".$dbname."] SET [address=".$address.", phno=".$phno."] ");
+     }
 
    $sql = "SELECT * from login where LoginName = '$loginUser'";
    $result = mysqli_query($conn, $sql);
 
    //signature details form
    if(isset($_POST['signature_settings'])){
-   $signature         =$_POST['signature'];
-   $query = "UPDATE svcehost_cms.login SET Signature='$signature' where LoginName = '$loginUser'";
-
-   if (!mysqli_query($conn, $query)) {
-   echo "Error updating record: " . mysqli_error($conn);
-   }
+     $signature         =$_POST['signature'];
+     $query = "UPDATE svcehost_cms.login SET Signature='$signature' where LoginName = '$loginUser'";
+     if (!mysqli_query($conn, $query)) {
+          echo "Error updating record: " . mysqli_error($conn);
+     }
+     logActivity($_SESSION['uname'], "In Profile Editor, Update in [db=".$dbname."]  SET [signature=".$signature."] ");
    }
 
    $sql = "SELECT * from login where LoginName = '$loginUser'";
@@ -93,25 +96,24 @@
      <title>Profile: SVCE-ACM CMS</title>
      <link rel="icon" type="image/png" sizes="600x600" href="../assets/img/Logo_White.png">
      <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
-     <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
      <link rel="stylesheet" href="../assets/fonts/fontawesome5-overrides.min.css">
      <link rel="stylesheet" href="../assets/css/custom.css">
      <style>
-     .file_button_container,
-     .file_button_container input {
-          height: auto;
-     }
+          .file_button_container,
+          .file_button_container input {
+               height: auto;
+          }
 
-     .file_button_container {
-          background: transparent url(https://cdn2.iconfinder.com/data/icons/circle-icons-1/64/upload-32.png) left top no-repeat;
-     }
+          .file_button_container {
+               background: transparent url(https://cdn2.iconfinder.com/data/icons/circle-icons-1/64/upload-32.png) left top no-repeat;
+          }
 
-     .file_button_container input {
-          opacity: 0;
-     }
+          .file_button_container input {
+               opacity: 0;
+          }
      </style>
 </head>
 <?php if (mysqli_num_rows($result) > 0) {
@@ -137,20 +139,20 @@
                                         <input type="submit" class="btn btn-primary btn-sm" type="button"
                                              value="Change Photo" name="photo_settings" />
                                         <script type="text/javascript">
-                                        // To hide the ugly file upload input and replace it with a button
-                                        window.onload = function() {
-                                             var fileupload = document.getElementById("myFile");
-                                             var filePath = document.getElementById("spnFilePath");
-                                             var button = document.getElementById("btnFileUpload");
-                                             button.onclick = function() {
-                                                  fileupload.click();
+                                             // To hide the ugly file upload input and replace it with a button
+                                             window.onload = function() {
+                                                  var fileupload = document.getElementById("myFile");
+                                                  var filePath = document.getElementById("spnFilePath");
+                                                  var button = document.getElementById("btnFileUpload");
+                                                  button.onclick = function() {
+                                                       fileupload.click();
+                                                  };
+                                                  fileupload.onchange = function() {
+                                                       var fileName = fileupload.value.split('\\')[fileupload.value
+                                                            .split('\\').length - 1];
+                                                       filePath.innerHTML = "<b>Selected File: </b>" + fileName;
+                                                  };
                                              };
-                                             fileupload.onchange = function() {
-                                                  var fileName = fileupload.value.split('\\')[fileupload.value
-                                                       .split('\\').length - 1];
-                                                  filePath.innerHTML = "<b>Selected File: </b>" + fileName;
-                                             };
-                                        };
                                         </script>
                                    </form>
                               </div>
