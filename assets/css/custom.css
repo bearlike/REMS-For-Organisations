@@ -40,13 +40,22 @@
     font-size: 20px;
 }
 
-::-webkit-file-upload-button {
-  background: #4E73df ;
-  color: #ffffff;
-  border: 0px;
-  padding-top:  5px;
-  padding-bottom: 5px;
-  padding-left: 10px;
-  padding-right: 10px;
-  border-radius: 5px;
+.link{
+    font-size: 20px;
+    color: #ffffff !important;
+    margin-left: 10px;
+    padding-top: 5px;
+}
+
+.file_button_container,
+.file_button_container input {
+     height: auto;
+}
+
+.file_button_container {
+     background: transparent url(https://cdn2.iconfinder.com/data/icons/circle-icons-1/64/upload-32.png) left top no-repeat;
+}
+
+.file_button_container input {
+     opacity: 0;
 }
