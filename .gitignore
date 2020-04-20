@@ -1,8 +1,11 @@
-# Git ignore file for 
+# Git ignore file for
 # https://github.com/K-Kraken/cms-for-organisations
 
-# Uploaded Files
+# Uploaded Files for certificate generation
 members/CDS_Admin/Uploaded files/
+
+#Uploaded files for mailing list updation
+members/Mailing-list/Uploaded files/
 
 # Generated Certificate
 public/Generated Certificate/

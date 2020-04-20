@@ -99,3 +99,7 @@
 #mail_shortened{
     background-color: #282828;
 }
+
+::-webkit-file-upload-button{
+    background-color: #0B4444;
+}
