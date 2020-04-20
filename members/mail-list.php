@@ -32,8 +32,9 @@ if ($conn->connect_error) {
                     opacity: 0;
                }
                </style>
-               <h3 class="text-dark mb-1">Mailing List Generator</h3>
-
+               <div class="d-sm-flex justify-content-between align-items-center mb-4">
+               <h3 class="text-dark mb-1">Mailing List Generator</h3><a class="btn btn-primary btn-sm d-none d-sm-inline-block" role="button" href="Mailing-list/Sample_headers.csv"><i class="fas fa-download fa-sm text-white-50"></i>&nbsp;Download Sample CSV for Mailing list&nbsp;</a>
+           </div>
                <div class="" style="padding-bottom: 30px; padding-top:30px">
                     <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post" enctype="multipart/form-data">
                         <div style="display:inline-flex">
