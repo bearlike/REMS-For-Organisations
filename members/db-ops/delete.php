@@ -19,5 +19,6 @@
          $dbc=1;
      else
          $dbc=2;
+    logActivity($_SESSION['uname'], 'Removed column for [id=' . $id . '] in [table=' . $tablename . '] of [db=' . $_GET['db'] . ']');
 	header('Location: ../db-manage.php?db='.$dbc.'&table='.$tablename);
 ?>

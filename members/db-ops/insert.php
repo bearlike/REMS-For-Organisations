@@ -30,7 +30,8 @@ include("../header.php");
      else
          $dbc=2;
 	$submit_stmt->execute();
-	// echo("Value inserted successfully");
-	// echo ("<br> Value inserted successfully");
+	// echo("Value inserted successfully");			// For Debugging	
+	// echo ("<br> Value inserted successfully");	// For Debugging	
+	logActivity($_SESSION['uname'], 'Inserted column in [table=' . $tablename . '] of [db=' . $_POST['db'] . ']');
 	header('Location: ../db-manage.php?db='.$dbc.'&table='.$tablename);
 ?>
