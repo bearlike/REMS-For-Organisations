@@ -39,3 +39,14 @@
     margin-left: 10px;
     font-size: 20px;
 }
+
+::-webkit-file-upload-button {
+  background: #4E73df ;
+  color: #ffffff;
+  border: 0px;
+  padding-top:  5px;
+  padding-bottom: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 5px;
+}
