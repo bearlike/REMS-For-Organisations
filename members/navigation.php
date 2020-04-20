@@ -1,4 +1,29 @@
 <?php
+$displayCircles=array(
+                    'normal' => '<div class="bg-primary icon-circle"><i class="fas fa-file-alt text-white"></i></div>',
+                    'success' => '<div class="bg-success icon-circle"><i class="fas fa-crosshairs text-white"></i></div>',
+                    'warning' => '<div class="bg-warning icon-circle"><i class="fas fa-exclamation-triangle text-white"></i></div>'
+);
+
+$alertCount=0;
+$readReamining=0;
+$retAlerts = new mysqli($servername, $username, $password, $dbname);
+if ($retAlerts->connect_error) {
+	die("Connection failed: " . $retAlerts->connect_error);
+}
+$retAlertsSQL = 'select timestamp, user, message, type, clickURL from notification where user="' . $_SESSION['uname'] . '" order by id desc limit 3;';
+// echo $retAlertsSQL; // For Debugging
+// echo "Successfully Logged"; // For Debugging
+$logResults  = $retAlerts->query($retAlertsSQL);
+foreach ($logResults as $row) {
+	$alertArray[$alertCount]["timestamp"]=$row["timestamp"];          
+	$alertArray[$alertCount]["user"]=$row["user"];          
+	$alertArray[$alertCount]["message"]=$row["message"];          
+	$alertArray[$alertCount]["type"]=$row["type"];  
+	$alertArray[$alertCount]["clickURL"]=$row["clickURL"];          
+	$alertCount++;
+}          
+$retAlerts->close();
 
 echo '
 			<!--  Navigation Panel starts !-->
@@ -67,33 +92,28 @@ echo '
 						<a class="nav-link" id="mode_toggler" onClick="change_mode(sessionStorage.toChange)"><i class="fas fa-sun"></i></a>
 					</li>
 					<li class="nav-item dropdown no-arrow mx-1" role="presentation">
-						<div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="badge badge-danger badge-counter">3+</span><i class="fas fa-bell fa-fw"></i></a>
+						<div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="badge badge-danger badge-counter">'.$readReamining.'</span><i class="fas fa-bell fa-fw"></i></a>
 							<div class="dropdown-menu dropdown-menu-right dropdown-list dropdown-menu-right animated--grow-in" role="menu">
-							<h6 class="dropdown-header">alerts center</h6>
-							<a class="d-flex align-items-center dropdown-item" href="#">
-								<div class="mr-3">
-									<div class="bg-primary icon-circle"><i class="fas fa-file-alt text-white"></i></div>
-								</div>
-								<div><span class="small text-gray-500">December 12, 2019</span>
-									<p>Sample Text</p>
-								</div>
-							</a>
-							<a class="d-flex align-items-center dropdown-item" href="#">
-								<div class="mr-3">
-									<div class="bg-success icon-circle"><i class="fas fa-donate text-white"></i></div>
-								</div>
-								<div><span class="small text-gray-500">December 7, 2019</span>
-									<p>Sample Text</p>
-								</div>
-							</a>
-							<a class="d-flex align-items-center dropdown-item" href="#">
-								<div class="mr-3">
-									<div class="bg-warning icon-circle"><i class="fas fa-exclamation-triangle text-white"></i></div>
-								</div>
-								<div><span class="small text-gray-500">December 2, 2019</span>
-									<p>Sample Text</p>
-								</div>
-							</a><a class="text-center dropdown-item small text-gray-500" href="#">Show All Alerts</a></div>
+							<h6 class="dropdown-header">alerts center</h6>';
+if(!(empty($alertArray))){	
+	foreach ($alertArray as $alert){
+		if(empty($displayCircles[$alert["type"]])){
+			$displayCircles[$alert["type"]]='<div class="bg-primary icon-circle"><i class="fas fa-file-alt text-white"></i></div>';
+		}
+		echo '<a class="d-flex align-items-center dropdown-item" href="'.$alert["clickURL"].'">
+			<div class="mr-3">
+				'.$displayCircles[$alert["type"]].'
+			</div>
+			<div><span class="small text-gray-500"> '.$alert["user"].' said on '.$alert["timestamp"].'</span>
+				<p>'.$alert["message"].'</p>
+			</div>
+		</a>';	
+	}							
+}
+else{
+	echo '<span class="text-center dropdown-item small text-gray-500">No new alerts</span>';
+}
+echo '					<a class="text-center dropdown-item small text-gray-500" href="#">Show All Alerts</a></div>
 						</div>
 					</li>
 					<li class="nav-item dropdown no-arrow mx-1" role="presentation">
