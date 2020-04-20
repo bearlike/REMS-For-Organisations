@@ -30,7 +30,6 @@
       // Call Example: retProfilePic($_SESSION['uname']); 
       function retProfilePic($loggedOnUser) {
             include("secrets_.php");
-            $loggedOnUser="admin";
             $retProfilePic = new mysqli($servername, $username, $password, $dbname);
             if ($retProfilePic->connect_error) {
                   die("Connection failed: " . $retProfilePic->connect_error);
