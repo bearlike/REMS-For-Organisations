@@ -1,5 +1,8 @@
 <?php
     include("header.php");
+    if(retIsAdmin($_SESSION['uname'])==0){
+        header('Location: pages/error.php?error=noAccess');
+    }
 	// Dictionary on what to replace what with what
     $table="Choose an table";
     $page=1;
