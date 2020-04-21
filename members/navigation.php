@@ -16,14 +16,14 @@ $retAlertsSQL = 'select notification.timestamp, notification.user, notification.
 // echo "Successfully Logged"; // For Debugging
 $alertSQLResults  = $retAlerts->query($retAlertsSQL);
 foreach ($alertSQLResults as $rowAlert) {
-	$alertArray[$alertCount]["timestamp"]=$rowAlert["timestamp"];          
-	$alertArray[$alertCount]["user"]=$rowAlert["user"];          
-	$alertArray[$alertCount]["message"]=$rowAlert["message"];          
-	$alertArray[$alertCount]["type"]=$rowAlert["type"];  
-	$alertArray[$alertCount]["clickURL"]=$rowAlert["clickURL"]; 
-	$alertArray[$alertCount]["imgsrc"]=$rowAlert["imgsrc"];         
+	$alertArray[$alertCount]["timestamp"]=$rowAlert["timestamp"];
+	$alertArray[$alertCount]["user"]=$rowAlert["user"];
+	$alertArray[$alertCount]["message"]=$rowAlert["message"];
+	$alertArray[$alertCount]["type"]=$rowAlert["type"];
+	$alertArray[$alertCount]["clickURL"]=$rowAlert["clickURL"];
+	$alertArray[$alertCount]["imgsrc"]=$rowAlert["imgsrc"];
 	$alertCount++;
-}          
+}
 $retAlerts->close();
 
 echo '
@@ -90,13 +90,18 @@ echo '
 						</div>
 					</li>
 					<li class="nav-item dropdown no-arrow mx-1" role="presentation">
-						<a class="nav-link" id="mode_toggler" onClick="change_mode(sessionStorage.toChange)"><i class="fas fa-sun"></i></a>
+                    <div class="toggle" id="mode_toggler" class="nav-link" >
+                        <span class="icon sun"><i class="fas fa-sun"></i></span>
+                        <input type="checkbox" id="toggle-switch" onClick="change_mode(sessionStorage.toChange)" />
+                        <label for="toggle-switch"><span class="screen-reader-text">Toggle Color Scheme</span></label>
+                        <span class="icon moon"><i class="fas fa-moon"></i></span>
+                    </div>
 					</li>
 					<li class="nav-item dropdown no-arrow mx-1" role="presentation">
 						<div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="badge badge-danger badge-counter">'.$readReamining.'</span><i class="fas fa-bell fa-fw"></i></a>
 							<div class="dropdown-menu dropdown-menu-right dropdown-list dropdown-menu-right animated--grow-in" role="menu">
 							<h6 class="dropdown-header">alerts center</h6><a class="d-flex align-items-center dropdown-item" href="#">';
-if(!(empty($alertArray))){	
+if(!(empty($alertArray))){
 	foreach ($alertArray as $alert){
 		if(empty($displayCircles[$alert["type"]])){
 			echo '<a class="d-flex align-items-center dropdown-item" href="'.$alert["clickURL"].'"><div class="dropdown-list-image mr-3"><img class="rounded-circle" src="/cms/assets/img/avatars/users/'.$alert["imgsrc"].'" />
@@ -118,8 +123,8 @@ if(!(empty($alertArray))){
 				<p class="small text-gray-500 mb-0">'.$alert["user"].' - '.$alert["timestamp"].'</p>
 			</div>
 			</a>';
-		}	
-	}							
+		}
+	}
 }
 else{
 	echo '<span class="text-center dropdown-item small text-gray-500">No new alerts</span>';

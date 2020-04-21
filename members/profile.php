@@ -132,12 +132,18 @@
                                    <img class="rounded-circle mb-3 mt-4" src="<?php echo $image_src; ?>" width="160"
                                         height="160">
                                    <form method="post" id="fileForm" action="profile.php" enctype='multipart/form-data'>
-                                        <input type="file" id="myFile" name="file" style="display: none" required />
+                                       <div style="display:inline-flex">
+                                           <input type="file" id="myFile" name="file" style="display: none" required />
+                                                           <input id="spnFilePath" class="form-control border-1 small" style="width: 100%;max-width:15em;" placeholder="Select picture to change" disabled>
+                                                          <a class="btn btn-primary btn-sm link" id="btnFileUpload"><i
+                                                                    class="fa fa-upload" aria-hidden="true"></i></a>
+                                           </div>
+                                        <!-- <input type="file" id="myFile" name="file" style="display: none" required />
                                         <button class="btn btn-primary btn-sm" id="btnFileUpload"><i
                                                   class="fa fa-upload" aria-hidden="true"></i></button>
-                                        <span id="spnFilePath"></span>
+                                        <span id="spnFilePath"></span> -->
                                         <input type="submit" class="btn btn-primary btn-sm" type="button"
-                                             value="Change Photo" name="photo_settings" />
+                                             value="Change Photo" name="photo_settings" style="margin-top:10px;" />
                                         <script type="text/javascript">
                                              // To hide the ugly file upload input and replace it with a button
                                              window.onload = function() {
@@ -150,7 +156,7 @@
                                                   fileupload.onchange = function() {
                                                        var fileName = fileupload.value.split('\\')[fileupload.value
                                                             .split('\\').length - 1];
-                                                       filePath.innerHTML = "<b>Selected File: </b>" + fileName;
+                                                       filePath.value =  fileName;
                                                   };
                                              };
                                         </script>
@@ -168,7 +174,7 @@
                                         <div class="form-group">
                                           <label for="signature"><strong>Signature</strong><br></label>
                                           <textarea class="form-control" rows="4" name="signature">
-                                             <?php echo $row["Signature"]; ?> 
+                                             <?php echo $row["Signature"]; ?>
                                           </textarea>
                                         </div>
                                         <div class="form-group"><button class="btn btn-primary btn-sm" type="submit"
@@ -273,7 +279,7 @@
           <div class="container my-auto">
                <div class="text-center my-auto copyright"><span>SVCE ACM Student Chapter</span></div>
           </div>
-          <?php    
+          <?php
                }
             }
             mysqli_close($conn);
