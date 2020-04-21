@@ -3,6 +3,9 @@
     if(empty($_GET["error"])){
         $_GET["error"]="Ahm. Nothing?";
     }
+    else if($_GET["error"]=="noAccess"){
+        $_GET["error"]="You do not have enough privileges to view this page";
+    }
 ?>
 <html>
 
