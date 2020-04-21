@@ -11,7 +11,7 @@ $retAlerts = new mysqli($servername, $username, $password, $dbname);
 if ($retAlerts->connect_error) {
 	die("Connection failed: " . $retAlerts->connect_error);
 }
-$retAlertsSQL = 'select timestamp, user, message, type, clickURL from notification where user="' . $_SESSION['uname'] . '" order by id desc limit 3;';
+$retAlertsSQL = 'select notification.timestamp, notification.user, notification.message, notification.type, notification.clickURL, login.imgsrc from notification, login where notification.user=login.LoginName order by notification.id desc limit 3;';
 // echo $retAlertsSQL; // For Debugging
 // echo "Successfully Logged"; // For Debugging
 $logResults  = $retAlerts->query($retAlertsSQL);
@@ -20,7 +20,8 @@ foreach ($logResults as $row) {
 	$alertArray[$alertCount]["user"]=$row["user"];          
 	$alertArray[$alertCount]["message"]=$row["message"];          
 	$alertArray[$alertCount]["type"]=$row["type"];  
-	$alertArray[$alertCount]["clickURL"]=$row["clickURL"];          
+	$alertArray[$alertCount]["clickURL"]=$row["clickURL"]; 
+	$alertArray[$alertCount]["imgsrc"]=$row["imgsrc"];         
 	$alertCount++;
 }          
 $retAlerts->close();
@@ -94,20 +95,30 @@ echo '
 					<li class="nav-item dropdown no-arrow mx-1" role="presentation">
 						<div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="badge badge-danger badge-counter">'.$readReamining.'</span><i class="fas fa-bell fa-fw"></i></a>
 							<div class="dropdown-menu dropdown-menu-right dropdown-list dropdown-menu-right animated--grow-in" role="menu">
-							<h6 class="dropdown-header">alerts center</h6>';
+							<h6 class="dropdown-header">alerts center</h6><a class="d-flex align-items-center dropdown-item" href="#">';
 if(!(empty($alertArray))){	
 	foreach ($alertArray as $alert){
 		if(empty($displayCircles[$alert["type"]])){
-			$displayCircles[$alert["type"]]='<div class="bg-primary icon-circle"><i class="fas fa-file-alt text-white"></i></div>';
+			echo '<a class="d-flex align-items-center dropdown-item" href="'.$alert["clickURL"].'"><div class="dropdown-list-image mr-3"><img class="rounded-circle" src="/cms/assets/img/avatars/users/'.$alert["imgsrc"].'" />
+				<div class="bg-success"></div>
+			</div>
+			<div class="font-weight-bold">
+				<div class="text-truncate"><span>'.$alert["message"].'</span></div>
+				<p class="small text-gray-500 mb-0">'.$alert["user"].' - '.$alert["timestamp"].'</p>
+			</div>
+			</a>';
 		}
-		echo '<a class="d-flex align-items-center dropdown-item" href="'.$alert["clickURL"].'">
-			<div class="mr-3">
-				'.$displayCircles[$alert["type"]].'
+		else{
+			echo '<a class="d-flex align-items-center dropdown-item" href="">
+				<div class="mr-3">
+					'.$displayCircles[$alert["type"]].'
+				</div>
+			<div class="font-weight-bold">
+				<div class="text-truncate"><span>'.$alert["message"].'</span></div>
+				<p class="small text-gray-500 mb-0">'.$alert["user"].' - '.$alert["timestamp"].'</p>
 			</div>
-			<div><span class="small text-gray-500"> '.$alert["user"].' said on '.$alert["timestamp"].'</span>
-				<p>'.$alert["message"].'</p>
-			</div>
-		</a>';	
+			</a>';
+		}	
 	}							
 }
 else{
@@ -122,7 +133,7 @@ echo '					<a class="text-center dropdown-item small text-gray-500" href="#">Sho
 					<div class="d-none d-sm-block topbar-divider"></div>
 					<li class="nav-item dropdown no-arrow" role="presentation">
 						<div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="d-none d-lg-inline mr-2 text-gray-600 small">'.$loginUser.'</span><img class="border rounded-circle img-profile" src="'.retProfilePic($_SESSION['uname']).'"></a>
-							<div class="dropdown-menu shadow dropdown-menu-right animated--grow-in" role="menu"><a class="dropdown-item" role="presentation" href="'.$startPath.'/members/profile.php"><i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Profile</a><a class="dropdown-item" role="presentation" href="'.$startPath.'/members/settings.php"><i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Settings</a>
+							<div class="dropdown-menu shadow dropdown-menu-right animated--grow-in" role="menu"><a class="dropdown-item" role="presentation" href="'.$startPath.'/members/profile.php"><i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Profile</a>
 							<a class="dropdown-item" role="presentation" href="'.$startPath.'/members/activity-log.php"><i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Activity log</a>
 							<div class="dropdown-divider"></div><a class="dropdown-item" role="presentation" href="'.$startPath.'/members/logout.php"><i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Logout</a></div>
 						</div>
