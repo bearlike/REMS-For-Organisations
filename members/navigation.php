@@ -1,4 +1,30 @@
 <?php
+$displayCircles=array(
+                    'normal' => '<div class="bg-primary icon-circle"><i class="fas fa-file-alt text-white"></i></div>',
+                    'success' => '<div class="bg-success icon-circle"><i class="fas fa-crosshairs text-white"></i></div>',
+                    'warning' => '<div class="bg-warning icon-circle"><i class="fas fa-exclamation-triangle text-white"></i></div>'
+);
+
+$alertCount=0;
+$readReamining=0;
+$retAlerts = new mysqli($servername, $username, $password, $dbname);
+if ($retAlerts->connect_error) {
+	die("Connection failed: " . $retAlerts->connect_error);
+}
+$retAlertsSQL = 'select notification.timestamp, notification.user, notification.message, notification.type, notification.clickURL, login.imgsrc from notification, login where notification.user=login.LoginName order by notification.id desc limit 3;';
+// echo $retAlertsSQL; // For Debugging
+// echo "Successfully Logged"; // For Debugging
+$alertSQLResults  = $retAlerts->query($retAlertsSQL);
+foreach ($alertSQLResults as $rowAlert) {
+	$alertArray[$alertCount]["timestamp"]=$rowAlert["timestamp"];          
+	$alertArray[$alertCount]["user"]=$rowAlert["user"];          
+	$alertArray[$alertCount]["message"]=$rowAlert["message"];          
+	$alertArray[$alertCount]["type"]=$rowAlert["type"];  
+	$alertArray[$alertCount]["clickURL"]=$rowAlert["clickURL"]; 
+	$alertArray[$alertCount]["imgsrc"]=$rowAlert["imgsrc"];         
+	$alertCount++;
+}          
+$retAlerts->close();
 
 echo '
 			<!--  Navigation Panel starts !-->
@@ -67,33 +93,38 @@ echo '
 						<a class="nav-link" id="mode_toggler" onClick="change_mode(sessionStorage.toChange)"><i class="fas fa-sun"></i></a>
 					</li>
 					<li class="nav-item dropdown no-arrow mx-1" role="presentation">
-						<div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="badge badge-danger badge-counter">3+</span><i class="fas fa-bell fa-fw"></i></a>
+						<div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="badge badge-danger badge-counter">'.$readReamining.'</span><i class="fas fa-bell fa-fw"></i></a>
 							<div class="dropdown-menu dropdown-menu-right dropdown-list dropdown-menu-right animated--grow-in" role="menu">
-							<h6 class="dropdown-header">alerts center</h6>
-							<a class="d-flex align-items-center dropdown-item" href="#">
-								<div class="mr-3">
-									<div class="bg-primary icon-circle"><i class="fas fa-file-alt text-white"></i></div>
-								</div>
-								<div><span class="small text-gray-500">December 12, 2019</span>
-									<p>Sample Text</p>
-								</div>
-							</a>
-							<a class="d-flex align-items-center dropdown-item" href="#">
-								<div class="mr-3">
-									<div class="bg-success icon-circle"><i class="fas fa-donate text-white"></i></div>
-								</div>
-								<div><span class="small text-gray-500">December 7, 2019</span>
-									<p>Sample Text</p>
-								</div>
-							</a>
-							<a class="d-flex align-items-center dropdown-item" href="#">
-								<div class="mr-3">
-									<div class="bg-warning icon-circle"><i class="fas fa-exclamation-triangle text-white"></i></div>
-								</div>
-								<div><span class="small text-gray-500">December 2, 2019</span>
-									<p>Sample Text</p>
-								</div>
-							</a><a class="text-center dropdown-item small text-gray-500" href="#">Show All Alerts</a></div>
+							<h6 class="dropdown-header">alerts center</h6><a class="d-flex align-items-center dropdown-item" href="#">';
+if(!(empty($alertArray))){	
+	foreach ($alertArray as $alert){
+		if(empty($displayCircles[$alert["type"]])){
+			echo '<a class="d-flex align-items-center dropdown-item" href="'.$alert["clickURL"].'"><div class="dropdown-list-image mr-3"><img class="rounded-circle" src="/cms/assets/img/avatars/users/'.$alert["imgsrc"].'" />
+				<div class="bg-success"></div>
+			</div>
+			<div class="font-weight-bold">
+				<div class="text-truncate"><span>'.$alert["message"].'</span></div>
+				<p class="small text-gray-500 mb-0">'.$alert["user"].' - '.$alert["timestamp"].'</p>
+			</div>
+			</a>';
+		}
+		else{
+			echo '<a class="d-flex align-items-center dropdown-item" href="">
+				<div class="mr-3">
+					'.$displayCircles[$alert["type"]].'
+				</div>
+			<div class="font-weight-bold">
+				<div class="text-truncate"><span>'.$alert["message"].'</span></div>
+				<p class="small text-gray-500 mb-0">'.$alert["user"].' - '.$alert["timestamp"].'</p>
+			</div>
+			</a>';
+		}	
+	}							
+}
+else{
+	echo '<span class="text-center dropdown-item small text-gray-500">No new alerts</span>';
+}
+echo '					<a class="text-center dropdown-item small text-gray-500" href="#">Show All Alerts</a></div>
 						</div>
 					</li>
 					<li class="nav-item dropdown no-arrow mx-1" role="presentation">
@@ -102,7 +133,7 @@ echo '
 					<div class="d-none d-sm-block topbar-divider"></div>
 					<li class="nav-item dropdown no-arrow" role="presentation">
 						<div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="d-none d-lg-inline mr-2 text-gray-600 small">'.$loginUser.'</span><img class="border rounded-circle img-profile" src="'.retProfilePic($_SESSION['uname']).'"></a>
-							<div class="dropdown-menu shadow dropdown-menu-right animated--grow-in" role="menu"><a class="dropdown-item" role="presentation" href="'.$startPath.'/members/profile.php"><i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Profile</a><a class="dropdown-item" role="presentation" href="'.$startPath.'/members/settings.php"><i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Settings</a>
+							<div class="dropdown-menu shadow dropdown-menu-right animated--grow-in" role="menu"><a class="dropdown-item" role="presentation" href="'.$startPath.'/members/profile.php"><i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Profile</a>
 							<a class="dropdown-item" role="presentation" href="'.$startPath.'/members/activity-log.php"><i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Activity log</a>
 							<div class="dropdown-divider"></div><a class="dropdown-item" role="presentation" href="'.$startPath.'/members/logout.php"><i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Logout</a></div>
 						</div>

@@ -57,7 +57,7 @@
 						'github5' => 'GitHub #5',
 						'email5' => 'Email #5',
 						'phoneno5' => 'Phone #5',
-                        'linkedin5' => 'LinkedIn #5',
+                        'linkedin5' => 'LinkedIn #5'
     );
     $event="Choose an event";
     //$_GET['event'] = "event_design_jam_2020";
