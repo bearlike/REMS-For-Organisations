@@ -14,14 +14,14 @@ if ($retAlerts->connect_error) {
 $retAlertsSQL = 'select notification.timestamp, notification.user, notification.message, notification.type, notification.clickURL, login.imgsrc from notification, login where notification.user=login.LoginName order by notification.id desc limit 3;';
 // echo $retAlertsSQL; // For Debugging
 // echo "Successfully Logged"; // For Debugging
-$logResults  = $retAlerts->query($retAlertsSQL);
-foreach ($logResults as $row) {
-	$alertArray[$alertCount]["timestamp"]=$row["timestamp"];          
-	$alertArray[$alertCount]["user"]=$row["user"];          
-	$alertArray[$alertCount]["message"]=$row["message"];          
-	$alertArray[$alertCount]["type"]=$row["type"];  
-	$alertArray[$alertCount]["clickURL"]=$row["clickURL"]; 
-	$alertArray[$alertCount]["imgsrc"]=$row["imgsrc"];         
+$alertSQLResults  = $retAlerts->query($retAlertsSQL);
+foreach ($alertSQLResults as $rowAlert) {
+	$alertArray[$alertCount]["timestamp"]=$rowAlert["timestamp"];          
+	$alertArray[$alertCount]["user"]=$rowAlert["user"];          
+	$alertArray[$alertCount]["message"]=$rowAlert["message"];          
+	$alertArray[$alertCount]["type"]=$rowAlert["type"];  
+	$alertArray[$alertCount]["clickURL"]=$rowAlert["clickURL"]; 
+	$alertArray[$alertCount]["imgsrc"]=$rowAlert["imgsrc"];         
 	$alertCount++;
 }          
 $retAlerts->close();
