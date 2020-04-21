@@ -98,6 +98,38 @@
                                 self explainatory. Knock yourself out.&nbsp;<br></p>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="text-primary m-0 font-weight-bold">Send Alerts&nbsp;<i class="fa fa-send"></i></h6>
+                                </div>
+                                <div class="card-body">
+                                    <p class="m-0" style="padding-bottom: 10px;">You can send alerts to all from here through the alert center. You username would be attached to your message.<br /></p>
+                                    <form method="POST" action="db-ops/pushAlert.php">
+                                        <?php if(retIsAdmin($_SESSION['uname'])==1){echo '<div class="form-group">
+                                            <div class="dropdown">
+                                                <select class="btn btn-sm btn-primary dropdown-toggle" name="type">
+                                                    <option value="none" class="" selected>None</option>
+                                                    <option value="normal" class="">Normal</option>
+                                                    <option value="info" class="">Infomation</option>
+                                                    <option value="success" class="">Success</option>
+                                                    <option value="warning" class="">Warning</option>
+                                                </select>
+                                            </div>
+                                        </div>';}
+                                        else{
+                                            echo '<input type="hidden" value="none" name="type" />';
+                                        }
+                                        ?>
+                                        <div class="form-group"><input type="text" class="form-control btn-sm" placeholder="Enter the message to be sent" name="alertMessage" /></div>
+                                        <div class="form-group"><input type="submit" class="form-control btn btn-primary btn-sm" /></div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col"></div>
+                    </div>
                 </div>
             </div>
         </div>
