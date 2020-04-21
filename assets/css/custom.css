@@ -19,10 +19,10 @@
     margin-right: 20%;
 }
 
-#mode_toggler{
+/* #mode_toggler{
     font-size: 22px !important;
     color: #f0e609;
-}
+} */
 
 .center{
     text-align:center !important;
@@ -40,13 +40,88 @@
     font-size: 20px;
 }
 
-::-webkit-file-upload-button {
-  background: #4E73df ;
-  color: #ffffff;
-  border: 0px;
-  padding-top:  5px;
-  padding-bottom: 5px;
-  padding-left: 10px;
-  padding-right: 10px;
-  border-radius: 5px;
+.link{
+    font-size: 20px;
+    color: #ffffff !important;
+    margin-left: 10px;
+    padding-top: 5px;
+}
+
+.file_button_container,
+.file_button_container input {
+     height: auto;
+}
+
+.file_button_container {
+     background: transparent url(https://cdn2.iconfinder.com/data/icons/circle-icons-1/64/upload-32.png) left top no-repeat;
+}
+
+.file_button_container input {
+     opacity: 0;
+}
+
+.toggle {
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-align: center;
+          align-items: center;
+  justify-content: space-around;
+  max-width: 140px;
+  margin-top: 25px;
+  font-size: 20px;
+}
+.toggle span {
+  margin: 0 0.5rem;
+}
+
+.icon{
+    padding-bottom: 8px;
+}
+
+.sun{
+    color: #f0e609;
+}
+
+.moon{
+    color: rgba(0,0,0,0.1);
+}
+
+.toggle input[type="checkbox"] {
+  height: 0;
+  width: 0;
+  visibility: hidden;
+}
+
+.toggle label {
+  cursor: pointer;
+  width: 50px;
+  height: 20px;
+  background: rgba(0, 0, 0, 0.27);
+  display: block;
+  border-radius: 40px;
+  position: relative;
+}
+.toggle label:after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border-radius: 40px;
+}
+
+.screen-reader-text {
+  border: 0;
+  clip: rect(1px, 1px, 1px, 1px);
+  -webkit-clip-path: inset(50%);
+          clip-path: inset(50%);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute !important;
+  width: 1px;
+  word-wrap: normal !important;
 }

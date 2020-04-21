@@ -19,6 +19,11 @@
     border-color: #0B4444;
 }
 
+.btn:hover{
+        background-color: #179090;
+        border-color: #179090;
+}
+
 #mode_toggler{
     color: #ffffff !important;
 }
@@ -100,6 +105,36 @@
     background-color: #282828;
 }
 
-::-webkit-file-upload-button{
-    background-color: #0B4444;
+.form-control  {
+    background-color: #121212 !important;
+    border-color: #121212 !important;
+    color: #ffffff;
+}
+.form-control::placeholder  {
+    color:rgba(255,255,255,0.3);
+	}
+.card-body .form-control{
+    background-color: #282828 !important;
+    border-color: #282828 !important;
+}
+
+.text-dark{
+    color: #FFFFFF !important;
+}
+
+.toggle input[type="checkbox"]:checked + label {
+  background: teal;
+}
+.toggle input[type="checkbox"]:checked + label:after {
+  left: calc(100% - 2px);
+  -webkit-transform: translateX(-100%);
+          transform: translateX(-100%);
+}
+
+.moon{
+    color: #ffffff;
+}
+
+.sun{
+    color: rgba(255,255,255,0.1);
 }
