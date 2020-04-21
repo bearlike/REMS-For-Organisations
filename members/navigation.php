@@ -1,12 +1,13 @@
 <?php
 $displayCircles=array(
                     'normal' => '<div class="bg-primary icon-circle"><i class="fas fa-file-alt text-white"></i></div>',
-                    'success' => '<div class="bg-success icon-circle"><i class="fas fa-crosshairs text-white"></i></div>',
+				'success' => '<div class="bg-success icon-circle"><i class="fas fa-crosshairs text-white"></i></div>',
+				'info' => '<div class="bg-success icon-circle"><i class="fas fa-info-circle text-white"></i></div>',
                     'warning' => '<div class="bg-warning icon-circle"><i class="fas fa-exclamation-triangle text-white"></i></div>'
 );
 
 $alertCount=0;
-$readReamining=0;
+$readReamining="";
 $retAlerts = new mysqli($servername, $username, $password, $dbname);
 if ($retAlerts->connect_error) {
 	die("Connection failed: " . $retAlerts->connect_error);
@@ -44,7 +45,7 @@ echo '
 						<li class="nav-item" role="presentation">
 						<a class="nav-link" href="'.$startPath.'/members/cds-admin.php"><i class="fas fa-medal"></i><span>&nbsp;Certificate Generator</span></a>
 						<a class="nav-link" href="'.$startPath.'/members/mailer.php"><i class="fas fa-mail-bulk"></i><span>&nbsp;Bulk Mailer</span></a>
-						<a class="nav-link" href="'.$startPath.'/members/mail-list.php"><i class="fas fa-list"></i><span>&nbsp;Update Mailing list</span></a></li>
+						<a class="nav-link" href="'.$startPath.'/members/mail-list.php"><i class="fas fa-list"></i><span>&nbsp;Update Mailing List</span></a></li>
 						<hr class="sidebar-divider">
 						<div class="sidebar-heading">
 							<p class="mb-0">Events</p>
