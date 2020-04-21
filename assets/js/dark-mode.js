@@ -7,12 +7,12 @@ function change_mode(theme){
     if(theme == null || theme == "light"){
         sessionStorage.toChange="dark";
         sessionStorage.theme="light";
-        document.getElementById("mode_toggler").innerHTML = '<i class="fas fa-sun"></i>';
+        document.getElementById("toggle-switch").checked = false;
         document.getElementById("head_tag").innerHTML=document.getElementById("head_tag").innerHTML.replace('<link rel="stylesheet" href="/cms/assets/css/dark-mode.css">',"");
     }else{
         sessionStorage.toChange="light";
         sessionStorage.theme="dark";
-        document.getElementById("mode_toggler").innerHTML = '<i class="fas fa-moon"></i>';
+        document.getElementById("toggle-switch").checked = true;
         document.getElementById("head_tag").innerHTML += '<link rel="stylesheet" href="/cms/assets/css/dark-mode.css">';
     }
 }

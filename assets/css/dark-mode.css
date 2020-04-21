@@ -121,3 +121,20 @@
 .text-dark{
     color: #FFFFFF !important;
 }
+
+.toggle input[type="checkbox"]:checked + label {
+  background: teal;
+}
+.toggle input[type="checkbox"]:checked + label:after {
+  left: calc(100% - 2px);
+  -webkit-transform: translateX(-100%);
+          transform: translateX(-100%);
+}
+
+.moon{
+    color: #ffffff;
+}
+
+.sun{
+    color: rgba(255,255,255,0.1);
+}
