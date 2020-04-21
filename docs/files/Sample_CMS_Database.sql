@@ -87,6 +87,21 @@ CREATE TABLE `logging` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `notification`
+--
+
+CREATE TABLE `notification` (
+  `id` int(11) NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT current_timestamp(),
+  `user` varchar(50) NOT NULL,
+  `message` varchar(255) NOT NULL,
+  `type` varchar(50) NOT NULL COMMENT 'Changes the icon according to type',
+  `clickURL` varchar(255) NOT NULL DEFAULT '#' COMMENT 'Redirects to the URL if this alert is clicked'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `login`
 --
 
@@ -142,6 +157,13 @@ ALTER TABLE `login`
   ADD UNIQUE KEY `FullName` (`FullName`);
 
 --
+-- Indexes for table `notification`
+--
+ALTER TABLE `notification`
+  ADD PRIMARY KEY (`id`);
+
+
+--
 -- AUTO_INCREMENT for table `certificates`
 --
 ALTER TABLE `certificates`
@@ -160,9 +182,17 @@ ALTER TABLE `logging`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `notification`
+--
+ALTER TABLE `notification`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `login`
 --
 ALTER TABLE `login`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
+
+
 
