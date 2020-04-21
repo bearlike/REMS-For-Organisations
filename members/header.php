@@ -26,6 +26,24 @@
             $logActivityConn->close();
       }
 
+      // returns 1 if user has admin privileges, else returns 0
+      // Call Example: retIsAdmin($_SESSION['uname']); 
+      function retIsAdmin($loggedOnUser) {
+            include("secrets_.php");
+            $retIsAdmin = new mysqli($servername, $username, $password, $dbname);
+            if ($retIsAdmin->connect_error) {
+                  die("Connection failed: " . $retIsAdmin->connect_error);
+            }
+            $retIsAdminSQL = 'select count(1) as code from login where LoginName="' . $loggedOnUser . '" and IsAdmin=1;';
+            // echo $retIsAdminSQL; // For Debugging
+            $Results  = $retIsAdmin->query($retIsAdminSQL);
+            foreach ($Results as $row) {
+                  return $row["code"];          
+            }          
+            $retIsAdmin->close();
+      }
+
+
       // function to retieve profile pic
       // Call Example: retProfilePic($_SESSION['uname']); 
       function retProfilePic($loggedOnUser) {
@@ -36,7 +54,6 @@
             }
             $retProfilePicSQL = 'select imgsrc from login where LoginName="' . $loggedOnUser . '" limit 1;';
             // echo $retProfilePicSQL; // For Debugging
-            // echo "Successfully Logged"; // For Debugging
             $logResults  = $retProfilePic->query($retProfilePicSQL);
             foreach ($logResults as $row) {
                   return $startPath . '/assets/img/avatars/users/' . $row["imgsrc"];          
