@@ -52,7 +52,7 @@
                                         </div><button class="btn btn-primary btn-block text-white btn-user" type="submit">Login</button>
                                         <hr>
                                     </form>
-                                    <div class="text-center"><a class="small" href="#">Forgot Password?</a></div>
+                                    <div class="text-center"><a class="small" href="forgot-password.php">Forgot Password?</a></div>
                                     <div class="text-center"><a class="small" href="../index.php">Looking for our Certificate Distribution System (CDS)?</a></div>
                                     <div class="text-center"></div>
                                 </div>
@@ -88,7 +88,7 @@
             xhr.open('GET', url);
             xhr.send();
         }
-        populatePre("https://www.cloudflare.com/cdn-cgi/trace");    
+        populatePre("https://www.cloudflare.com/cdn-cgi/trace");
     </script>
 
 </body>
