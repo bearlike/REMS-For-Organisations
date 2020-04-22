@@ -80,7 +80,7 @@ if ($conn->connect_error) {
                                                 $mail->SetFrom($mailerUname, "Technical support");
                                                 $mail->AddBCC($email);
                                                 $mail->Subject = "Request For Password - Reg";
-                                                $link = $link_header.'?gen='.$key;
+                                                $link = $hostName.$forgotPwdExtension.'?gen='.$key;
                                                 $mail->Body = forgot_password_mail($darkLogo,$logoHREF,$link,$reachEmail);
                                                 if(!$mail->Send()) {
                                                 	echo 'Mail error: '.$mail->ErrorInfo;
