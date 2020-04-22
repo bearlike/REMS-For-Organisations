@@ -9,6 +9,9 @@
         else
             session_destroy();
     }
+    if((isset($_COOKIE["username"])) && (isset($_COOKIE["password"]))) {
+        header('Location: validate.php');
+    }
 ?>
 <html>
 
@@ -85,7 +88,7 @@
             xhr.open('GET', url);
             xhr.send();
         }
-        populatePre("https://www.cloudflare.com/cdn-cgi/trace");
+        populatePre("https://www.cloudflare.com/cdn-cgi/trace");    
     </script>
 
 </body>
