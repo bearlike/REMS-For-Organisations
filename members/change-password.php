@@ -1,4 +1,5 @@
 <?php
+include('mainFunction.php');
 include("secrets_.php");
 $servername ='localhost';
 $username = 'root';
@@ -86,12 +87,18 @@ if(isset($_GET['gen'])){
 
                                         if (isset($_POST["submit"])){
                                             $gen = $_POST["gen"];
+                                            $get_uname_sql = 'SELECT GetUserName("'.$gen.'") as uname';
+                                            $user_name_list = $conn->query($get_uname_sql);
+                                            foreach ($user_name_list as $user_name) {
+                                                $uname  =  $user_name['uname'];
+                                            }
                                             $password = $_POST['pwd_confirm'];
                                             $update_sql = 'CALL SetPassword("'.$gen.'","'.$password.'")';
                                             $list  = $conn->query($update_sql);
                                             echo('<div class="alert alert-success" role="alert" style="width:80%;margin-left:10%;margin-right:10%">
                                             Password updated successfuly!
                                             </div>');
+                                                logActivity($uname,"Password changed");
                                             }
                                      ?>
                                 </div>
