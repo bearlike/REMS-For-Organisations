@@ -71,16 +71,19 @@ if(isset($_GET['gen'])){
                                     <div class="text-center">
                                         <h4 class="text-dark mb-2">Create your new password</h4>
                                     </div>
-                                    <form class="user" action="<?php echo $_SERVER["PHP_SELF"]?>" method="post">
+                                    <form class="user" action="<?php echo $_SERVER["PHP_SELF"]?>" method="post" onSubmit="return checkMatch();">
                                         <input type="hidden" name="gen" value =<?php echo $gen;?>>
                                         <div class="form-group"><input class="form-control form-control-user" type="password" id="pwd" placeholder="Enter New Password" name="pwd"></div>
-                                        <div class="form-group"><input class="form-control form-control-user" type="password" id="pwd_confirm"  placeholder="Confirm password" name="pwd_confirm"></div><button class="btn btn-primary btn-block text-white btn-user"
+                                        <div class="form-group"><input class="form-control form-control-user" type="password" id="pwd_confirm"  placeholder="Confirm password" name="pwd_confirm"></div>
+                                        <p style='text-align:center;font-size:15px;color:red' id="password_match"></p>
+                                        <button class="btn btn-primary btn-block text-white btn-user"
                                             type="submit" name="submit">Reset Password</button></form>
                                     <div class="text-center">
                                         <hr>
                                     </div>
                                     <div class="text-center"><a class="small" href="member-login.php">Already have an account? Login!</a></div>
                                     <?php
+
                                         if (isset($_POST["submit"])){
                                             $gen = $_POST["gen"];
                                             $password = $_POST['pwd_confirm'];
@@ -92,6 +95,22 @@ if(isset($_GET['gen'])){
                                             }
                                      ?>
                                 </div>
+                                <script>
+                                    function checkMatch(){
+                                        var pwd1 = document.getElementById('pwd').value;
+                                        var pwd2 = document.getElementById('pwd_confirm').value;
+                                        if(pwd1.replace(" ","").length==0 || pwd2.replace(" ","").length==0){
+                                            document.getElementById('password_match').innerHTML = 'Fields Empty';
+                                            return false;
+                                        }
+                                        if(pwd1==pwd2){
+                                            return true;
+                                        }else{
+                                            document.getElementById('password_match').innerHTML = 'Passwords do not match!';
+                                            return false;
+                                        }
+                                    }
+                                </script>
                             </div>
                         </div>
                     </div>
