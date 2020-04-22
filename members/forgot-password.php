@@ -1,5 +1,6 @@
 <?php
 include("secrets_.php");
+include("mailer-templates/forgot_pwd_temp.php");
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\SMTP;
@@ -55,32 +56,45 @@ if ($conn->connect_error) {
                                     <?php
                                         if (isset($_POST["submit"])){
                                             $email = $_POST['email'];
-                                            $hash_sql = 'SELECT ForgotPasswordHash("'.$email.'") as link_value';
-                                            $list  = $conn->query($hash_sql);
-                                            foreach ($list as $row) {
-                                                $key=$row['link_value'];
+                                            $check_sql = 'SELECT count(1) as isPresent from login where Email="'.$email.'"';
+                                            $list_check = $conn->query($check_sql);
+                                            foreach ($list_check as $entry) {
+                                                $isUser =  $entry['isPresent'];
                                             }
-                                            $mail = new PHPMailer();  // create a new object
-                                            $mail->IsSMTP();
-                                            $mail->isHTML(true);
-                                            $mail->SMTPDebug = 0;
-                                            $mail->SMTPAuth = true;
-                                            $mail->SMTPSecure = 'ssl';
-                                            $mail->Host = $mailerHostname;
-                                            $mail->Port = 465;
-                                            $mail->Username = $mailerUname;
-                                            $mail->Password = $mailerPassword;
-                                            $mail->SetFrom($mailerUname, "Technical support");
-                                            $mail->AddBCC($email);
-                                            $mail->Subject = "Request For Password - Reg";
-                                            $mail->Body = 'Hello,<br><br> Click this <a href="'.$link_header.'?gen='.$key.'">link</a> to change your password.<br><br>Regards,<br>SVCE ACM Team';
-                                            if(!$mail->Send()) {
-                                            	echo 'Mail error: '.$mail->ErrorInfo;
-                                            } else {
-                                                echo('<div class="alert alert-success" role="alert" style="width:70%;margin-left:15%;margin-right:15%">
-                                                Your e-mail has been sent!
+                                            if($isUser){
+                                                $hash_sql = 'SELECT ForgotPasswordHash("'.$email.'") as link_value';
+                                                $list  = $conn->query($hash_sql);
+                                                foreach ($list as $row) {
+                                                    $key =  $row['link_value'];
+                                                }
+                                                $mail = new PHPMailer();  // create a new object
+                                                $mail->IsSMTP();
+                                                $mail->isHTML(true);
+                                                $mail->SMTPDebug = 0;
+                                                $mail->SMTPAuth = true;
+                                                $mail->SMTPSecure = 'ssl';
+                                                $mail->Host = $mailerHostname;
+                                                $mail->Port = 465;
+                                                $mail->Username = $mailerUname;
+                                                $mail->Password = $mailerPassword;
+                                                $mail->SetFrom($mailerUname, "Technical support");
+                                                $mail->AddBCC($email);
+                                                $mail->Subject = "Request For Password - Reg";
+                                                $link = $link_header.'?gen='.$key;
+                                                $mail->Body = forgot_password_mail($darkLogo,$logoHREF,$link,$reachEmail);
+                                                if(!$mail->Send()) {
+                                                	echo 'Mail error: '.$mail->ErrorInfo;
+                                                } else {
+                                                    echo('<div class="alert alert-success" role="alert" style="width:70%;margin-left:15%;margin-right:15%">
+                                                    Your e-mail has been sent!
+                                                    </div>');
+                                                }
+                                            }else{
+                                                echo('<div class="alert alert-danger" role="alert" style="width:70%;margin-left:15%;margin-right:15%">
+                                                This account does not exist!
                                                 </div>');
                                             }
+
                                         }
                                      ?>
                                 </div>
