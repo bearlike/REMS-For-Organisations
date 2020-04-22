@@ -1,5 +1,4 @@
 <?php
-error_reporting(E_ALL & ~E_NOTICE);
 include("secrets_.php");
 $servername ='localhost';
 $username = 'root';
@@ -10,8 +9,38 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-$gen = $_GET['gen'];
+$gen = null;
+if(isset($_GET['gen'])){
+    $gen = $_GET['gen'];
+    $check_if_done = 'SELECT count(PasswordLinkVerification("'.$gen.'"))as ifExists';
+    $list  = $conn->query($check_if_done);
+    foreach ($list as $row) {
+        $exists = $row['ifExists'];
+    }
+    if($exists==1){
+        $check_validity_query = 'SELECT PasswordLinkVerification("'.$gen.'") as time_diff';
+        $list_time  = $conn->query($check_validity_query);
+        foreach ($list_time as $row_time) {
+            $key =  $row_time['time_diff'];
+        }
+        if($key<1800){
+        }
+        else{
+            $check_validity_query = 'DELETE FROM forgot_password WHERE gen_key="'.$gen.'"';
+            $list  = $conn->query($check_validity_query);
+            header('Location:link-expired.html');
+        }
+    }else{
+        header('Location:link-expired.html');
+    }
+
+
+}else{
+    header('Location:member-login.php');
+}
+
 ?>
+
 <html>
 
 <head>
@@ -56,11 +85,11 @@ $gen = $_GET['gen'];
                                             $gen = $_POST["gen"];
                                             $password = $_POST['pwd_confirm'];
                                             $update_sql = 'CALL SetPassword("'.$gen.'","'.$password.'")';
-                                            $result = mysqli_query($conn, $update_sql);
-                                            echo('<div class="alert alert-success" role="alert" style="width:70%;margin-left:15%;margin-right:15%">
+                                            $list  = $conn->query($update_sql);
+                                            echo('<div class="alert alert-success" role="alert" style="width:80%;margin-left:10%;margin-right:10%">
                                             Password updated successfuly!
                                             </div>');
-                                        }
+                                            }
                                      ?>
                                 </div>
                             </div>
