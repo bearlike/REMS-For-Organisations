@@ -8,7 +8,10 @@
         }
         else
             session_destroy();
-    }    
+    }
+    if((isset($_COOKIE["username"])) && (isset($_COOKIE["password"]))) {
+        header('Location: validate.php');
+    }
 ?>
 <html>
 

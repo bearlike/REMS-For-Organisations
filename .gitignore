@@ -24,3 +24,4 @@ members/secrets_.php
 # Ignore User Profile Picture upload
 assets/img/avatars/users/*
 
+members/test.php
