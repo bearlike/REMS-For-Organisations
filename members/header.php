@@ -5,17 +5,17 @@
 */
       // initialise
       session_start();
+      date_default_timezone_set('Asia/Kolkata');
       include("secrets_.php");      // Include Secret Keys such as APIs and override default database credentials
-     include("mainFunction.php");
-
-
+      include("mainFunction.php");
+       
+       
       // If Session doesn't exist
       if (!$_SESSION['uname']){
             header('Location: '.$startPath.'/members/member-login.php');
       }
       else{
             if($_SESSION['remember']==0){
-                  date_default_timezone_set('Asia/Kolkata');
                   $date1 = strtotime($_SESSION['loginTime']);
                   $date2 = strtotime(date('Y-m-d H:i:s'));
                   $secs = $date2 - $date1;// == <seconds between the two times>
@@ -30,3 +30,4 @@
             $loginUser = $_SESSION['uname'];
             $_SESSION['loginTime'] = date("Y-m-d H:i:s", time());
       }
+?>
