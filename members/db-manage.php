@@ -17,8 +17,10 @@
     if(!(empty($_POST['db']))){
         if($_POST['db']==1)
             $db=$dbname;
-        else
+        else if($_POST['db']==2)
             $db=$formDB;
+        else
+            $db=$mailerDB;
     }
     else{
         $_POST['db']=1;
@@ -92,7 +94,8 @@
                         <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="POST">
                             <select class="form-control border-1 small" style="width: 68%;max-width:15em;" onchange="this.form.submit()" name="db">
                                 <option value="1" <?php if($_POST['db']==1){echo 'selected=""';} ?>>CMS database</option>
-                                <option value="2" <?php if($_POST['db']==2){echo 'selected=""';} ?>>Forms database</option>p
+                                <option value="2" <?php if($_POST['db']==2){echo 'selected=""';} ?>>Forms database</option>
+                                <option value="3" <?php if($_POST['db']==3){echo 'selected=""';} ?>>Mailer database</option>
                             </select>
                         </form>
                         <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="GET">
