@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <img src="https://i.imgur.com/LIkrG7E.png" alt="CMS For Organisations" height="250px">
+  <img src="https://i.imgur.com/BypQLTA.png" alt="CMS For Organisations" height="250px">
   <br>
 </h1>
 <h4 align="center">User-friendly CMS for small organisations and clubs. Form Generator, Mailer, Certificate Generator and much more :)</h4>
@@ -57,7 +57,7 @@ A two-ended system (Both for **admin** and **public**) that'll automatically  ge
 
 | CDS Public (Collection)                                  | CDS Admin (Generation)                                   | Generated Certificates                         |
 | -------------------------------------------------------- | -------------------------------------------------------- | ---------------------------------------------- |
-| <img src="https://i.imgur.com/gaMfSOr.png" width="650"/> | <img src="https://i.imgur.com/APt8LDL.png" width="650"/> | <img src="/docs/images/cert.png" width="650"/> |
+| <img src="https://i.imgur.com/gaMfSOr.png" width="650"/> | <img src="https://i.imgur.com/APt8LDL.png" width="650"/> | <img src="https://i.imgur.com/av6OHek.png" width="650"/> |
 
 ### Database Management
 This is an interface for the databases that are used. The administrator can update, insert and delete values from any table of the databases without having to risk cluttering with the structure or format. The interface is made as generic possible to support future development and extensions.
@@ -116,6 +116,10 @@ Perhaps our most desired feature, it gives an option to toggle the page between 
 | **Mahalakshumi V**  | [mahavisvanathan](https://github.com/mahavisvanathan/) |
 
 
+## Outside Contributors
+| Contributors           |     Profile Links                        | PR               |
+| ---------------------- | ---------------------------------------- | -----------------| 
+| **Dhiraj V**           | [dhirajv2000](https://github.com/dhirajv2000) | [#28](https://github.com/K-Kraken/cms-for-organisations/pull/28)              |
 
 ## Acknowledgments
 
