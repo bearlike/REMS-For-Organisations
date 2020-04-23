@@ -128,7 +128,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col"></div>
+                        <div id="newCol" class=""></div>
                     </div>
                 </div>
             </div>
@@ -144,6 +144,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
     <script src="../assets/js/theme.js"></script>
+    <script>
+        if(!(isMobile)){
+            document.getElementById('newCol').classList.add('col');
+        }
+    </script>
 </body>
 
 </html>
