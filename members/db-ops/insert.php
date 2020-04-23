@@ -27,8 +27,10 @@ include("../header.php");
 	}
      if($_POST['db']==$dbname)
          $dbc=1;
-     else
-         $dbc=2;
+     else if($_POST['db']==$formDB)
+	    $dbc=2;
+	else
+		$dbc=3;
 	$submit_stmt->execute();
 	// echo("Value inserted successfully");			// For Debugging	
 	// echo ("<br> Value inserted successfully");	// For Debugging	

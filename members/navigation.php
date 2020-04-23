@@ -57,7 +57,7 @@ echo '
 						<div class="sidebar-heading">
 							<p class="mb-0">Admin Stuff</p>
 						</div>
-						<li class="nav-item" role="presentation"><a class="nav-link" href="'.$startPath.'/members/db-manage.php"><i class="fas fa-database"></i><span>&nbsp;Maintainance</span></a></li>
+						<li class="nav-item" role="presentation"><a class="nav-link" href="'.$startPath.'/members/db-manage.php"><i class="fas fa-database"></i><span>&nbsp;Maintenance</span></a></li>
 						<hr class="sidebar-divider">
 					</ul>
 

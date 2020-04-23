@@ -742,7 +742,7 @@ function make_mail($body,$title,$BUTTON_LINK,$BUTTON_LABEL,$LogoURL,$coverImageU
     }
   </style>
   <meta name="robots" content="noindex,nofollow" />
-  <meta property="og:title" content="My First Campaign" />
+  <meta property="og:title" content="Announcemnt" />
 </head>
 <!--[if mso]>
   <body class="mso">
@@ -767,7 +767,7 @@ function make_mail($body,$title,$BUTTON_LINK,$BUTTON_LABEL,$LogoURL,$coverImageU
                 align="center">
                 <div class="logo-center" align="center" id="emb-email-header">
                   <a style="text-decoration: none;transition: opacity 0.1s ease-in;color: #c3ced9;"
-                    href="https://svce.acm.org"><img
+                    href="'.$LogoURL.'"><img
                       style="display: block;height: auto;width: 100%;border: 0;max-width: 266px;"
                       src="'.$LogoURL.'" alt="Logo"
                       width="266" /></a>
@@ -823,11 +823,11 @@ function make_mail($body,$title,$BUTTON_LINK,$BUTTON_LABEL,$LogoURL,$coverImageU
 
                     <div style="Margin-left: 20px;Margin-right: 20px;">
                       <div class="btn btn--shadow btn--large" style="Margin-bottom: 20px;text-align: center;">
-                        <![if !mso]><a
+                        <![if !mso]><a alt="Click here to visit the page"
                           style="border-radius: 4px;display: inline-block;font-size: 14px;font-weight: bold;line-height: 24px;padding: 12px 24px 13px 24px;text-align: center;text-decoration: none !important;transition: opacity 0.1s ease-in;color: #ffffff !important;box-shadow: inset 0 -2px 0 0 rgba(0, 0, 0, 0.2);background-color: #e31212;font-family: Avenir, sans-serif;"
                           href="'.$BUTTON_LINK.'">'.$BUTTON_LABEL.'</a>
                         <![endif]>
-                        <!--[if mso]><p style="line-height:0;margin:0;">&nbsp;</p><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" href="'.$BUTTON_LINK.'" style="width:201px" arcsize="9%" fillcolor="#E31212" stroke="f"><v:shadow on="t" color="#B60E0E" offset="0,2px"></v:shadow><v:textbox style="mso-fit-shape-to-text:t" inset="0px,11px,0px,10px"><center style="font-size:14px;line-height:24px;color:#FFFFFF;font-family:Avenir,sans-serif;font-weight:bold;mso-line-height-rule:exactly;mso-text-raise:4px">Collect your Certificate</center></v:textbox></v:roundrect><![endif]-->
+                        <!--[if mso]><p style="line-height:0;margin:0;">&nbsp;</p><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" alt="Click here to visit the page" href="'.$BUTTON_LINK.'" style="width:201px" arcsize="9%" fillcolor="#E31212" stroke="f"><v:shadow on="t" color="#B60E0E" offset="0,2px"></v:shadow><v:textbox style="mso-fit-shape-to-text:t" inset="0px,11px,0px,10px"><center style="font-size:14px;line-height:24px;color:#FFFFFF;font-family:Avenir,sans-serif;font-weight:bold;mso-line-height-rule:exactly;mso-text-raise:4px">Collect your Certificate</center></v:textbox></v:roundrect><![endif]-->
                       </div>
                     </div>
 
@@ -895,28 +895,22 @@ function make_mail($body,$title,$BUTTON_LINK,$BUTTON_LABEL,$LogoURL,$coverImageU
             <div style="mso-line-height-rule: exactly;line-height: 20px;font-size: 20px;">&nbsp;</div>
 
             <div role="contentinfo">
-              <div class="layout email-footer stack"
-                style="Margin: 0 auto;max-width: 600px;min-width: 320px; width: 320px;width: calc(28000% - 167400px);overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;">
+            <div class="layout one-col fixed-width stack"
+              style="Margin: 0 auto;max-width: 600px;min-width: 320px; width: 320px;width: calc(28000% - 167400px);overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;">
                 <div class="layout__inner" style="border-collapse: collapse;display: table;width: 100%;">
-                  <!--[if (mso)|(IE)]><table align="center" cellpadding="0" cellspacing="0" role="presentation"><tr class="layout-email-footer"><td style="width: 400px;" valign="top" class="w360"><![endif]-->
+                  <!--[if (mso)|(IE)]><table align="justify" cellpadding="0" cellspacing="0" role="presentation"><tr class="layout-email-footer"><td style="width: 600px;" valign="top" class="w560"><![endif]-->
                   <div class="column wide"
-                    style="text-align: left;font-size: 12px;line-height: 19px;color: #adb3b9;font-family: sans-serif;Float: left;max-width: 400px;min-width: 320px; width: 320px;width: calc(8000% - 47600px);">
+                    style="text-align: justify;font-size: 12px;line-height: 19px;color: #adb3b9;font-family: sans-serif;Float: left;max-width: 400px;min-width: 320px; width: 320px;width: calc(8000% - 47600px);">
                     <div style="Margin-left: 20px;Margin-right: 20px;Margin-top: 10px;Margin-bottom: 10px;">
 
                       <div style="font-size: 12px;line-height: 19px;">
-                        <div>SVCE ACM Student Chapter</div>
+                        <div>This is an auto-generated email. Do not reply to this email. For any further queries, contact us at <a style="color:#777b7f;" href="mailto:acm.svcecse@gmail.com">acm.svcecse@gmail.com</a>. This message may contain confidential information and is intended only for the intended recipients. If you are not an intended recipient you should not disseminate, distribute or copy this e-mail.</div>
                       </div>
                       <!--[if mso]>&nbsp;<![endif]-->
                     </div>
                   </div>
-                  <!--[if (mso)|(IE)]></td><td style="width: 200px;" valign="top" class="w160"><![endif]-->
-                  <div class="column narrow"
-                    style="text-align: left;font-size: 12px;line-height: 19px;color: #adb3b9;font-family: sans-serif;Float: left;max-width: 320px;min-width: 200px; width: 320px;width: calc(72200px - 12000%);">
-                    <div style="Margin-left: 20px;Margin-right: 20px;Margin-top: 10px;Margin-bottom: 10px;">
-
-                    </div>
-                  </div>
-                  <!--[if (mso)|(IE)]></td></tr></table><![endif]-->
+                  <!--[if (mso)|(IE)]></td><![endif]-->
+                  <!--[if (mso)|(IE)]></tr></table><![endif]-->
                 </div>
               </div>
               <div class="layout one-col email-footer"
