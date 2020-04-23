@@ -46,7 +46,7 @@ if (!empty($_POST)) {
 	else {
 		$_SESSION['uname'] = $_POST['uname'];
 		$_SESSION['password'] = $_POST['password'];
-		if (isset($_POST['remember'])) {
+		if (!(isset($_POST['remember']))) {
 			$_POST['remember'] = 0;
 		}
 		if ($_POST['remember'] == 1) {
