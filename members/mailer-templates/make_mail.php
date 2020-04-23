@@ -895,28 +895,22 @@ function make_mail($body,$title,$BUTTON_LINK,$BUTTON_LABEL,$LogoURL,$coverImageU
             <div style="mso-line-height-rule: exactly;line-height: 20px;font-size: 20px;">&nbsp;</div>
 
             <div role="contentinfo">
-              <div class="layout email-footer stack"
-                style="Margin: 0 auto;max-width: 600px;min-width: 320px; width: 320px;width: calc(28000% - 167400px);overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;">
+            <div class="layout one-col fixed-width stack"
+              style="Margin: 0 auto;max-width: 600px;min-width: 320px; width: 320px;width: calc(28000% - 167400px);overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;">
                 <div class="layout__inner" style="border-collapse: collapse;display: table;width: 100%;">
-                  <!--[if (mso)|(IE)]><table align="center" cellpadding="0" cellspacing="0" role="presentation"><tr class="layout-email-footer"><td style="width: 400px;" valign="top" class="w360"><![endif]-->
+                  <!--[if (mso)|(IE)]><table align="justify" cellpadding="0" cellspacing="0" role="presentation"><tr class="layout-email-footer"><td style="width: 600px;" valign="top" class="w560"><![endif]-->
                   <div class="column wide"
-                    style="text-align: left;font-size: 12px;line-height: 19px;color: #adb3b9;font-family: sans-serif;Float: left;max-width: 400px;min-width: 320px; width: 320px;width: calc(8000% - 47600px);">
+                    style="text-align: justify;font-size: 12px;line-height: 19px;color: #adb3b9;font-family: sans-serif;Float: left;max-width: 400px;min-width: 320px; width: 320px;width: calc(8000% - 47600px);">
                     <div style="Margin-left: 20px;Margin-right: 20px;Margin-top: 10px;Margin-bottom: 10px;">
 
                       <div style="font-size: 12px;line-height: 19px;">
-                        <div>SVCE ACM Student Chapter</div>
+                        <div>This is an auto-generated email. Do not reply to this email. For any further queries, contact us at <a style="color:#777b7f;" href="mailto:acm.svcecse@gmail.com">acm.svcecse@gmail.com</a>. This message may contain confidential information and is intended only for the intended recipients. If you are not an intended recipient you should not disseminate, distribute or copy this e-mail.</div>
                       </div>
                       <!--[if mso]>&nbsp;<![endif]-->
                     </div>
                   </div>
-                  <!--[if (mso)|(IE)]></td><td style="width: 200px;" valign="top" class="w160"><![endif]-->
-                  <div class="column narrow"
-                    style="text-align: left;font-size: 12px;line-height: 19px;color: #adb3b9;font-family: sans-serif;Float: left;max-width: 320px;min-width: 200px; width: 320px;width: calc(72200px - 12000%);">
-                    <div style="Margin-left: 20px;Margin-right: 20px;Margin-top: 10px;Margin-bottom: 10px;">
-
-                    </div>
-                  </div>
-                  <!--[if (mso)|(IE)]></td></tr></table><![endif]-->
+                  <!--[if (mso)|(IE)]></td><![endif]-->
+                  <!--[if (mso)|(IE)]></tr></table><![endif]-->
                 </div>
               </div>
               <div class="layout one-col email-footer"
