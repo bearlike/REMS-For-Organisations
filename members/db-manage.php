@@ -8,6 +8,9 @@
     $page=1;
     $perPage=10;;
     $totalPages=1;
+    if(empty($_GET['table'])){
+        $_GET['table']=NULL;
+    }
     if(!(empty($_GET['db']))){
         $_POST['db']=$_GET['db'];
     }
