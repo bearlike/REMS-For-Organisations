@@ -5,9 +5,9 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\SMTP;
 
-require '..\src\PHPMailer\Exception.php';
-require '..\src\PHPMailer\PHPMailer.php';
-require '..\src\PHPMailer\SMTP.php';
+require '../src/PHPMailer/Exception.php';
+require '../src/PHPMailer/PHPMailer.php';
+require '../src/PHPMailer/SMTP.php';
 
 
 $conn = new mysqli($servername, $username, $password, $dbname);
