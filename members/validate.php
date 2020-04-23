@@ -4,10 +4,17 @@
 * For CMS For Organisations
 */
 session_start();
+if((isset($_COOKIE["username"])) && (isset($_COOKIE["password"]))) {
+			$_POST['uname'] = $_COOKIE['usernamee'];
+			$_POST['password'] = $_COOKIE['password'];
+			$_POST['remember'] = 1;
+}
 if (!empty($_SESSION)) {
 	if ($_SESSION['remember'] == 0) {
 		session_destroy();
 		echo "no remember";
+		setcookie("username","", time()-3600);	// forget cookie
+		setcookie("password","", time()-3600);	// forget cookie
 		header('Location: member-login.php');
 	}
 	$_POST['uname'] = $_SESSION['uname'];
@@ -15,45 +22,37 @@ if (!empty($_SESSION)) {
 	$_POST['remember'] = $_SESSION['remember'];
 }
 if (!empty($_POST)) {
-    // Runtime Variables
-	$servername = "localhost";
-	$username = "root";
-	$password = "";
-	$dbname = "svcehost_cms";
-	$uname = NULL;
-	/* Include Secret Keys such as APIs and override default database credentials */
-	include("secrets_.php");
-
-    // Create connection
-	$conn = new mysqli($servername, $username, $password, $dbname);
-
-    // Check connection
-	if ($conn->connect_error) {
+	include("secrets_.php"); // Include Secret Keys such as APIs and override default database credentials
+	$conn = new mysqli($servername, $username, $password, $dbname); // Create connection
+	if ($conn->connect_error) {	// Check connection
 		die("Connection failed: " . $conn->connect_error);
 	}
-    // Call Procedures
-	$check_sql = 'CALL CheckUser("' . $_POST['uname'] . '","' . $_POST['password'] . '");';
+	$check_sql = 'CALL CheckUser("' . $_POST['uname'] . '","' . $_POST['password'] . '");';	// Call Procedures
 	$result = $conn->query($check_sql);
 	foreach ($result as $row) {
-		if ($row["code"] > 0) {
+		if ($row["code"] > 0)
 			$flag = true;
-		} else {
+		else
 			$flag = false;
-		}
 	}
-
 	if ($flag == false) {
 		$conn->close();
 		echo "Unsuccessful";
+		session_destroy();
+		setcookie("username","", time()-3600);	// forget cookie
+		setcookie("password","", time()-3600);	// forget cookie
 		header('Location: member-login.php');
-	} else {
+	} 
+	else {
 		$_SESSION['uname'] = $_POST['uname'];
 		$_SESSION['password'] = $_POST['password'];
-		if (empty(($_POST['remember']))) {
+		if (!(isset($_POST['remember']))) {
 			$_POST['remember'] = 0;
 		}
 		if ($_POST['remember'] == 1) {
 			$_SESSION['remember'] = 1;
+			setcookie("username",$_POST['uname'], time()+30*24*60*60);	// start cookie, expire in 30 days
+			setcookie("password",$_POST['password'], time()+30*24*60*60);	// start cookie, expire in 30 days
 			echo "remembered";
 		} else {
 			$_SESSION['remember'] = 0;
@@ -62,16 +61,11 @@ if (!empty($_POST)) {
 		date_default_timezone_set('Asia/Kolkata');
 		$_SESSION['loginTime'] = date("Y-m-d H:i:s", time());
 		$conn->close();
-		/* 
-        Needs Optimisation, currently restarting connection to flush 
-        previous result (to prevent "Commands out of sync; you can't 
-        run this command now" error) 
-        */
-        // Create connection
-		$conn = new mysqli($servername, $username, $password, $dbname);
-
-        // Check connection
-		if ($conn->connect_error) {
+		/* Needs Optimisation, currently restarting connection to flush 
+		previous result (to prevent "Commands out of sync; you can't 
+		run this command now" error) */
+		$conn = new mysqli($servername, $username, $password, $dbname);	// Create connection
+		if ($conn->connect_error) {	// Check connection
 			die("Connection failed: " . $conn->connect_error);
 		}
 		$Log = "Logged in Successfully from " . $_POST['ipadd'];

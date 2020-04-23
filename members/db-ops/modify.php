@@ -38,10 +38,12 @@
         }
         $updateSQL=$updateSQL." WHERE id=".$id;
         echo $updateSQL."<br><br>";
-        if($db==$dbname)
+        if($_POST['db']==$dbname)
             $dbc=1;
-        else
+        else if($_POST['db']==$formDB)
             $dbc=2;
+        else
+            $dbc=3;
         if ($conn->query($updateSQL) === TRUE) {
             echo "Record updated successfully";
             logActivity($_SESSION['uname'], 'Modified column for [id=' . $id . '] in [table=' . $table . '] of [db=' . $db . ']');

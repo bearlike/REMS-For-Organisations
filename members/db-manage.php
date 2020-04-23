@@ -1,18 +1,26 @@
 <?php
     include("header.php");
+    if(retIsAdmin($_SESSION['uname'])==0){
+        header('Location: pages/error.php?error=noAccess');
+    }
 	// Dictionary on what to replace what with what
     $table="Choose an table";
     $page=1;
-    $perPage=10;;
+    $perPage=10;
     $totalPages=1;
+    if(empty($_GET['table'])){
+        $_GET['table']=NULL;
+    }
     if(!(empty($_GET['db']))){
         $_POST['db']=$_GET['db'];
     }
     if(!(empty($_POST['db']))){
         if($_POST['db']==1)
             $db=$dbname;
-        else
+        else if($_POST['db']==2)
             $db=$formDB;
+        else if($_POST['db']==3)
+            $db=$mailerDB;
     }
     else{
         $_POST['db']=1;
@@ -86,11 +94,12 @@
                         <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="POST">
                             <select class="form-control border-1 small" style="width: 68%;max-width:15em;" onchange="this.form.submit()" name="db">
                                 <option value="1" <?php if($_POST['db']==1){echo 'selected=""';} ?>>CMS database</option>
-                                <option value="2" <?php if($_POST['db']==2){echo 'selected=""';} ?>>Forms database</option>p
+                                <option value="2" <?php if($_POST['db']==2){echo 'selected=""';} ?>>Forms database</option>
+                                <option value="3" <?php if($_POST['db']==3){echo 'selected=""';} ?>>Mailer database</option>
                             </select>
                         </form>
                         <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="GET">
-                            <input type="hidden" name="db" value="<?php if($_POST['db']==2){echo '2';} else {echo '1';} ?>" ?>
+                            <input type="hidden" name="db" value="<?php if($_POST['db']==2){echo '2';} else if($_POST['db']==3){echo '3';} else {echo '1';} ?>" ?>
                             <select onchange="this.form.submit()" class="form-control border-1 small" style="width: 68%;max-width:15em;" name ="table" required>
                                 <option value = "">Select an table</option>
                                 <?php
