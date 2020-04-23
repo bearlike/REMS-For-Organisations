@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <img src="https://i.imgur.com/LIkrG7E.png" alt="CMS For Organisations" height="250px">
+  <img src="/docs/images/logo.png" alt="CMS For Organisations" height="250px">
   <br>
 </h1>
 <h4 align="center">User-friendly CMS for small organisations and clubs. Form Generator, Mailer, Certificate Generator and much more :)</h4>
@@ -76,8 +76,8 @@ This tool is used to generate forms for events. Initially, the specifications of
 
 ### Bulk Mailer
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus semper, felis vel elementum tincidunt, arcu tellus ultricies justo, at imperdiet est purus ut nibh. Nunc tortor orci, pulvinar vel luctus ut, finibus sit amet ipsum. In condimentum nulla massa, eget vehicula ex ultricies feugiat. Proin et tristique odio. Nam a tortor pharetra, commodo dolor eu, rutrum augue. Cras vel porta erat, et congue elit. Aenean vel neque ac enim bibendum venenatis sed a tortor.  
-  
+The mailer can send automatically send emails to a specific mailing list. It supports HTML emails and comes with a pre-designed template. The parameters for the pre-defined template can be modified for the specifications of the organization.  There is also a feature to create mailing lists to use with these mailers. A CSV of the emails and names has to be uploaded ana a mailing list is created.  
+
 | Bulk Mailer Interface                                    | Sample Sent Mail                                         |
 | -------------------------------------------------------- | -------------------------------------------------------- |
 | <img src="https://i.imgur.com/M5fIT6H.png" width="650"/> | <img src="https://i.imgur.com/WFY81vT.jpg" width="650"/> |
