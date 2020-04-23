@@ -351,7 +351,7 @@
 										}
 										$submit_stmt->execute();
 										echo ("<tr><td>Successfully created table in database for the new form</td></tr>");
-											$markdown_text = preg_replace('/\r?\n|\r/', "\\n",$_POST["event_description"]);
+											$markdown_text = preg_replace('/\r?\n|\r/', "<br>",$_POST["event_description"]);
 											//Closing section
 											$html_file = $html_file.'		<div class="p-t-20">
 																			<input type="submit" class="btn btn--radius btn--green">

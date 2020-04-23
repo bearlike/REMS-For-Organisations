@@ -6,9 +6,9 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\SMTP;
 
-require '..\src\PHPMailer\Exception.php';
-require '..\src\PHPMailer\PHPMailer.php';
-require '..\src\PHPMailer\SMTP.php';
+require '../src/PHPMailer/Exception.php';
+require '../src/PHPMailer/PHPMailer.php';
+require '../src/PHPMailer/SMTP.php';
 $conn = new mysqli($servername, $username, $password, $mailerDB);
 // Check connection
 if ($conn->connect_error) {
@@ -170,6 +170,7 @@ $tableNames = $conn->query($sql);
           function preview() {
                var myWindow = window.open("", "_blank");
                var body = document.getElementById("mail_body").value;
+               body = body.replace(/\r?\n|\r/g, "<br>");
                var title = document.getElementById("mail_title").value;
                var button_link = document.getElementById("mail_button_url").value;
                var button_label = document.getElementById("mail_button_label").value;

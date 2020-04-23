@@ -127,7 +127,6 @@ $logResults  = $conn->query($sql);
                                                                 echo 'disabled';
                                                             } ?>"><button name="page" value="<?php echo ($page - 1); ?>" class="page-link" aria-label="Previous"><span aria-hidden="true">«</span></button>
                                     </li>
-                                    <input type="hidden" name="event" value="<?php echo $_GET['event']; ?>" />
                                     <input type="hidden" name="perPage" value="<?php echo $perPage; ?>" />
                                     <?php
                                     // Generate buttons for choosing pages
