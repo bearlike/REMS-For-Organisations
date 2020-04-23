@@ -35,6 +35,37 @@ BEGIN
 SELECT LoginName as code from login where Email=pEmail;
 END$$
 
+CREATE FUNCTION `ForgotPasswordHash` (`mailid` VARCHAR(255)) RETURNS VARCHAR(255) CHARSET utf8mb4 NO SQL
+BEGIN	
+SELECT NOW() INTO @Now;
+SELECT id from login where Email=mailid INTO @id;
+SELECT sha(concat(id,LoginName,PasswordHash,Email,@Now)) from login where Email=mailid INTO @Hashstring;
+INSERT INTO forgot_password VALUES (@Hashstring,@id,@Now);
+RETURN @Hashstring;
+END$$
+
+CREATE FUNCTION `GetUserName` (`gen` VARCHAR(255)) RETURNS VARCHAR(255) CHARSET utf8mb4 NO SQL
+BEGIN
+SELECT id from forgot_password where gen_key=gen INTO @id;
+SELECT LoginName from login where id=@id into @UserName;
+RETURN @UserName;
+END$$
+
+CREATE FUNCTION `PasswordLinkVerification` (`gen` VARCHAR(255)) RETURNS INT(11) NO SQL
+BEGIN 
+    SELECT times FROM forgot_password where gen_key=gen INTO @pwd_time;
+    SELECT TIMESTAMPDIFF(SECOND, @pwd_time, NOW()) INTO @Time_diff;
+    return @Time_diff;
+END$$
+
+
+CREATE PROCEDURE `SetPassword` (IN `Hashstring` VARCHAR(255), IN `Password` VARCHAR(255))  NO SQL
+BEGIN
+	SELECT @ident := id from forgot_password where gen_key=Hashstring;
+    UPDATE login SET PasswordHash=sha(Password) WHERE id=@ident;
+    DELETE FROM forgot_password where gen_key=Hashstring;
+END$$
+
 DELIMITER ;
 
 -- --------------------------------------------------------
@@ -87,6 +118,21 @@ CREATE TABLE `logging` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `notification`
+--
+
+CREATE TABLE `notification` (
+  `id` int(11) NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT current_timestamp(),
+  `user` varchar(50) NOT NULL,
+  `message` varchar(255) NOT NULL,
+  `type` varchar(50) NOT NULL COMMENT 'Changes the icon according to type',
+  `clickURL` varchar(255) NOT NULL DEFAULT '#' COMMENT 'Redirects to the URL if this alert is clicked'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `login`
 --
 
@@ -112,7 +158,28 @@ CREATE TABLE `login` (
 --
 
 INSERT INTO `login` (`id`, `LoginName`, `PasswordHash`, `Email`, `FullName`, `IsAdmin`, `FirstName`, `LastName`, `Address`, `Phno`, `Signature`, `imgsrc`) VALUES
-(3, 'admin', 'd033e22ae348aeb5660fc2140aec35850c4da997', 'krishna.alagiri03@gmail.com', 'admin', 1, NULL, NULL, NULL, NULL, NULL, '../image2.png');
+(3, 'admin', 'd033e22ae348aeb5660fc2140aec35850c4da997', 'test@test.com', 'admin', 1, NULL, NULL, NULL, NULL, NULL, '../image2.png');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `forgot_password`
+--
+
+CREATE TABLE `forgot_password` (
+  `gen_key` varchar(255) NOT NULL,
+  `id` int(11) NOT NULL DEFAULT current_timestamp(),
+  `times` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Indexes for table `forgot_password`
+--
+ALTER TABLE `forgot_password`
+  ADD PRIMARY KEY (`gen_key`);
+
 
 --
 -- Indexes for table `certificates`
@@ -142,6 +209,13 @@ ALTER TABLE `login`
   ADD UNIQUE KEY `FullName` (`FullName`);
 
 --
+-- Indexes for table `notification`
+--
+ALTER TABLE `notification`
+  ADD PRIMARY KEY (`id`);
+
+
+--
 -- AUTO_INCREMENT for table `certificates`
 --
 ALTER TABLE `certificates`
@@ -160,9 +234,17 @@ ALTER TABLE `logging`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `notification`
+--
+ALTER TABLE `notification`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `login`
 --
 ALTER TABLE `login`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
+
+
 
