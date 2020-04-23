@@ -6,7 +6,7 @@
 	// Dictionary on what to replace what with what
     $table="Choose an table";
     $page=1;
-    $perPage=10;;
+    $perPage=10;
     $totalPages=1;
     if(empty($_GET['table'])){
         $_GET['table']=NULL;
@@ -19,7 +19,7 @@
             $db=$dbname;
         else if($_POST['db']==2)
             $db=$formDB;
-        else
+        else if($_POST['db']==3)
             $db=$mailerDB;
     }
     else{
@@ -99,7 +99,7 @@
                             </select>
                         </form>
                         <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="GET">
-                            <input type="hidden" name="db" value="<?php if($_POST['db']==2){echo '2';} else {echo '1';} ?>" ?>
+                            <input type="hidden" name="db" value="<?php if($_POST['db']==2){echo '2';} else if($_POST['db']==3){echo '3';} else {echo '1';} ?>" ?>
                             <select onchange="this.form.submit()" class="form-control border-1 small" style="width: 68%;max-width:15em;" name ="table" required>
                                 <option value = "">Select an table</option>
                                 <?php
