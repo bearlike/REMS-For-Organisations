@@ -25,7 +25,7 @@ include("../header.php");
 	if (!$submit_stmt) {
 		header('Location: ../pages/error.php?error='.$conn->error);
 	}
-     if($_POST['db']==$dbname)
+     if($_POST['db']==$MainDB)
          $dbc=1;
      else if($_POST['db']==$formDB)
 	    $dbc=2;

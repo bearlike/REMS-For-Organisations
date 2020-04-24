@@ -2,7 +2,7 @@
 
 <?php
    // Create connection
-   $conn = mysqli_connect($servername, $username, $password, $dbname);
+   $conn = mysqli_connect($servername, $username, $password, $MainDB);
    // Check connection
    if (!$conn) {
       header('Location: ../pages/error.php?error=' . mysqli_connect_error()  );
@@ -27,7 +27,7 @@
          // Insert record
          $query = "UPDATE login SET imgsrc='$name' where LoginName = '$loginUser'";
          mysqli_query($conn,$query);
-         logActivity($_SESSION['uname'], "In Profile Editor, Update in [db=".$dbname."] SET [imgsrc=".$name."] ");
+         logActivity($_SESSION['uname'], "In Profile Editor, Update in [db=".$MainDB."] SET [imgsrc=".$name."] ");
 
          // Upload file
          move_uploaded_file($_FILES['file']['tmp_name'],$target_dir.$name);
@@ -55,7 +55,7 @@
           if (!mysqli_query($conn, $query)) {
                header('Location: ../pages/error.php?error=' . mysqli_error($conn));
           }
-          logActivity($_SESSION['uname'], "In Profile Editor, Update in [db=".$dbname."] SET [lastname=".$lastname.", FirstName=".$firstname.", Email=".$email."] ");
+          logActivity($_SESSION['uname'], "In Profile Editor, Update in [db=".$MainDB."] SET [lastname=".$lastname.", FirstName=".$firstname.", Email=".$email."] ");
      }
      // contact details form
      if(isset($_POST['contact_settings'])){
@@ -67,7 +67,7 @@
           if (!mysqli_query($conn, $query)) {
                header('Location: ../pages/error.php?error=' . mysqli_error($conn));
           }
-          logActivity($_SESSION['uname'], "In Profile Editor, Update in [db=".$dbname."] SET [address=".$address.", phno=".$phno."] ");
+          logActivity($_SESSION['uname'], "In Profile Editor, Update in [db=".$MainDB."] SET [address=".$address.", phno=".$phno."] ");
      }
 
    $sql = "SELECT * from login where LoginName = '$loginUser'";
@@ -80,7 +80,7 @@
      if (!mysqli_query($conn, $query)) {
           echo "Error updating record: " . mysqli_error($conn);
      }
-     logActivity($_SESSION['uname'], "In Profile Editor, Update in [db=".$dbname."]  SET [signature=".$signature."] ");
+     logActivity($_SESSION['uname'], "In Profile Editor, Update in [db=".$MainDB."]  SET [signature=".$signature."] ");
    }
 
    $sql = "SELECT * from login where LoginName = '$loginUser'";
@@ -93,7 +93,7 @@
 <head id="head_tag">
      <meta charset="utf-8">
      <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-     <title>Profile: SVCE-ACM CMS</title>
+     <title>Profile:<?php echo " ".$OrgName; ?></title>
      <link rel="icon" type="image/png" sizes="600x600" href="../assets/img/Logo_White.png">
      <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">

@@ -3,5 +3,9 @@
      $servername = "localhost";
      $username = "root";
      $password = "";
-     $dbname = "svcehost_cms";
+     $MainDB = "svcehost_cms";
+     /* Basic Information */
+     $OrgName = "SVCE-ACM REMS";
+     $startPath='/cms';
+     
 ?>
