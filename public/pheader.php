@@ -1,11 +1,4 @@
-<?php   
-     // Runtime Variables
-     $servername = "localhost";
-     $username = "root";
-     $password = "";
-     $MainDB = "svcehost_cms";
-     /* Basic Information */
-     $OrgName = "SVCE-ACM REMS";
-     $startPath='/cms';
-     
+<?php
+     date_default_timezone_set('Asia/Kolkata');
+     include("../members/secrets_.php"); 
 ?>

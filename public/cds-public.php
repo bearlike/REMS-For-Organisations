@@ -1,7 +1,7 @@
 <?php
+    include("pheader.php");
     if (!empty( $_GET)) {
         // Include Public Headers
-        include("pheader.php");
         // Create connection
         $conn = new mysqli($servername, $username, $password, $MainDB);
         // Check connection
