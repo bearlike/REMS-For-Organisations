@@ -1,5 +1,5 @@
 -- CMS For Organisations
--- Link: https://github.com/K-Kraken/cms-for-organisations
+-- Link: https://github.com/K-Kraken/REMS-For-Organisations
 -- --------------------------------------------------------------
 -- Name: SQL Dump
 -- Made on version 4.9.1
@@ -9,7 +9,7 @@
 --
 
 --
--- Database: `main_cms_database` represented by $dbname in the secrets.php
+-- Database: `main_rems_database` represented by $MainDB in the secrets.php
 --
 
 DELIMITER $$

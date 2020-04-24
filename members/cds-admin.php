@@ -18,7 +18,7 @@ $Fonts_Path = "CDS_Admin/Fonts/";
             echo "<title>Generating</title>";
         }
         else{
-            echo "<title>CDS Admin: SVCE-ACM CMS</title>";
+            echo "<title>CDS Admin:".$OrgName."</title>";
         }
     ?>
     <link rel="icon" type="image/png" sizes="600x600" href="../assets/img/Logo_White.png">
@@ -113,7 +113,7 @@ $Fonts_Path = "CDS_Admin/Fonts/";
         }
     }
     echo "<br>";
-    $conn = new mysqli($servername, $username, $password, $dbname);
+    $conn = new mysqli($servername, $username, $password, $MainDB);
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error); // IF-Fail to Connect
     }

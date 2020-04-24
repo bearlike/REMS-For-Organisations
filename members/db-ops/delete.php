@@ -15,7 +15,7 @@
         header('Location: ../pages/error.php?error=Error while executing the query');
     }
     $submit_stmt->execute();
-     if($_POST['db']==$dbname)
+     if($_POST['db']==$MainDB)
          $dbc=1;
      else if($_POST['db']==$formDB)
 	    $dbc=2;
