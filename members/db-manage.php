@@ -6,20 +6,25 @@
 	// Dictionary on what to replace what with what
     $table="Choose an table";
     $page=1;
-    $perPage=10;;
+    $perPage=10;
     $totalPages=1;
+    if(empty($_GET['table'])){
+        $_GET['table']=NULL;
+    }
     if(!(empty($_GET['db']))){
         $_POST['db']=$_GET['db'];
     }
     if(!(empty($_POST['db']))){
         if($_POST['db']==1)
-            $db=$dbname;
-        else
+            $db=$MainDB;
+        else if($_POST['db']==2)
             $db=$formDB;
+        else if($_POST['db']==3)
+            $db=$mailerDB;
     }
     else{
         $_POST['db']=1;
-        $db=$dbname;
+        $db=$MainDB;
     }
     if(empty($_GET['search'])){
         $_GET['search']="";
@@ -70,7 +75,7 @@
 <head id="head_tag">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Database Management: SVCE-ACM</title>
+    <title>Database Management:<?php echo " ".$OrgName; ?></title>
     <link rel="icon" type="image/png" sizes="600x600" href="../assets/img/Logo_White.png">
     <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
@@ -89,11 +94,12 @@
                         <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="POST">
                             <select class="form-control border-1 small" style="width: 68%;max-width:15em;" onchange="this.form.submit()" name="db">
                                 <option value="1" <?php if($_POST['db']==1){echo 'selected=""';} ?>>CMS database</option>
-                                <option value="2" <?php if($_POST['db']==2){echo 'selected=""';} ?>>Forms database</option>p
+                                <option value="2" <?php if($_POST['db']==2){echo 'selected=""';} ?>>Forms database</option>
+                                <option value="3" <?php if($_POST['db']==3){echo 'selected=""';} ?>>Mailer database</option>
                             </select>
                         </form>
                         <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="GET">
-                            <input type="hidden" name="db" value="<?php if($_POST['db']==2){echo '2';} else {echo '1';} ?>" ?>
+                            <input type="hidden" name="db" value="<?php if($_POST['db']==2){echo '2';} else if($_POST['db']==3){echo '3';} else {echo '1';} ?>" ?>
                             <select onchange="this.form.submit()" class="form-control border-1 small" style="width: 68%;max-width:15em;" name ="table" required>
                                 <option value = "">Select an table</option>
                                 <?php

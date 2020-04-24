@@ -5,9 +5,10 @@
 */
 session_start();
 if((isset($_COOKIE["username"])) && (isset($_COOKIE["password"]))) {
-			$_POST['uname'] = $_COOKIE['usernamee'];
+			$_POST['uname'] = $_COOKIE['username'];
 			$_POST['password'] = $_COOKIE['password'];
 			$_POST['remember'] = 1;
+			$_POST['ipadd']="Last Used Browser";
 }
 if (!empty($_SESSION)) {
 	if ($_SESSION['remember'] == 0) {
@@ -23,7 +24,7 @@ if (!empty($_SESSION)) {
 }
 if (!empty($_POST)) {
 	include("secrets_.php"); // Include Secret Keys such as APIs and override default database credentials
-	$conn = new mysqli($servername, $username, $password, $dbname); // Create connection
+	$conn = new mysqli($servername, $username, $password, $MainDB); // Create connection
 	if ($conn->connect_error) {	// Check connection
 		die("Connection failed: " . $conn->connect_error);
 	}
@@ -64,7 +65,7 @@ if (!empty($_POST)) {
 		/* Needs Optimisation, currently restarting connection to flush 
 		previous result (to prevent "Commands out of sync; you can't 
 		run this command now" error) */
-		$conn = new mysqli($servername, $username, $password, $dbname);	// Create connection
+		$conn = new mysqli($servername, $username, $password, $MainDB);	// Create connection
 		if ($conn->connect_error) {	// Check connection
 			die("Connection failed: " . $conn->connect_error);
 		}

@@ -1,29 +1,35 @@
 <?php
+    include("pheader.php");
     if (!empty( $_GET)) {
-        include("pheader.php");
+        // Include Public Headers
         // Create connection
-        $conn = new mysqli($servername, $username, $password, $dbname);
+        $conn = new mysqli($servername, $username, $password, $MainDB);
         // Check connection
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         }
+        // To know if user is searching for a name/event
         if(empty($_GET['search'])){
             $_GET['search']="";
         }
+        // To know user's current page
         if(empty($_GET['page'])){
             $page=1;
         }
         else{
             $page=$_GET['page'];
         }
+        // Number of tuples per page
         if(empty($_GET['perPage'])){
             $perPage=10;
         }
         else{
             $perPage=$_GET['perPage'];
         }
+        // If user wants to see the events conducted and not the cert generated [$mode=1]
         if(isset($_GET['mode'])){
             $mode=1;
+            $_GET['event']="";
             $countr = -1;
             $event = "Events Details";
             $resultc = $conn->query("SELECT COUNT(DISTINCT event_name, date) FROM events");
@@ -34,6 +40,7 @@
             $sql = "select event_name, date from events order by date limit ".$startPage.",".$perPage.";";
             $result = $conn->query($sql);
         }
+        // If user wants to see the cert generated and not the events conducted  [$mode=0]
         else{
             $mode=0;
             $event = strtolower($_GET['event']);
@@ -71,6 +78,7 @@
         }
     }
     else {
+        // Display event not found
         header('Location: ../index.php?status=notfound');
     }
 ?>
@@ -79,7 +87,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Certificate Distribution System (CDS): SVCE-ACM</title>
+    <title>Certificate Distribution System (CDS):<?php echo " ".$OrgName; ?></title>
     <link rel="icon" type="image/png" sizes="600x600" href="../assets/img/Logo_White.png">
     <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">

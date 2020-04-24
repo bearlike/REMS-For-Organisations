@@ -15,10 +15,12 @@
         header('Location: ../pages/error.php?error=Error while executing the query');
     }
     $submit_stmt->execute();
-     if($_GET['db']==$dbname)
+     if($_POST['db']==$MainDB)
          $dbc=1;
-     else
-         $dbc=2;
+     else if($_POST['db']==$formDB)
+	    $dbc=2;
+	else
+		$dbc=3;
     logActivity($_SESSION['uname'], 'Removed column for [id=' . $id . '] in [table=' . $tablename . '] of [db=' . $_GET['db'] . ']');
 	header('Location: ../db-manage.php?db='.$dbc.'&table='.$tablename);
 ?>

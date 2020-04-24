@@ -3,7 +3,7 @@
 // Call Example: logActivity($_SESSION['uname'], "Log Something");
 function logActivity($loggedOnUser, $log) {
       include("secrets_.php");
-  $logActivityConn = new mysqli($servername, $username, $password, $dbname);
+  $logActivityConn = new mysqli($servername, $username, $password, $MainDB);
   if ($logActivityConn->connect_error) {
       die("Connection failed: " . $logActivityConn->connect_error);
   }
@@ -22,7 +22,7 @@ function logActivity($loggedOnUser, $log) {
 // Call Example: retIsAdmin($_SESSION['uname']);
 function retIsAdmin($loggedOnUser) {
       include("secrets_.php");
-      $retIsAdmin = new mysqli($servername, $username, $password, $dbname);
+      $retIsAdmin = new mysqli($servername, $username, $password, $MainDB);
       if ($retIsAdmin->connect_error) {
             die("Connection failed: " . $retIsAdmin->connect_error);
       }
@@ -40,7 +40,7 @@ function retIsAdmin($loggedOnUser) {
 // Call Example: retProfilePic($_SESSION['uname']);
 function retProfilePic($loggedOnUser) {
       include("secrets_.php");
-      $retProfilePic = new mysqli($servername, $username, $password, $dbname);
+      $retProfilePic = new mysqli($servername, $username, $password, $MainDB);
       if ($retProfilePic->connect_error) {
             die("Connection failed: " . $retProfilePic->connect_error);
       }
