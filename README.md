@@ -3,12 +3,13 @@
   <img src="https://i.imgur.com/w5PZAuO.png" alt="CMS For Organisations" height="250px">
   <br>
 </h1>
-<h4 align="center">User-friendly REMS for small organisations and clubs. Form Generator, Mailer, Certificate Generator and much more :)</h4>
+<h4 align="center">Responsive Resources and Event Management System for small organisations and clubs. Form Generator, Mailer, Certificate Generator and much more :)</h4>
 
 <p align="center">
   <img src="https://img.shields.io/github/last-commit/K-Kraken/REMS-For-Organisations?color=blue&style=flat-square">
   <a href="/LICENSE"><img src="https://img.shields.io/github/license/K-Kraken/REMS-For-Organisations.svg?style=flat-square"></a>
-     <a href="https://github.com/K-Kraken/REMS-For-Organisations/issues"><img src="https://img.shields.io/github/issues-raw/K-Kraken/REMS-For-Organisations?color=red&style=flat-square"/></a>
+  <a href="https://github.com/K-Kraken/REMS-For-Organisations/issues"><img src="https://img.shields.io/github/issues-raw/K-Kraken/REMS-For-Organisations?color=red&style=flat-square"/></a>
+    <a href="https://github.com/K-Kraken/REMS-For-Organisations/releases"><img src="https://img.shields.io/github/v/tag/K-Kraken/REMS-For-Organisations?label=stable&style=flat-square"/></a>
 </p>
 
 
@@ -31,18 +32,18 @@ What things you need to run the software:
 
 
 ### Installation
-
-1. Create and Import the Main Database dump for  **MySQL-MariaDB** from [here](/docs/files/Sample_REMS_Database.sql) 
-2. Create a Forms Database.
-3. Copy the files from this repository to a location in the root directory of the web server
-4. Rename `member/secrets.php_` to `member/secrets.php`
-5. Update your database credentials, databases names (Main and Forms) and API Keys in `member/secrets.php` and `public/cds-public.php`
-6. With your Web Server and MySQL server running, visit the site
+1. Download the latest stable release from [here](https://github.com/K-Kraken/REMS-For-Organisations/releases)
+2. Create and Import the Main Database dump for  **MySQL-MariaDB** from [here](/docs/files/Sample_REMS_Database.sql) 
+3. Create a Forms Database.
+4. Copy the files from this repository to a location in the root directory of the web server
+5. Rename `member/secrets.php_` to `member/secrets.php`
+6. Update your database credentials, databases names (Main and Forms) and API Keys in `member/secrets.php` and `public/cds-public.php`
+7. With your Web Server and MySQL server running, visit the site
    - ```
       Default Username: admin
       Default Password: admin
      ```
-7. If any error occurs, check your configurations in `member/secrets.php` and `public/cds-public.php` and try again
+8. If any error occurs, check your configurations in `member/secrets.php` and `public/cds-public.php` and try again
 
 
 
@@ -79,7 +80,7 @@ This tool is used to generate forms for events. Initially, the specifications of
 
 The mailer can send automatically send emails to a specific mailing list. It supports HTML emails and comes with a pre-designed template. The parameters for the pre-defined template can be modified for the specifications of the organization.  There is also a feature to create mailing lists to use with these mailers. A CSV of the emails and names has to be uploaded ana a mailing list is created.  
 
-| Bulk Mailer Interface                                    |                                                          | Sample Sent Mail                                         |
+| Bulk Mailer Interface                                    | Mailing List Generator                                   | Sample Sent Mail                                         |
 | -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- |
 | <img src="https://i.imgur.com/R2RJOvu.png" width="650"/> | <img src="https://i.imgur.com/NOEJiH4.png" width="650"/> | <img src="https://i.imgur.com/OvPolMF.png" width="650"/> |
 
