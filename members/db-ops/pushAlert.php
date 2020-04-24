@@ -1,6 +1,6 @@
 <?php
      include("../header.php");
-     $alertConn = new mysqli($servername, $username, $password, $dbname);
+     $alertConn = new mysqli($servername, $username, $password, $MainDB);
      if ($alertConn->connect_error) {
      	die("Connection failed: " . $alertConn->connect_error);
      }

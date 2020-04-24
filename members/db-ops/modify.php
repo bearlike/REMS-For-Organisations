@@ -38,7 +38,7 @@
         }
         $updateSQL=$updateSQL." WHERE id=".$id;
         echo $updateSQL."<br><br>";
-        if($_POST['db']==$dbname)
+        if($_POST['db']==$MainDB)
             $dbc=1;
         else if($_POST['db']==$formDB)
             $dbc=2;
@@ -60,7 +60,7 @@
 <head id="head_tag">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Modify Row: SVCE-ACM</title>
+    <title>Modify Row:<?php echo " ".$OrgName; ?></title>
     <link rel="icon" type="image/png" sizes="600x600" href="../../assets/img/Logo_White.png">
     <link rel="stylesheet" href="../../assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">

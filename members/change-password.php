@@ -1,12 +1,8 @@
 <?php
 include('mainFunction.php');
 include("secrets_.php");
-$servername ='localhost';
-$username = 'root';
-$password = '';
-$dbname = 'svcehost_cms';
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conn = new mysqli($servername, $username, $password, $MainDB);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
@@ -47,7 +43,7 @@ if(isset($_GET['gen'])){
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Forgotten Password - SVCE-ACM: CMS</title>
+    <title>Forgotten Password -<?php echo " ".$OrgName; ?></title>
     <link rel="icon" type="image/png" sizes="600x600" href="../assets/img/Logo_White.png">
     <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">

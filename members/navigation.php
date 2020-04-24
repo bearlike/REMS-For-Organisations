@@ -8,7 +8,7 @@ $displayCircles=array(
 
 $alertCount=0;
 $readReamining="";
-$retAlerts = new mysqli($servername, $username, $password, $dbname);
+$retAlerts = new mysqli($servername, $username, $password, $MainDB);
 if ($retAlerts->connect_error) {
 	die("Connection failed: " . $retAlerts->connect_error);
 }

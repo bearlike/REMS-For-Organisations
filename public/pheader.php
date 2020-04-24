@@ -1,7 +1,4 @@
-<?php   
-     // Runtime Variables
-     $servername = "localhost";
-     $username = "root";
-     $password = "";
-     $dbname = "svcehost_cms";
+<?php
+     date_default_timezone_set('Asia/Kolkata');
+     include("../members/secrets_.php"); 
 ?>
