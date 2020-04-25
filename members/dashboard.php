@@ -1,28 +1,38 @@
 <?php
     include("header.php");
-    $conn1 = new mysqli($servername, $username, $password, $MainDB);
-    // Check connection
-    if ($conn1->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-    $conn2 = new mysqli($servername, $username, $password, $formDB);
-    // Check connection
-    if ($conn2->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-    $resultc = $conn1->query('SELECT CONCAT("event_",LOWER(REPLACE((SELECT `event_name` FROM `events` order by `date` desc limit 1)," ","_"))) as code');
-    $rowc = $resultc->fetch_row();
-    $eventsCount = $rowc[0]; // Count total responses
-    $resultc = $conn2->query('SELECT COUNT(*) as code FROM '.$eventsCount);
-    if($resultc){
-        $rowc = $resultc->fetch_row();
-        $registrationCount = $rowc[0]; // Count total responses
+    $conn1 = new PDO('mysql:dbname='.$MainDB.';host='.$servername.';charset=utf8', $username, $password);
+    $conn1->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+    //$conn1->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    $conn2 = new PDO('mysql:dbname='.$formDB.';host='.$servername.';charset=utf8', $username, $password);
+    $conn2->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+    //$conn2->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    
+    $resultc = $conn1->prepare('SELECT CONCAT("event_",LOWER(REPLACE((SELECT `event_name` FROM `events` order by `date` desc limit 1)," ","_"))) as code');
+    $resultc->execute();
+    $rowc = $resultc->fetch();
+    $eventTable = $rowc[0]; // Return Latest Event Name
+    //echo $eventTable;
+    $ifTableExistSQL = $conn2->prepare('SELECT count(1) FROM information_schema.TABLES WHERE (TABLE_SCHEMA = :formDB) AND (TABLE_NAME = :eventTable)');
+    $ifTableExistSQL->bindValue(':formDB', $formDB);
+    $ifTableExistSQL->bindValue(':eventTable', $eventTable);
+    $ifTableExistSQL->execute();
+    $ifTableExist = $ifTableExistSQL->fetch();
+
+    if($ifTableExist[0]==1){
+        $evCountStmt = $conn2->prepare('SELECT count(*) from '.$eventTable);
+        $evCountStmt->execute();
+        $resultc = $evCountStmt->fetch();
+        $registrationCount = $resultc[0]; // Count total responses
     }
     else{
-        $registrationCount = 0;
+        $registrationCount = "Form not Generated";
     }
-    $resultc = $conn1->query('SELECT COUNT(*) as code FROM events;');
-    $rowc = $resultc->fetch_row();
+    $conn2=null;
+    $resultc = $conn1->prepare('SELECT COUNT(*) as code FROM events;');
+    $resultc->execute();
+    $rowc = $resultc->fetch();
     $eventsCount = $rowc[0]; // Count total responses
 
 ?>
@@ -52,7 +62,7 @@
                             <div class="card-body">
                                 <div class="row align-items-center no-gutters">
                                     <div class="col mr-2">
-                                        <div class="text-uppercase text-primary font-weight-bold text-xs mb-1"><span>Registrations (Latest)</span></div>
+                                        <div class="text-uppercase text-primary font-weight-bold text-xs mb-1"><span>Registrations for <?php echo ucwords(str_replace("event ","",(str_replace("_"," ",$eventTable)))); ?> (Latest)</span></div>
                                         <div class="text-dark font-weight-bold h5 mb-0"><span><?php echo $registrationCount; ?></span></div>
                                     </div>
                                     <div class="col-auto"><i class="fas fa-user-friends fa-2x text-gray-300"></i></div>
