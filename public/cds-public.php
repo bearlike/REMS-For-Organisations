@@ -3,15 +3,11 @@
     if (!empty( $_GET)) {
         // Include Public Headers
         // Create connection
-        //$conn = new mysqli($servername, $username, $password, $MainDB);
         $conn = new PDO('mysql:dbname='.$MainDB.';host='.$servername.';charset=utf8', $username, $password);
 
         $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         // Check connection
-        // if ($conn->connect_error) {
-        //     die("Connection failed: " . $conn->connect_error);
-        // }
         // To know if user is searching for a name/event
         if(empty($_GET['search'])){
             $_GET['search']="";
@@ -37,14 +33,15 @@
             $countr = -1;
             $event = "Events Details";
             $resultc = $conn->query("SELECT COUNT(DISTINCT event_name, date) FROM events");
-            $rowc = $resultc->fetch_row();
+            $rowc = $resultc->fetch();
             $countr = $rowc[0]; // Count total certificates
             $totalPages = ceil($countr/$perPage);
             $startPage = $perPage*($page-1);
             $sql =  $conn->prepare("select event_name, date from events order by date limit :startpage , :perpage");
             $sql->bindValue(':startpage', (int) $startPage, PDO::PARAM_INT);
-            $statement->bindValue(':perpage', (int) $perPage, PDO::PARAM_INT);
-            $result = $sql->execute();
+            $sql->bindValue(':perpage', (int) $perPage, PDO::PARAM_INT);
+            $sql->execute();
+            $result = $sql->fetchAll(PDO::FETCH_ASSOC);
         }
         // If user wants to see the cert generated and not the events conducted  [$mode=0]
         else{
@@ -53,7 +50,6 @@
             // To know if an event exist or not
             $sql = $conn->prepare('select count(1) as code from events where event_name= :event_name');
             $sql->bindValue(':event_name', $event);
-            //$sql->bind_param('s', $event);
             $sql->execute();
             foreach ($sql as $row) {
                 if ($row["code"]==0) {
@@ -83,7 +79,6 @@
             $startPage = $perPage*($page-1);
             // SLECT for table
             if (!($isInter)){
-                //$sql = "SELECT DISTINCT name,regno,dept,year,section,position,cert_link from certificates where event_name=\"".$event."\" AND name LIKE '%".$_GET['search']."%' order by name limit ".$startPage.",".$perPage.";";
                 $sql = $conn->prepare("SELECT DISTINCT name,regno,dept,year,section,position,cert_link from certificates where event_name= :event_name AND name LIKE :search_value order by name limit :startpage,:perpage;");
                 $sql->bindValue(':event_name', $event);
                 $sql->bindValue(':search_value', $search_value);
@@ -99,7 +94,6 @@
             }
             $sql->execute();
             $result = $sql->fetchAll(PDO::FETCH_ASSOC);
-            // echo $countr;
         }
     }
     else {
@@ -161,13 +155,6 @@
                             </li>
                             <div class="d-none d-sm-block topbar-divider"></div>
                             <li class="nav-item dropdown no-arrow" role="presentation">
-                                <!-- <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="d-none d-lg-inline mr-2 text-gray-600 small">Username</span><img class="border rounded-circle img-profile" src="../assets/img/avatars/avatar1.jpeg"></a>
-                                    <div
-                                        class="dropdown-menu shadow dropdown-menu-right animated--grow-in" role="menu"><a class="dropdown-item" role="presentation" href="#"><i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Profile</a><a class="dropdown-item" role="presentation" href="#"><i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Settings</a>
-                                        <a
-                                            class="dropdown-item" role="presentation" href="#"><i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Activity log</a>
-                                            <div class="dropdown-divider"></div><a class="dropdown-item" role="presentation" href="#"><i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Logout</a></div>
-                    </div> -->
                     </li>
                     </ul>
             </div>
@@ -342,7 +329,6 @@
                                 </nav>
                             </form>
                         </div>
-
                     </div>
                 </div>
             </div>
