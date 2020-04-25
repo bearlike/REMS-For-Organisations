@@ -24,26 +24,35 @@ if (!empty($_SESSION)) {
 }
 if (!empty($_POST)) {
 	include("secrets_.php"); // Include Secret Keys such as APIs and override default database credentials
-	$conn = new mysqli($servername, $username, $password, $MainDB); // Create connection
-	if ($conn->connect_error) {	// Check connection
-		die("Connection failed: " . $conn->connect_error);
-	}
-	$check_sql = 'CALL CheckUser("' . $_POST['uname'] . '","' . $_POST['password'] . '");';	// Call Procedures
-	$result = $conn->query($check_sql);
+	$conn = new PDO('mysql:dbname='.$MainDB.';host='.$servername.';charset=utf8', $username, $password);
+
+	$conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+	$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+	//$check_sql = 'CALL CheckUser("' . $_POST['uname'] . '","' . $_POST['password'] . '");';	// Call Procedures
+	$check_sql = $conn->prepare('CALL CheckUser(:uname,:password)');
+	$check_sql->bindValue(":uname",$_POST['uname']);
+	$check_sql->bindValue(":password",$_POST['password']);
+
+	$check_sql->execute();
+	$result = $check_sql->fetchAll(PDO::FETCH_ASSOC);
+	$check_sql->closeCursor();
+
 	foreach ($result as $row) {
 		if ($row["code"] > 0)
 			$flag = true;
 		else
 			$flag = false;
 	}
+
 	if ($flag == false) {
-		$conn->close();
+		$conn=null;
 		echo "Unsuccessful";
 		session_destroy();
 		setcookie("username","", time()-3600);	// forget cookie
 		setcookie("password","", time()-3600);	// forget cookie
 		header('Location: member-login.php');
-	} 
+	}
 	else {
 		$_SESSION['uname'] = $_POST['uname'];
 		$_SESSION['password'] = $_POST['password'];
@@ -61,18 +70,17 @@ if (!empty($_POST)) {
 		}
 		date_default_timezone_set('Asia/Kolkata');
 		$_SESSION['loginTime'] = date("Y-m-d H:i:s", time());
-		$conn->close();
-		/* Needs Optimisation, currently restarting connection to flush 
-		previous result (to prevent "Commands out of sync; you can't 
-		run this command now" error) */
-		$conn = new mysqli($servername, $username, $password, $MainDB);	// Create connection
-		if ($conn->connect_error) {	// Check connection
-			die("Connection failed: " . $conn->connect_error);
-		}
+
+		$conn = new PDO('mysql:dbname='.$MainDB.';host='.$servername.';charset=utf8', $username, $password);
+		$conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+		$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
 		$Log = "Logged in Successfully from " . $_POST['ipadd'];
-		$LogSQL = 'CALL enterLog("' . $_POST['uname'] . '","' . $Log . '");';
-		echo $LogSQL;
-		if ($conn->query($LogSQL) === TRUE) {
+		$LogSQL = $conn->prepare('CALL enterLog(:uname,:log);');
+		$LogSQL->bindValue(":uname", $_POST['uname']);
+		$LogSQL->bindValue(":log",$Log);
+
+		if ($LogSQL->execute()) {
 			echo "New record created successfully";
 		} else {
 			echo "Error: " . $conn->error;

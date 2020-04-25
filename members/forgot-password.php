@@ -9,11 +9,10 @@ require '../src/PHPMailer/Exception.php';
 require '../src/PHPMailer/PHPMailer.php';
 require '../src/PHPMailer/SMTP.php';
 
+$conn = new PDO('mysql:dbname='.$MainDB.';host='.$servername.';charset=utf8', $username, $password);
 
-$conn = new mysqli($servername, $username, $password, $MainDB);
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+$conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 ?>
 <html>
 
@@ -56,15 +55,19 @@ if ($conn->connect_error) {
                                     <?php
                                         if (isset($_POST["submit"])){
                                             $email = $_POST['email'];
-                                            $check_sql = 'SELECT count(1) as isPresent from login where Email="'.$email.'"';
-                                            $list_check = $conn->query($check_sql);
-                                            foreach ($list_check as $entry) {
+                                            $check_sql = $conn->prepare('SELECT count(1) as isPresent from login where Email=:email');
+                                            $check_sql->bindValue(":email",$email);
+                                            $check_sql->execute();
+
+                                            foreach ($check_sql as $entry) {
                                                 $isUser =  $entry['isPresent'];
                                             }
                                             if($isUser){
-                                                $hash_sql = 'SELECT ForgotPasswordHash("'.$email.'") as link_value';
-                                                $list  = $conn->query($hash_sql);
-                                                foreach ($list as $row) {
+                                                $hash_sql = $conn->prepare('SELECT ForgotPasswordHash(:email) as link_value');
+                                                $hash_sql->bindValue(":email",$email);
+                                                $hash_sql->execute();
+
+                                                foreach ($hash_sql as $row) {
                                                     $key =  $row['link_value'];
                                                 }
                                                 $mail = new PHPMailer();  // create a new object
