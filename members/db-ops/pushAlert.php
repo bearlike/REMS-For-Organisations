@@ -1,16 +1,23 @@
 <?php
      include("../header.php");
-     $alertConn = new mysqli($servername, $username, $password, $MainDB);
-     if ($alertConn->connect_error) {
-     	die("Connection failed: " . $alertConn->connect_error);
+     try {
+          $conn = new PDO('mysql:dbname=' . $MainDB . ';host=' . $servername . ';charset=utf8', $username, $password);
+     } catch (PDOException $e) {
+          $message = $e->getMessage();
+          header('Location: ../pages/error.php?error=Cannot connect to the server/database');
+          die();
      }
-     $alertSQL = 'INSERT INTO `notification` (`user`, `message`, `type`, `clickURL`) VALUES ("'.$_SESSION['uname'].'", "'.$_POST["alertMessage"].'", "'.$_POST["type"].'", "#");';
+     $alertSQL = 'INSERT INTO `notification` (`user`, `message`, `type`, `clickURL`) VALUES (:user, :message, :type, :clickURL)';
      // echo $logSQL; // For Debugging
-     if ($alertConn->query($alertSQL) == TRUE) {
-     	header('Location: ../dashboard.php?alPush=Success');
+     $alertPrep = $conn->prepare($alertSQL);
+     if ($alertPrep == TRUE) {
+          $alertPrep->bindValue(":user", $_SESSION['uname']);
+          $alertPrep->bindValue(":message", $_POST["alertMessage"]);
+          $alertPrep->bindValue(":type", $_POST["type"]);
+          $alertPrep->bindValue(":clickURL", "#");
+          $alertPrep->execute();
+          header('Location: ../dashboard.php?alPush=Success');
      } else {
-     	// echo "Error: " . $alertConn->error; // For Debugging
-     	header('Location: ../member-login.php');
+          header('Location: ../member-login.php');
      }
-     $alertConn->close();
 ?>

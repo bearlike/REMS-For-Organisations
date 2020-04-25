@@ -1,56 +1,65 @@
 <?php
     include("../header.php");
-    if(empty($_POST)){
+    if (retIsAdmin($_SESSION['uname']) == 0) {
+        header('Location: pages/error.php?error=noAccess');
+    }
+
+    if (empty($_POST)) {
         $table = $_GET["tbname"];
         $db = $_GET["db"];
         $id = $_GET["id"];
-        $conn = new mysqli($servername, $username, $password, $db);
-        // Check connection
-        if ($conn->connect_error) {
-            header('Location: ../pages/error.php?error='.$conn->connect_error);
+        try {
+            $conn = new PDO('mysql:dbname=' . $db . ';host=' . $servername . ';charset=utf8', $username, $password);
+        } catch (PDOException $e) {
+            $message = $e->getMessage();
+            header('Location: ../pages/error.php?error=Cannot connect to the server/database');
+            die();
         }
-        $sql = "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`='".$db."' AND `TABLE_NAME`='".$table."'";
-        // echo $sql;   // For testing
-        $columns = $conn->query($sql); // COLUMN_NAME
-        $i=0;
+
+        $sql = $conn->prepare("SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`=:db AND `TABLE_NAME`=:table");
+        $sql->bindValue(":db", $db);
+        $sql->bindValue(":table", $table);
+        $sql->execute();
+        $columns = $sql->fetchAll(PDO::FETCH_ASSOC); // COLUMN_NAME
+        $i = 0;
         foreach ($columns as $row) {
-            $colArr[$i]=$row['COLUMN_NAME'];
+            $colArr[$i] = $row['COLUMN_NAME'];
             $i++;
         }
-        $sql = "select * from ".$table." where id=".$id.";";
-        $temp  = $conn->query($sql);
-        $colSelect = $temp->fetch_row();
-        $counterVar=0;
-    }
-    else{
+        $sql = "select * from " . $table . " where id=" . $id;
+        $temp  = $conn->prepare($sql);
+        $temp->execute();
+        $colSelect = $temp->fetch();
+        $counterVar = 0;
+    } else {
         $db = $_POST["db"];
         $table = $_POST["table"];
         $id = $_POST["id"];
-        $conn = new mysqli($servername, $username, $password, $db);
-        // Check connection
-        if ($conn->connect_error) {
-            header('Location: ../pages/error.php?error='.$conn->connect_error);
+        try {
+            $conn = new PDO('mysql:dbname=' . $db . ';host=' . $servername . ';charset=utf8', $username, $password);
+        } catch (PDOException $e) {
+            $message = $e->getMessage();
+            header('Location: ../pages/error.php?error=Cannot connect to the server/database');
+            die();
         }
-        $updateSQL="UPDATE ".$table." SET id=".$id;
+
+        $updateSQL = "UPDATE " . $table . " SET id=" . $id;
         foreach ($_POST as $key => $value) {
-            if(($key!="id")&&($key!="submit")&&($key!="table")&&($key!="db"))
-                $updateSQL=$updateSQL.", ".$key."="."\"".$value."\"";
+            if (($key != "id") && ($key != "submit") && ($key != "table") && ($key != "db")) $updateSQL = $updateSQL . ", " . $key . "=" . "\"" . $value . "\"";
         }
-        $updateSQL=$updateSQL." WHERE id=".$id;
-        echo $updateSQL."<br><br>";
-        if($_POST['db']==$MainDB)
-            $dbc=1;
-        else if($_POST['db']==$formDB)
-            $dbc=2;
-        else
-            $dbc=3;
-        if ($conn->query($updateSQL) === TRUE) {
+        $updateSQL = $updateSQL . " WHERE id=" . $id;
+        echo $updateSQL . "<br><br>";
+        if ($_POST['db'] == $MainDB) $dbc = 1;
+        else if ($_POST['db'] == $formDB) $dbc = 2;
+        else $dbc = 3;
+        $updatePrep = $conn->prepare($updateSQL);
+        if ($updatePrep == TRUE) {
+            $updatePrep->execute();
             echo "Record updated successfully";
             logActivity($_SESSION['uname'], 'Modified column for [id=' . $id . '] in [table=' . $table . '] of [db=' . $db . ']');
-            header('Location: ../db-manage.php?db='.$dbc.'&table='.$table);
-        }
-        else {
-            header('Location: ../pages/error.php?error='.$conn->error);
+            header('Location: ../db-manage.php?db=' . $dbc . '&table=' . $table);
+        } else {
+            header('Location: ../pages/error.php?error=' . $conn->error);
         }
         $conn->close();
     }
