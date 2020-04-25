@@ -41,10 +41,16 @@
     else{
         $perPage=$_GET['perPage'];
     }
-    $conn = new PDO('mysql:dbname='.$db.';host='.$servername.';charset=utf8', $username, $password);
+    try{
+        $conn = new PDO('mysql:dbname='.$db.';host='.$servername.';charset=utf8', $username, $password);
 
-    $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    }catch(PDOException $e){
+        $message = $e->getMessage()  ;
+        header('Location:pages/error.php?error='.$e->getMessage());
+        die();
+    }
 
     $sql = $conn->prepare("show TABLES from ".$db);
     $sql->execute();

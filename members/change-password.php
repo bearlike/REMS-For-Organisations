@@ -2,10 +2,16 @@
 include('mainFunction.php');
 include("secrets_.php");
 
-$conn = new PDO('mysql:dbname='.$MainDB.';host='.$servername.';charset=utf8', $username, $password);
+try{
+    $conn = new PDO('mysql:dbname='.$MainDB.';host='.$servername.';charset=utf8', $username, $password);
 
-$conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+}catch(PDOException $e){
+    $message = $e->getMessage()  ;
+    header('Location:../public/error.html');
+    die();
+}
 $gen = null;
 if(isset($_GET['gen'])){
     $gen = $_GET['gen'];

@@ -24,10 +24,16 @@ if (!empty($_SESSION)) {
 }
 if (!empty($_POST)) {
 	include("secrets_.php"); // Include Secret Keys such as APIs and override default database credentials
-	$conn = new PDO('mysql:dbname='.$MainDB.';host='.$servername.';charset=utf8', $username, $password);
+	try{
+	    $conn = new PDO('mysql:dbname='.$MainDB.';host='.$servername.';charset=utf8', $username, $password);
 
-	$conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-	$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	    $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+	    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	}catch(PDOException $e){
+	    $message = $e->getMessage()  ;
+	    header('Location:../public/error.html');
+	    die();
+	}
 
 	//$check_sql = 'CALL CheckUser("' . $_POST['uname'] . '","' . $_POST['password'] . '");';	// Call Procedures
 	$check_sql = $conn->prepare('CALL CheckUser(:uname,:password)');
