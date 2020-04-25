@@ -10,6 +10,8 @@
         $id = $_GET["id"];
         try {
             $conn = new PDO('mysql:dbname=' . $db . ';host=' . $servername . ';charset=utf8', $username, $password);
+            $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
             $message = $e->getMessage();
             header('Location: ../pages/error.php?error=Cannot connect to the server/database');

@@ -1,14 +1,25 @@
 <?php
     include("header.php");
-    $conn1 = new PDO('mysql:dbname='.$MainDB.';host='.$servername.';charset=utf8', $username, $password);
-    $conn1->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-    //$conn1->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    try{
+        $conn1 = new PDO('mysql:dbname='.$MainDB.';host='.$servername.';charset=utf8', $username, $password);
+        $conn1->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+        $conn1->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    }catch(PDOException $e){
+        $message = $e->getMessage()  ;
+        header('pages/error.php?error='.$e->getMessage());
+        die();
+    }
 
-    $conn2 = new PDO('mysql:dbname='.$formDB.';host='.$servername.';charset=utf8', $username, $password);
-    $conn2->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-    //$conn2->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    try{
+        $conn2 = new PDO('mysql:dbname='.$formDB.';host='.$servername.';charset=utf8', $username, $password);
+        $conn2->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+        $conn2->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    }catch(PDOException $e){
+        $message = $e->getMessage()  ;
+        header('pages/error.php?error='.$e->getMessage());
+        die();
+    }
 
-    
     $resultc = $conn1->prepare('SELECT CONCAT("event_",LOWER(REPLACE((SELECT `event_name` FROM `events` order by `date` desc limit 1)," ","_"))) as code');
     $resultc->execute();
     $rowc = $resultc->fetch();

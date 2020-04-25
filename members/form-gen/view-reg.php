@@ -81,6 +81,8 @@
 
     try{
         $conn =  new PDO('mysql:dbname='.$formDB.';host='.$servername.';charset=utf8', $username, $password);
+        $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }catch(PDOException $e){
         $message = $e->getMessage()  ;
         header('pages/error.php?error='.$e->getMessage());

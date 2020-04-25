@@ -2,9 +2,15 @@
 
 <?php
    // Create connection
-   $conn = new PDO('mysql:dbname='.$MainDB.';host='.$servername.';charset=utf8', $username, $password);
-   $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-   $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+   try{
+        $conn = new PDO('mysql:dbname='.$MainDB.';host='.$servername.';charset=utf8', $username, $password);
+        $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    }catch(PDOException $e){
+        $message = $e->getMessage()  ;
+        header('pages/error.php?error='.$e->getMessage());
+        die();
+    }
    //profile pic upload
    if(isset($_POST['photo_settings'])){
       $name = $_FILES['file']['name'];
@@ -132,7 +138,7 @@
                                         <button class="btn btn-primary btn-sm" id="btnFileUpload"><i
                                                   class="fa fa-upload" aria-hidden="true"></i></button>
                                         <span id="spnFilePath"></span> -->
-                                        <input type="submit" class="btn btn-primary btn-sm" type="button"
+                                        <br><input type="submit" class="btn btn-primary btn-sm" type="button"
                                              value="Change Photo" name="photo_settings" style="margin-top:10px;" />
                                         <script type="text/javascript">
                                              // To hide the ugly file upload input and replace it with a button
