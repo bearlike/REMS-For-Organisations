@@ -12,9 +12,7 @@ function logActivity($loggedOnUser, $log) {
          $logSQL->bindValue(":loggedOnUser",$loggedOnUser);
          $logSQL->bindValue(":log",$log);
          $logSQL->execute();
-
-
-
+         $logActivityConn = null;
 }
 
 // returns 1 if user has admin privileges, else returns 0
@@ -33,6 +31,7 @@ function retIsAdmin($loggedOnUser) {
       foreach ($retIsAdminSQL as $row) {
             return $row["code"];
       }
+      $retIsAdmin=null;
 }
 
 
@@ -52,6 +51,7 @@ function retProfilePic($loggedOnUser) {
       foreach ($retProfilePicSQL as $row) {
             return $startPath . '/assets/img/avatars/users/' . $row["imgsrc"];
       }
+      $retProfilePic=null;
 }
 
 ?>
