@@ -13,20 +13,29 @@ if (empty($_GET['perPage'])) {
 } else {
     $perPage = $_GET['perPage'];
 }
-$conn = new mysqli($servername, $username, $password, $MainDB);
+$conn = new PDO('mysql:dbname='.$MainDB.';host='.$servername.';charset=utf8', $username, $password);
+$conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+// $conn = new mysqli($servername, $username, $password, $MainDB);
 // Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-$resultc = $conn->query('select count(*) from logging where userid="' . $_SESSION['uname'] . '";');
-$rowc = $resultc->fetch_row();
+// if ($conn->connect_error) {
+//     die("Connection failed: " . $conn->connect_error);
+// }
+$resultc = $conn->prepare('select count(*) from logging where userid=:currentUser');
+$resultc->bindValue(':currentUser', $_SESSION['uname']);
+$resultc->execute();
+$rowc = $resultc->fetch();
 $countr = $rowc[0]; // Count total responses
 // calculate number of pages needed
 $totalPages = ceil($countr / $perPage);
 // Find the starting element for the current $page
 $startPage = $perPage * ($page - 1);
-$sql = "select timestamp, log from logging where userid=\"" . $_SESSION['uname'] . "\" order by id desc limit " . $startPage . "," . $perPage . ";";
-$logResults  = $conn->query($sql);
+$sql =  $conn->prepare("select timestamp, log from logging where userid=:currentUser order by id desc limit :startpage , :perpage");
+$sql->bindValue(':currentUser', $_SESSION['uname']);
+$sql->bindValue(':startpage', (int) $startPage, PDO::PARAM_INT);
+$sql->bindValue(':perpage', (int) $perPage, PDO::PARAM_INT);
+$sql->execute();
+$logResults  = $sql->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <html>
