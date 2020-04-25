@@ -3,11 +3,15 @@
     if (!empty( $_GET)) {
         // Include Public Headers
         // Create connection
-        $conn = new mysqli($servername, $username, $password, $MainDB);
+        //$conn = new mysqli($servername, $username, $password, $MainDB);
+        $conn = new PDO('mysql:dbname='.$MainDB.';host='.$servername.';charset=utf8', $username, $password);
+
+        $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         // Check connection
-        if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
-        }
+        // if ($conn->connect_error) {
+        //     die("Connection failed: " . $conn->connect_error);
+        // }
         // To know if user is searching for a name/event
         if(empty($_GET['search'])){
             $_GET['search']="";
@@ -47,32 +51,31 @@
             $mode=0;
             $event = strtolower($_GET['event']);
             // To know if an event exist or not
-            $sql = $conn->prepare('select count(1) as code from events where event_name=?');
-            $sql->bind_param('s', $event);
+            $sql = $conn->prepare('select count(1) as code from events where event_name= :event_name');
+            $sql->bindValue(':event_name', $event);
+            //$sql->bind_param('s', $event);
             $sql->execute();
-            $result = $sql->get_result();
-            foreach ($result as $row) {
+            foreach ($sql as $row) {
                 if ($row["code"]==0) {
                     header('Location: ../index.php?status=notfound');
                 }
             }
             // To know if an event is inter or intra
-            $sql = $conn->prepare("select isInter as code from events where event_name=?");
-            $sql->bind_param('s', $event);
+            $sql = $conn->prepare("select isInter as code from events where event_name= :event_name");
+            $sql->bindValue(':event_name', $event);
             $sql->execute();
-            $result = $sql->get_result();
-            foreach ($result as $row) {
+            foreach ($sql as $row) {
                 if ($row["code"]==0)
                     $isInter=False;
                 else
                     $isInter=True;
             }
             $search_value = '%'.$_GET['search'].'%';
-            $sql = $conn->prepare('SELECT COUNT(DISTINCT name,regno,college,dept,year,section,position,cert_link) FROM certificates where event_name=? AND name LIKE ? ');
-            $sql->bind_param("ss", $event,$search_value);
+            $sql = $conn->prepare('SELECT COUNT(DISTINCT name,regno,college,dept,year,section,position,cert_link) FROM certificates where event_name= :event_name AND name LIKE :search_value ');
+            $sql->bindValue(':event_name', $event);
+            $sql->bindValue(':search_value', $search_value);
             $sql->execute();
-            $resultc = $sql->get_result();
-            $rowc = $resultc->fetch_row();
+            $rowc = $sql->fetch();
             $countr = $rowc[0]; // Count total certificates
             // calculate number of pages needed
             $totalPages = ceil($countr/$perPage);
@@ -81,15 +84,21 @@
             // SLECT for table
             if (!($isInter)){
                 //$sql = "SELECT DISTINCT name,regno,dept,year,section,position,cert_link from certificates where event_name=\"".$event."\" AND name LIKE '%".$_GET['search']."%' order by name limit ".$startPage.",".$perPage.";";
-                $sql = $conn->prepare("SELECT DISTINCT name,regno,dept,year,section,position,cert_link from certificates where event_name= ? AND name LIKE ? order by name limit ?,?;");
-                $sql->bind_param("ssii", $event,$search_value,$startPage,$perPage);
+                $sql = $conn->prepare("SELECT DISTINCT name,regno,dept,year,section,position,cert_link from certificates where event_name= :event_name AND name LIKE :search_value order by name limit :startpage,:perpage;");
+                $sql->bindValue(':event_name', $event);
+                $sql->bindValue(':search_value', $search_value);
+                $sql->bindValue(':startpage', $startPage, PDO::PARAM_INT);
+                $sql->bindValue(':perpage', $perPage, PDO::PARAM_INT);
             }
             else{
-                $sql = $conn->prepare("SELECT DISTINCT name,college,year,position,cert_link from certificates where event_name=? AND name LIKE ? order by name limit ?,?;");
-                $sql->bind_param("ssii", $event,$search_value,$startPage,$perPage);
+                $sql = $conn->prepare("SELECT DISTINCT name,college,year,position,cert_link from certificates where event_name=:event_name AND name LIKE :search_value order by name limit :startpage,:perpage;");
+                $sql->bindValue(':event_name', $event);
+                $sql->bindValue(':search_value', $search_value);
+                $sql->bindValue(':startpage', $startPage, PDO::PARAM_INT);
+                $sql->bindValue(':perpage', $perPage, PDO::PARAM_INT);
             }
             $sql->execute();
-            $result = $sql->get_result();
+            $result = $sql->fetchAll(PDO::FETCH_ASSOC);
             // echo $countr;
         }
     }
