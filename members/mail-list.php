@@ -96,7 +96,7 @@ $Uploaded_Files = "Mailing-list/Uploaded files/";
                         //Create a table for this list
                         $table_name = str_replace(" ", "_", $_POST["mailer_name"]);
                         try{
-                            $conn = new PDO('mysql:dbname='.mailerDB.';host='.$servername.';charset=utf8', $username, $password);
+                            $conn = new PDO('mysql:dbname='.$mailerDB.';host='.$servername.';charset=utf8', $username, $password);
 
                             $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
                             $creation_query = $conn->prepare("CREATE TABLE IF NOT EXISTS " . $table_name . " (id int PRIMARY KEY AUTO_INCREMENT NOT NULL,name VARCHAR(255),email VARCHAR(255));");
