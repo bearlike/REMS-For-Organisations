@@ -2,31 +2,25 @@
 
 <?php
    // Create connection
-   $conn = mysqli_connect($servername, $username, $password, $MainDB);
-   // Check connection
-   if (!$conn) {
-      header('Location: ../pages/error.php?error=' . mysqli_connect_error()  );
-   }
+   $conn = new PDO('mysql:dbname='.$MainDB.';host='.$servername.';charset=utf8', $username, $password);
+   $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+   $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
    //profile pic upload
    if(isset($_POST['photo_settings'])){
       $name = $_FILES['file']['name'];
       $target_dir = "../assets/img/avatars/users/";
       $target_file = $target_dir . basename($_FILES["file"]["name"]);
-
       // Select file type
       $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
-
       // Valid file extensions
       $extensions_arr = array("jpg","jpeg","png","gif");
-
       // Check extension
       if( in_array($imageFileType,$extensions_arr) ){
-         // Convert to base64
-         $image_base64 = base64_encode(file_get_contents($_FILES['file']['tmp_name']) );
-         $image = 'data:image/'.$imageFileType.';base64,'.$image_base64;
          // Insert record
-         $query = "UPDATE login SET imgsrc='$name' where LoginName = '$loginUser'";
-         mysqli_query($conn,$query);
+         $sql = $conn->prepare("UPDATE login SET imgsrc=:imgSRC where LoginName=:currentUser");
+         $sql->bindValue(':imgSRC', $name);
+         $sql->bindValue(':currentUser', $_SESSION['uname']);
+         $sql->execute();
          logActivity($_SESSION['uname'], "In Profile Editor, Update in [db=".$MainDB."] SET [imgsrc=".$name."] ");
 
          // Upload file
@@ -36,9 +30,10 @@
    }
    //retrieve profile picture
 
-   $sql1 = "select imgsrc from login where LoginName = '$loginUser'";
-   $result1 = mysqli_query($conn,$sql1);
-   $row1 = mysqli_fetch_array($result1);
+   $sql1 = $conn->prepare("select imgsrc from login where LoginName=:currentUser limit 1");
+   $sql1->bindValue(':currentUser', $_SESSION['uname']);
+   $sql1->execute();
+   $row1 = $sql1->fetch();
    if($row1['imgsrc']==""){
       $image_src="../assets/img/avatars/image2.png";
    }else{
@@ -47,44 +42,43 @@
    }
    //user details form
    if(isset($_POST['user_settings'])) {
-          $email          =$_POST['email'];
-          $firstname      =$_POST['first_name'];
-          $lastname       =$_POST['last_name'];
-          $query = "UPDATE login SET lastname='$lastname', FirstName='$firstname', Email='$email' where LoginName = '$loginUser'";
-
-          if (!mysqli_query($conn, $query)) {
-               header('Location: ../pages/error.php?error=' . mysqli_error($conn));
-          }
+          $email = $_POST['email'];
+          $firstname = $_POST['first_name'];
+          $lastname = $_POST['last_name'];
+          $query = $conn->prepare("UPDATE login SET lastname = :lastname, FirstName = :firstname, Email = :email where LoginName =:currentUser");
+          $query->bindValue(':lastname', $lastname);
+          $query->bindValue(':firstname', $firstname);
+          $query->bindValue(':email', $email);
+          $query->bindValue(':currentUser', $_SESSION['uname']);
+          $query->execute();
           logActivity($_SESSION['uname'], "In Profile Editor, Update in [db=".$MainDB."] SET [lastname=".$lastname.", FirstName=".$firstname.", Email=".$email."] ");
      }
      // contact details form
      if(isset($_POST['contact_settings'])){
-          $address         =$_POST['address'];
-          $phno            =$_POST['phno'];
-
-          $query = "UPDATE login SET Address='$address', Phno='$phno' where LoginName = '$loginUser'";
-
-          if (!mysqli_query($conn, $query)) {
-               header('Location: ../pages/error.php?error=' . mysqli_error($conn));
-          }
+          $address = $_POST['address'];
+          $phno = $_POST['phno'];
+          $query = $conn->prepare("UPDATE login SET Address= :address, Phno= :phno where LoginName =:currentUser");
+          $query->bindValue(':address', $address);
+          $query->bindValue(':phno', $phno);
+          $query->bindValue(':currentUser', $_SESSION['uname']);
+          $query->execute();
           logActivity($_SESSION['uname'], "In Profile Editor, Update in [db=".$MainDB."] SET [address=".$address.", phno=".$phno."] ");
      }
 
-   $sql = "SELECT * from login where LoginName = '$loginUser'";
-   $result = mysqli_query($conn, $sql);
-
    //signature details form
    if(isset($_POST['signature_settings'])){
-     $signature         =$_POST['signature'];
-     $query = "UPDATE login SET Signature='$signature' where LoginName = '$loginUser'";
-     if (!mysqli_query($conn, $query)) {
-          echo "Error updating record: " . mysqli_error($conn);
-     }
+     $signature = $_POST['signature'];
+     $query = $conn->prepare("UPDATE login SET Signature= :signature where LoginName =:currentUser");
+     $query->bindValue(':signature', $signature);
+     $query->bindValue(':currentUser', $_SESSION['uname']);
+     $query->execute();
      logActivity($_SESSION['uname'], "In Profile Editor, Update in [db=".$MainDB."]  SET [signature=".$signature."] ");
    }
 
-   $sql = "SELECT * from login where LoginName = '$loginUser'";
-   $result = mysqli_query($conn, $sql);
+   $sql3 = $conn->prepare("SELECT * from login where LoginName =:currentUser");
+   $sql3->bindValue(':currentUser', $_SESSION['uname']);
+   $sql3->execute();
+   $row = $sql3->fetch();
 
 ?>
 
@@ -116,10 +110,6 @@
           }
      </style>
 </head>
-<?php if (mysqli_num_rows($result) > 0) {
-      // output data of each row
-      while($row = mysqli_fetch_assoc($result)) { ?>
-
 <body id="page-top">
      <div id="wrapper">
           <?php include("navigation.php"); ?>
@@ -279,11 +269,6 @@
           <div class="container my-auto">
                <div class="text-center my-auto copyright"><span>SVCE ACM Student Chapter</span></div>
           </div>
-          <?php
-               }
-            }
-            mysqli_close($conn);
-         ?>
      </footer>
      </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a></div>
      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
