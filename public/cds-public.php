@@ -3,10 +3,17 @@
     if (!empty( $_GET)) {
         // Include Public Headers
         // Create connection
-        $conn = new PDO('mysql:dbname='.$MainDB.';host='.$servername.';charset=utf8', $username, $password);
+        try{
+            $conn = new PDO('mysql:dbname='.$MainDB.';host='.$servername.';charset=utf8', $username, $password);
 
-        $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        }catch(PDOException $e){
+        $message = $e->getMessage()  ;
+        header('Location:error.html');
+        die();
+    }
+
         // Check connection
         // To know if user is searching for a name/event
         if(empty($_GET['search'])){
