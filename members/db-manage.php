@@ -157,7 +157,7 @@
                                     <!-- Form weirdly starts here, don't ask me why :3 !-->
                                     <form action="<?php echo $_SERVER["PHP_SELF"]; ?>"  method="GET">
                                         <input type="hidden" name="table" value="<?php echo $table; ?>"/>
-                                        <input type="hidden" name="page"  value="<?php echo $page;  ?>"/>
+                                        <input type="hidden" name="page"  value="1"/>
                                         <select onchange="this.form.submit()" name="perPage" class="form-control form-control-sm custom-select custom-select-sm">
                                             <option value="10" <?php if($perPage==10){echo 'selected=""';} ?>>10</option>
                                             <option value="25" <?php if($perPage==25){echo 'selected=""';} ?>>25</option>
