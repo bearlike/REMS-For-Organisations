@@ -41,33 +41,57 @@
     else{
         $perPage=$_GET['perPage'];
     }
-    $conn = new mysqli($servername, $username, $password, $db);
-    // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
+    try{
+        $conn = new PDO('mysql:dbname='.$db.';host='.$servername.';charset=utf8', $username, $password);
+
+        $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    }catch(PDOException $e){
+        $message = $e->getMessage()  ;
+        header('Location:pages/error.php?error='.$e->getMessage());
+        die();
     }
-    $sql = "show TABLES from ".$db;
-    $tableNames = $conn->query($sql);
+
+    $sql = $conn->prepare("show TABLES from ".$db);
+    $sql->execute();
+    $tableNames = $sql->fetchAll(PDO::FETCH_ASSOC);
+
     if(!(empty($_GET['table']))){
         $table = $_GET['table'];
-        $sql = "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`='".$db."' AND `TABLE_NAME`='".$table."'";
-        // echo $sql;   // For testing
-        $columns = $conn->query($sql); // COLUMN_NAME
-        $i=0;
-        foreach ($columns as $row) {
-            $colArr[$i]=$row['COLUMN_NAME'];
-            $i++;
+        $table_list=[];
+
+        foreach ($tableNames as $row) {
+            $table_list[]=$row["Tables_in_".$db];
         }
-        $resultc = $conn->query("select count(*) from ".$table.";");
-        $rowc = $resultc->fetch_row();
-        $countr = $rowc[0]; // Count total responses
-        // calculate number of pages needed
-        $totalPages = ceil($countr/$perPage);
-        // Find the starting element for the current $page
-        $startPage = $perPage*($page-1);
-        $sql = "select * from ".$table." order by id limit ".$startPage.",".$perPage.";";
-        // echo "<br>".$sql;    // For testing
-        $registrants  = $conn->query($sql);
+
+        if(in_array($table,$table_list)){
+            $sql = $conn->prepare("SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`=:db AND `TABLE_NAME`=:table");
+            $sql->bindValue(":db",$db);
+            $sql->bindValue(":table",$table);
+            $sql->execute();
+            $columns = $sql->fetchAll(PDO::FETCH_ASSOC); // COLUMN_NAME
+            $i=0;
+            foreach ($columns as $row) {
+                $colArr[$i]=$row['COLUMN_NAME'];
+                $i++;
+            }
+            $sql = $conn->prepare("select count(*) from ".$table.";");
+            $sql->execute();
+            $rowc = $sql->fetch();
+            $countr = $rowc[0]; // Count total responses
+            // calculate number of pages needed
+            $totalPages = ceil($countr/$perPage);
+            // Find the starting element for the current $page
+            $startPage = $perPage*($page-1);
+            $sql = $conn->prepare("select * from ".$table." order by id limit :startpage,:perpage;");
+            $sql->bindValue(":startpage",$startPage);
+            $sql->bindValue(":perpage",$perPage);
+            $sql->execute();
+            $registrants  = $sql->fetchAll(PDO::FETCH_ASSOC);
+        }else{
+            header('Location: ../public/bad-request.html');
+        }
+
     }
 ?>
 <html>
@@ -103,8 +127,10 @@
                             <select onchange="this.form.submit()" class="form-control border-1 small" style="width: 68%;max-width:15em;" name ="table" required>
                                 <option value = "">Select an table</option>
                                 <?php
+                                    $table_list=[];
                                     foreach ($tableNames as $row) {
                                         echo "<option value = ".$row["Tables_in_".$db].">".$row["Tables_in_".$db]."</option>";
+                                        $table_list[]=$row["Tables_in_".$db];
                                     }
                                 ?>
                             </select><br>
@@ -137,7 +163,7 @@
                                     <!-- Form weirdly starts here, don't ask me why :3 !-->
                                     <form action="<?php echo $_SERVER["PHP_SELF"]; ?>"  method="GET">
                                         <input type="hidden" name="table" value="<?php echo $table; ?>"/>
-                                        <input type="hidden" name="page"  value="<?php echo $page;  ?>"/>
+                                        <input type="hidden" name="page"  value="1"/>
                                         <select onchange="this.form.submit()" name="perPage" class="form-control form-control-sm custom-select custom-select-sm">
                                             <option value="10" <?php if($perPage==10){echo 'selected=""';} ?>>10</option>
                                             <option value="25" <?php if($perPage==25){echo 'selected=""';} ?>>25</option>

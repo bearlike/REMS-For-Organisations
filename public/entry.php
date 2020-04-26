@@ -1,33 +1,55 @@
 <?php
-	include("../members/header.php");
+	include("pheader.php");
 	//Connecting to the database;
-	$conn = new mysqli($servername, $username, $password, $formDB);
-	if ($conn->connect_error) {
-		die("Connection failed: " . $conn->connect_error); // IF-Fail to Connect
+	try{
+		$conn = new PDO('mysql:dbname='.$formDB.';host='.$servername.';charset=utf8', $username, $password);
+
+		$conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+		$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	}catch(PDOException $e){
+	$message = $e->getMessage()  ;
+	header('Location:error.html');
+	die();
+}
+	$table_list=[];
+
+
+	$select_tables=$conn->prepare("SHOW TABLES;");
+	$select_tables->execute();
+	foreach($select_tables as $table){
+		$table_list[]= $table["Tables_in_".$formDB];
 	}
 
-	$tablename = " `event_" . str_replace(" ","_",$_POST["event_name"]) . "` ";
-	$attribute_list = "";
-	$values_list = "";
+	$tablename = "event_" . str_replace(" ","_",$_POST["event_name"]) . "";
+	if(in_array($tablename,$table_list)){
+		$values_list = "";
+		$i=0;
 
-	foreach ($_POST as $name => $value) { 
-		//Include all attributes except event_name because it is for the table name
-		if ($name != "event_name") {
-			$attribute_list = $attribute_list . "`" . $name . "`" . ",";
-			$values_list = $values_list . "\"" . $value . "\"" . ",";
+		foreach ($_POST as $name => $value) {
+			//Include all attributes except event_name because it is for the table name
+			if ($name != "event_name") {
+				$values_list = $values_list . ":" . "value".$i .",";
+				$i++;
+			}
 		}
-	}
-	//Removing the last comma added
-	$attribute_list = substr($attribute_list, 0, -1);
-	$values_list = substr($values_list, 0, -1);
-	$entry_query = "INSERT INTO" . $tablename . "(" . $attribute_list . ") VALUES (" . $values_list . ");";
-	// echo $entry_query;
+		//Removing the last comma added
+		$values_list = substr($values_list, 0, -1);
+		$entry_query = $conn->prepare("INSERT INTO ".$tablename . " VALUES ( NULL, NOW()," . $values_list . ");");
 
-	$submit_stmt = $conn->prepare($entry_query);
-	if (!$submit_stmt) {
-		echo "Prepare failed: (" . $conn->errno . ") " . $conn->error . "<br>";
+
+		$i=0;
+		foreach ($_POST as $name => $value) {
+			//Include all attributes except event_name because it is for the table name
+			if ($name != "event_name") {
+				$entry_query->bindValue(":value".$i, $value);
+				$i++;
+			}
+		}
+		$entry_query->execute();
+
+		 header('Location: congrats.html');
+	}else{
+		header('Location: bad-request.html');
 	}
-	$submit_stmt->execute();
-	// echo ("<br> Value inserted successfully");
-	header('Location: congrats.html');
+
 ?>

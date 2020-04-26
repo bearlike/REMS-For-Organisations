@@ -1,6 +1,15 @@
 <?php
-	error_reporting(E_ALL ^ E_NOTICE);
 	include("../header.php");
+	try{
+		$conn = new PDO('mysql:dbname='.$formDB.';host='.$servername.';charset=utf8', $username, $password);
+
+		$conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+		$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	}catch(PDOException $e){
+		$message = $e->getMessage()  ;
+	    header('Location:pages/error.php?error='.$e->getMessage());
+	    die();
+	}
 	$form_location="../../public/Generated Forms/";
 	$display_prompts=array(
 						'regno' => 'Registration Number' ,
@@ -91,6 +100,7 @@
                                         }
                                         </script>
                                         <tr>
+											<?php $event_type_array = ['individual','team']; ?>
                                              <th>Choose Type</th>
                                              <td>
                                                   <div class="form-check">
@@ -120,6 +130,7 @@
                                         }
                                         </script>
                                         <tr>
+											<?php $number_participants_array = [NULL,"1","2","3","4"]; ?>
                                              <th>Choose Number of Members (If Team)</th>
                                              <td>
                                                   <select class="form-control" name="number_participants"
@@ -136,6 +147,7 @@
 
                                         <tr id="alert_fields">
                                              <th>Choose the Fields Needed</th>
+											 <?php $fields_array = ["regno","dept","year","email","phoneno","college","github","linkedin"]; ?>
                                              <td onclick="reverse_red('fields')">
                                                   <div class="form-check">
                                                        <input class="form-check-input" type="checkbox" value="regno"
@@ -250,138 +262,157 @@
                               aria-describedby="dataTable_info">
                               <table class="table dataTable my-0" id="dataTable">
                                    <tbody>
-                                        <?php
+                                    <?php
 									// Connecting to the database
-									$conn = new mysqli($servername, $username, $password, $formDB);
-									if ($conn->connect_error) {
-										die("Connection failed: " . $conn->connect_error); // IF-Fail to Connect
-									}
 									if (isset($_POST["submit"])){
 										$event_name = $_POST["event_name"];
 										$event_type=$_POST["event_type"];
-										$number_participants=$_POST["number_participants"];
 										$fields=$_POST["fields"];
-										$form_file = $form_location.$event_name."-form.html";
-										$file = fopen($form_file,"w");
-										logActivity($_SESSION['uname'], 'Generated a form for ['. $event_name.']');
-										$table_columns = "id int NOT NULL AUTO_INCREMENT PRIMARY KEY, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,";
 
-										//Initial details of the HTML page
-										$html_file = '<!DOCTYPE html>
-													<html>
-														<head>
-															<title>'.ucwords($event_name).'</title>
-															<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-															<link rel="icon" type="image/png" sizes="600x600" href="../../assets/img/Logo_White.png">
-															<link href="vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
-															<link href="vendor/font-awesome-4.7/css/font-awesome.min.css" rel="stylesheet" media="all">
-															<link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i" rel="stylesheet">
-															<link href="vendor/select2/select2.min.css" rel="stylesheet" media="all">
-															<link href="vendor/datepicker/daterangepicker.css" rel="stylesheet" media="all">
-															<link href="css/main.css" rel="stylesheet" media="all">
-															<link href="css/custom.css" rel="stylesheet" media="all">
-														</head>
-													<body>
-														<div class="page-wrapper bg-blue p-t-100 p-b-100 font-robo">
-															<div class="wrapper wrapper--w680">
-																<div class="card card-1">
-																	<div class="card-heading"></div>
-																	<div class="card-body">
-																		<h2 class="title">Registration for '.ucwords($event_name).'</h2>
-																		<div id="event_description" class="desc"></div><br>';
-											//Form section starts here
-											$html_file = $html_file.'<form action="../entry.php" method="post" onSubmit="return verify()" id="entry_form">';
-											$html_file = $html_file.'<input type="hidden" name="event_name" value="'.$event_name.'">';
-											if($event_type=="individual"){
-												$html_file = $html_file.'<p id="participant_name" style="color:red;font-size:12px;" ></p>
-												<div class="input-group">
-												<input type="text" placeholder="Participant name" name="participant_name" class="input--style-1">
-												</div>';
-												$table_columns = $table_columns."participant_name VARCHAR(255),";
-												foreach($fields as $selected){
-													if($selected == "year"){
-														$html_file = $html_file.'<p id="'.$selected.'" style="color:red;font-size:12px;" ></p>
-														<div class="input-group"><div class="rs-select2 js-select-simple select--no-search"><select name="'.$selected.'" class="'.$selected.'"><option disabled="disabled" selected="selected" value="">'.ucwords($display_prompts[$selected]).'</option>'.$year_dropdown.'<div class="select-dropdown"></div></div></div>';
-													}else if($selected == "dept"){
-														$html_file=$html_file.'<p id="'.$selected.'" style="color:red;font-size:12px;" ></p><div class="input-group"><div class="rs-select2 js-select-simple select--no-search"><select name="'.$selected.'" class="'.$selected.'">
-							<option disabled="disabled" selected="selected" value="">'.ucwords($display_prompts[$selected]).'</option>	'.$department_dropdown.'<div class="select-dropdown"></div></div></div>';
-													}else{
-														$html_file = $html_file.'<p id="'.$selected.'" style="color:red;font-size:12px;" ></p><div class="input-group">
-													<input type="text" placeholder="'.ucwords($display_prompts[$selected]).'" name="'.$selected.'" class="input--style-1 '.$selected.'">
-													</div>';
-													}
-													$table_columns = $table_columns.$selected." VARCHAR(255),";
-												}
-											}
-											else{
-												$number_participants = (int)$number_participants;
-												for ($i=0;$i<$number_participants;$i++){
-													$participant_number = $i+1;
-													$html_file = $html_file.'<h3 class="title">Details for Participant - '.$participant_number.'</h3>';
-													$html_file = $html_file.'
-													<p id="participant_name'.$participant_number.'" style="color:red;font-size:12px;" ></p>
-													<div class="input-group">
-													<input type="text" placeholder="Name of Member '.$participant_number.'" name="participant_name'.$participant_number.'" class="input--style-1">
-													</div>';
-													$table_columns = $table_columns."participant_name".$participant_number." VARCHAR(255),";
-													foreach($fields as $selected){
-														if($selected=="year"){
-															$html_file = $html_file.'<p id="'.$selected.$participant_number.'" style="color:red;font-size:12px;" ></p><div class="input-group"><div class="rs-select2 js-select-simple select--no-search"><select name="'.$selected.$participant_number.'"  class="'.$selected.'"><option disabled="disabled" selected="selected" value="">'.ucwords($display_prompts[$selected]).' of Member '.$participant_number. '</option>'.$year_dropdown.'<div class="select-dropdown"></div></div></div>';
-														}else if($selected=='dept'){
-															$html_file = $html_file.'<p id="'.$selected.$participant_number.'" style="color:red;font-size:12px;" ></p><div class="input-group"><div class="rs-select2 js-select-simple select--no-search"><select name="'.$selected.$participant_number.'"  class="'.$selected.'"><option disabled="disabled" selected="selected" value="">'.ucwords($display_prompts[$selected]).' of Member '.$participant_number. '</option>'.$department_dropdown.'<div class="select-dropdown"></div></div></div>';
-														}
-														else{$html_file = $html_file.' <p id="'.$selected.$participant_number.'" style="color:red;font-size:12px;" ></p><div class="input-group">
-														<input type="text" placeholder="'.ucwords($display_prompts[$selected]).' of Member '.$participant_number.'" name="'.$selected.$participant_number.'" class="input--style-1 '.$selected.'">
-														</div><br>';
-														}
-														$table_columns = $table_columns.$selected.$participant_number." VARCHAR(255),";
-													}
-													/*if(i==0){
-														$html_file = $html_file.'</div></div>';
-													}*/
-												}
-											}
-
-											//table columns for the new table generated and query to create also generated
-											$table_columns=substr($table_columns, 0, -1);
-											$creation_query = "CREATE TABLE IF NOT EXISTS event_".str_replace(" ","_",$event_name)." (".$table_columns.");";
-											$submit_stmt = $conn->prepare($creation_query);
-										if (!$submit_stmt) {
-											echo "Prepare failed: (" . $conn->errno . ") " . $conn->error . "<br>";
+										$verify_name = preg_match ('/[^a-zA-Z-, ]/' , $event_name);
+										if(!isset($_POST["number_participants"])){
+											$number_participants=1;
+										}else{
+											$number_participants=$_POST["number_participants"];
 										}
-										$submit_stmt->execute();
-										echo ("<tr><td>Successfully created table in database for the new form</td></tr>");
-											$markdown_text = preg_replace('/\r?\n|\r/', "<br>",$_POST["event_description"]);
-											//Closing section
-											$html_file = $html_file.'		<div class="p-t-20">
-																			<input type="submit" class="btn btn--radius btn--green">
-																		</div>
-																	</form>
+
+										$verify_fields =true;
+
+										foreach($fields as $field){
+											if(! in_array($field,$fields_array)){
+												$verify_fields=false;
+												break;
+											}
+										}
+										//Values verification to prevent SQL injection
+										if(in_array($event_type,$event_type_array) && $verify_fields && in_array($number_participants,$number_participants_array) && !$verify_name) {
+											$form_file = $form_location.$event_name."-form.html";
+											$file = fopen($form_file,"w");
+											logActivity($_SESSION['uname'], 'Generated a form for ['. $event_name.']');
+											$table_columns = "id int NOT NULL AUTO_INCREMENT PRIMARY KEY, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,";
+
+											//Initial details of the HTML page
+											$html_file = '<!DOCTYPE html>
+														<html>
+															<head>
+																<title>'.ucwords($event_name).'</title>
+																<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+																<link rel="icon" type="image/png" sizes="600x600" href="../../assets/img/Logo_White.png">
+																<link href="vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
+																<link href="vendor/font-awesome-4.7/css/font-awesome.min.css" rel="stylesheet" media="all">
+																<link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i" rel="stylesheet">
+																<link href="vendor/select2/select2.min.css" rel="stylesheet" media="all">
+																<link href="vendor/datepicker/daterangepicker.css" rel="stylesheet" media="all">
+																<link href="css/main.css" rel="stylesheet" media="all">
+																<link href="css/custom.css" rel="stylesheet" media="all">
+															</head>
+														<body>
+															<div class="page-wrapper bg-blue p-t-100 p-b-100 font-robo">
+																<div class="wrapper wrapper--w680">
+																	<div class="card card-1">
+																		<div class="card-heading"></div>
+																		<div class="card-body">
+																			<h2 class="title">Registration for '.ucwords($event_name).'</h2>
+																			<div id="event_description" class="desc"></div><br>';
+												//Form section starts here
+												$html_file = $html_file.'<form action="../entry.php" method="post" onSubmit="return verify()" id="entry_form">';
+												$html_file = $html_file.'<input type="hidden" name="event_name" value="'.$event_name.'">';
+												if($event_type=="individual"){
+													$html_file = $html_file.'<p id="participant_name" style="color:red;font-size:12px;" ></p>
+													<div class="input-group">
+													<input type="text" placeholder="Participant name" name="participant_name" class="input--style-1">
+													</div>';
+													$table_columns = $table_columns."participant_name VARCHAR(255),";
+													foreach($fields as $selected){
+														if($selected == "year"){
+															$html_file = $html_file.'<p id="'.$selected.'" style="color:red;font-size:12px;" ></p>
+															<div class="input-group"><div class="rs-select2 js-select-simple select--no-search"><select name="'.$selected.'" class="'.$selected.'"><option disabled="disabled" selected="selected" value="">'.ucwords($display_prompts[$selected]).'</option>'.$year_dropdown.'<div class="select-dropdown"></div></div></div>';
+														}else if($selected == "dept"){
+															$html_file=$html_file.'<p id="'.$selected.'" style="color:red;font-size:12px;" ></p><div class="input-group"><div class="rs-select2 js-select-simple select--no-search"><select name="'.$selected.'" class="'.$selected.'">
+								<option disabled="disabled" selected="selected" value="">'.ucwords($display_prompts[$selected]).'</option>	'.$department_dropdown.'<div class="select-dropdown"></div></div></div>';
+														}else{
+															$html_file = $html_file.'<p id="'.$selected.'" style="color:red;font-size:12px;" ></p><div class="input-group">
+														<input type="text" placeholder="'.ucwords($display_prompts[$selected]).'" name="'.$selected.'" class="input--style-1 '.$selected.'">
+														</div>';
+														}
+														$table_columns = $table_columns.$selected." VARCHAR(255),";
+													}
+												}
+												else{
+													$number_participants = (int)$number_participants;
+													for ($i=0;$i<$number_participants;$i++){
+														$participant_number = $i+1;
+														$html_file = $html_file.'<h3 class="title">Details for Participant - '.$participant_number.'</h3>';
+														$html_file = $html_file.'
+														<p id="participant_name'.$participant_number.'" style="color:red;font-size:12px;" ></p>
+														<div class="input-group">
+														<input type="text" placeholder="Name of Member '.$participant_number.'" name="participant_name'.$participant_number.'" class="input--style-1">
+														</div>';
+														$table_columns = $table_columns."participant_name".$participant_number." VARCHAR(255),";
+														foreach($fields as $selected){
+															if($selected=="year"){
+																$html_file = $html_file.'<p id="'.$selected.$participant_number.'" style="color:red;font-size:12px;" ></p><div class="input-group"><div class="rs-select2 js-select-simple select--no-search"><select name="'.$selected.$participant_number.'"  class="'.$selected.'"><option disabled="disabled" selected="selected" value="">'.ucwords($display_prompts[$selected]).' of Member '.$participant_number. '</option>'.$year_dropdown.'<div class="select-dropdown"></div></div></div>';
+															}else if($selected=='dept'){
+																$html_file = $html_file.'<p id="'.$selected.$participant_number.'" style="color:red;font-size:12px;" ></p><div class="input-group"><div class="rs-select2 js-select-simple select--no-search"><select name="'.$selected.$participant_number.'"  class="'.$selected.'"><option disabled="disabled" selected="selected" value="">'.ucwords($display_prompts[$selected]).' of Member '.$participant_number. '</option>'.$department_dropdown.'<div class="select-dropdown"></div></div></div>';
+															}
+															else{$html_file = $html_file.' <p id="'.$selected.$participant_number.'" style="color:red;font-size:12px;" ></p><div class="input-group">
+															<input type="text" placeholder="'.ucwords($display_prompts[$selected]).' of Member '.$participant_number.'" name="'.$selected.$participant_number.'" class="input--style-1 '.$selected.'">
+															</div><br>';
+															}
+															$table_columns = $table_columns.$selected.$participant_number." VARCHAR(255),";
+														}
+														/*if(i==0){
+															$html_file = $html_file.'</div></div>';
+														}*/
+													}
+												}
+
+												//table columns for the new table generated and query to create also generated
+												$table_columns=substr($table_columns, 0, -1);
+												$creation_query = "CREATE TABLE IF NOT EXISTS event_".str_replace(" ","_",$event_name)." (".$table_columns.");";
+												$submit_stmt = $conn->prepare($creation_query);
+											if (!$submit_stmt) {
+												echo "Prepare failed: (" . $conn->errno . ") " . $conn->error . "<br>";
+											}
+											$submit_stmt->execute();
+											echo ("<tr><td>Successfully created table in database for the new form</td></tr>");
+												$markdown_text = preg_replace('/\r?\n|\r/', "<br>",$_POST["event_description"]);
+												//Closing section
+												$html_file = $html_file.'		<div class="p-t-20">
+																				<input type="submit" class="btn btn--radius btn--green">
+																			</div>
+																		</form>
+																	</div>
 																</div>
 															</div>
 														</div>
-													</div>
-													    <!-- Jquery JS-->
-													    <script src="vendor/jquery/jquery.min.js"></script>
-													    <!-- Vendor JS-->
-													    <script src="vendor/select2/select2.min.js"></script>
-													    <script src="vendor/datepicker/moment.min.js"></script>
-													    <script src="vendor/datepicker/daterangepicker.js"></script>
-													    <script src="js/validation.js"></script>
-													    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-													    <script>
-															document.getElementById("event_description").innerHTML =marked("'.$markdown_text.'");
-														</script>
+														    <!-- Jquery JS-->
+														    <script src="vendor/jquery/jquery.min.js"></script>
+														    <!-- Vendor JS-->
+														    <script src="vendor/select2/select2.min.js"></script>
+														    <script src="vendor/datepicker/moment.min.js"></script>
+														    <script src="vendor/datepicker/daterangepicker.js"></script>
+														    <script src="js/validation.js"></script>
+														    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+														    <script>
+																document.getElementById("event_description").innerHTML =marked("'.$markdown_text.'");
+															</script>
 
-													    <!-- Main JS-->
-													    <script src="js/global.js"></script>
-												</body>
-											</html>';
+														    <!-- Main JS-->
+														    <script src="js/global.js"></script>
+													</body>
+												</html>';
 
-											fwrite($file, $html_file);
-											fclose($file);
-											echo "<tr><td>Successfully Form Created</td></tr>";
-											echo "<tr><td><a target=\"_blank\" href='".$form_file."'>Click here to visit the form</a></td></tr>";
+												fwrite($file, $html_file);
+												fclose($file);
+												echo "<tr><td>Successfully Form Created</td></tr>";
+												echo "<tr><td><a target=\"_blank\" href='".$form_file."'>Click here to visit the form</a></td></tr>";
+
+										}else{
+											echo('<div class="alert alert-danger" role="alert" style="width:70%;margin-left:15%;margin-right:15%">
+											Dangerous request to the server! Please try again!
+											</div>');
+										}
 									}
 								?>
 
