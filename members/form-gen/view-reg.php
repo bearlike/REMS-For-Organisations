@@ -60,7 +60,6 @@
                         'linkedin5' => 'LinkedIn #5'
     );
     $event="Choose an event";
-    //$_GET['event'] = "event_design_jam_2020";
     $page=1;
     $perPage=10;;
     $totalPages=1;
@@ -79,31 +78,46 @@
     else{
         $perPage=$_GET['perPage'];
     }
-    $conn = new mysqli($servername, $username, $password, $formDB);
-    // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
+
+    try{
+        $conn =  new PDO('mysql:dbname='.$formDB.';host='.$servername.';charset=utf8', $username, $password);
+        $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    }catch(PDOException $e){
+        $message = $e->getMessage()  ;
+        header('pages/error.php?error='.$e->getMessage());
+        die();
     }
-    $sql = "show TABLES from ".$formDB." WHERE Tables_in_".$formDB." LIKE 'event_%';";
-    $eventNames = $conn->query($sql);
+
+    $sql = $conn->prepare("show TABLES from ".$formDB." WHERE Tables_in_".$formDB." LIKE 'event_%'");
+    $sql->execute();        
+    $eventNames = $sql->fetchAll(PDO::FETCH_ASSOC);
     if(!(empty($_GET['event']))){
         $event = $_GET['event'];
-        $sql = "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`='".$formDB."' AND `TABLE_NAME`='".$event."'";
-        $columns = $conn->query($sql); // COLUMN_NAME
+        $sql = $conn->prepare("SELECT COLUMN_NAME FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`= :formDB AND `TABLE_NAME`= :event");
+        $sql->bindValue(":formDB",$formDB);
+        $sql->bindValue(":event",$event);
+        $sql->execute(); 
+        $columns = $sql->fetchAll(PDO::FETCH_ASSOC); // COLUMN_NAME
         $i=0;
         foreach ($columns as $row) {
             $colArr[$i]=$row['COLUMN_NAME'];
             $i++;
         }
-        $resultc = $conn->query("select count(*) from ".$event.";");
-        $rowc = $resultc->fetch_row();
+        $stmt1="select count(*) from ".$event;
+        $resultc = $conn->prepare($stmt1);
+        $resultc->execute();
+        $rowc = $resultc->fetch();
         $countr = $rowc[0]; // Count total responses
         // calculate number of pages needed
         $totalPages = ceil($countr/$perPage);
         // Find the starting element for the current $page
         $startPage = $perPage*($page-1);
-        $sql = "select * from ".$event." order by id limit ".$startPage.",".$perPage.";";
-        $registrants  = $conn->query($sql);
+        $stmt2 = "select * from ".$event." order by id limit ".$startPage." , ".$perPage;
+        $registrantsSQL  = $conn->prepare($stmt2);
+        $registrantsSQL->execute();
+        $registrants = $registrantsSQL->fetchAll(PDO::FETCH_ASSOC);
+        //print_r($registrants);
     }
 ?>
 <html>
@@ -165,7 +179,7 @@
                                     <!-- Form weirdly starts here, don't ask me why :3 !-->
                                     <form action="<?php echo $_SERVER["PHP_SELF"]; ?>"  method="GET">
                                         <input type="hidden" name="event" value="<?php echo $event; ?>"/>
-                                        <input type="hidden" name="page"  value="<?php echo $page;  ?>"/>
+                                        <input type="hidden" name="page"  value="1"/>
                                         <select onchange="this.form.submit()" name="perPage" class="form-control form-control-sm custom-select custom-select-sm">
                                             <option value="10" <?php if($perPage==10){echo 'selected=""';} ?>>10</option>
                                             <option value="25" <?php if($perPage==25){echo 'selected=""';} ?>>25</option>
