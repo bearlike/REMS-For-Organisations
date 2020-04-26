@@ -20,7 +20,7 @@
 		$table_list[]= $table["Tables_in_".$formDB];
 	}
 
-	$tablename = "event_" . str_replace(" ","_",strtolower($_POST["event_name"])) . "";
+	$tablename = "event_" . str_replace(" ","_",$_POST["event_name"]) . "";
 	if(in_array($tablename,$table_list)){
 		$values_list = "";
 		$i=0;
