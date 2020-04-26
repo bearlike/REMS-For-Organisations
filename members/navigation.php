@@ -8,14 +8,14 @@ $displayCircles=array(
 
 $alertCount=0;
 $readReamining="";
-$retAlerts = new mysqli($servername, $username, $password, $MainDB);
-if ($retAlerts->connect_error) {
-	die("Connection failed: " . $retAlerts->connect_error);
-}
-$retAlertsSQL = 'select notification.timestamp, notification.user, notification.message, notification.type, notification.clickURL, login.imgsrc from notification, login where notification.user=login.LoginName order by notification.id desc limit 3;';
+$navConn = new PDO('mysql:dbname='.$MainDB.';host='.$servername.';charset=utf8', $username, $password);
+$navConn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+$navConn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+$retAlertsSQL = $navConn->prepare('select notification.timestamp, notification.user, notification.message, notification.type, notification.clickURL, login.imgsrc from notification, login where notification.user=login.LoginName order by notification.id desc limit 3;');
+$retAlertsSQL->execute();
 // echo $retAlertsSQL; // For Debugging
 // echo "Successfully Logged"; // For Debugging
-$alertSQLResults  = $retAlerts->query($retAlertsSQL);
+$alertSQLResults  = $retAlertsSQL->fetchAll(PDO::FETCH_ASSOC);
 foreach ($alertSQLResults as $rowAlert) {
 	$alertArray[$alertCount]["timestamp"]=$rowAlert["timestamp"];
 	$alertArray[$alertCount]["user"]=$rowAlert["user"];
@@ -25,7 +25,8 @@ foreach ($alertSQLResults as $rowAlert) {
 	$alertArray[$alertCount]["imgsrc"]=$rowAlert["imgsrc"];
 	$alertCount++;
 }
-$retAlerts->close();
+$navConn=null;
+$retAlertsSQL=null;
 
 echo '
 			<!--  Navigation Panel starts !-->

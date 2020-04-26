@@ -10,12 +10,19 @@ require '..\src\PHPMailer\Exception.php';
 require '..\src\PHPMailer\PHPMailer.php';
 require '..\src\PHPMailer\SMTP.php';
 $conn = new mysqli($servername, $username, $password, $mailerDB);
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+try{
+    $conn = new PDO('mysql:dbname='.$mailerDB.';host='.$servername.';charset=utf8', $username, $password);
+    $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+}catch(PDOException $e){
+    $message = $e->getMessage()  ;
+    header('Location:pages/error.php?error='.$e->getMessage());
+    die();
 }
 $sql = "show TABLES from ".$mailerDB;
-$tableNames = $conn->query($sql);
+$tableNames = $conn->prepare($sql);
+$tableNames->execute();  
+$tableNames = $tableNames->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <html>
