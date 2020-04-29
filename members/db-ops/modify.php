@@ -63,7 +63,6 @@
         } else {
             header('Location: ../pages/error.php?error=' . $conn->error);
         }
-        $conn->close();
     }
 ?>
 <html>

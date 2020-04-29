@@ -20,7 +20,7 @@
         die();
     }
 
-    $resultc = $conn1->prepare('SELECT CONCAT("event_",LOWER(REPLACE((SELECT `event_name` FROM `events` order by `date` desc limit 1)," ","_"))) as code');
+    $resultc = $conn1->prepare('SELECT CONCAT("event_",REPLACE((SELECT `event_name` FROM `events` order by `date` desc limit 1)," ","_")) as code');
     $resultc->execute();
     $rowc = $resultc->fetch();
     $eventTable = $rowc[0]; // Return Latest Event Name
