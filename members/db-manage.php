@@ -43,7 +43,6 @@
     }
     try{
         $conn = new PDO('mysql:dbname='.$db.';host='.$servername.';charset=utf8', $username, $password);
-
         $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }catch(PDOException $e){
@@ -89,7 +88,7 @@
             $sql->execute();
             $registrants  = $sql->fetchAll(PDO::FETCH_ASSOC);
         }else{
-            header('Location: ../public/bad-request.html');
+            header('Location: pages/error.php?error=Bad%20Request');
         }
 
     }
@@ -164,6 +163,7 @@
                                     <form action="<?php echo $_SERVER["PHP_SELF"]; ?>"  method="GET">
                                         <input type="hidden" name="table" value="<?php echo $table; ?>"/>
                                         <input type="hidden" name="page"  value="1"/>
+                                        <input type="hidden" name="db" value="<?php echo $_GET['db']; ?>"/>
                                         <select onchange="this.form.submit()" name="perPage" class="form-control form-control-sm custom-select custom-select-sm">
                                             <option value="10" <?php if($perPage==10){echo 'selected=""';} ?>>10</option>
                                             <option value="25" <?php if($perPage==25){echo 'selected=""';} ?>>25</option>
@@ -255,6 +255,7 @@
                                 <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
                                     <ul class="pagination">
                                         <li class="page-item <?php if($page==1){echo 'disabled';} ?>"><button name="page" value="<?php echo ($page-1); ?>" class="page-link" aria-label="Previous"><span aria-hidden="true">«</span></button></li>
+                                        <input type="hidden" name="db" value="<?php echo $_GET['db']; ?>"/>
                                         <input type="hidden" name="table" value="<?php echo $_GET['table']; ?>"/>
                                         <input type="hidden" name="perPage" value="<?php echo $perPage; ?>"/>
                                         <?php

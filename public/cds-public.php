@@ -167,7 +167,7 @@
             </div>
             </nav>
             <div class="container-fluid">
-                <h3 class="text-dark mb-4">Certificates Distrubution System (CDS)</h3>
+                <h3 class="text-dark mb-4">Certificates Distribution System (CDS)</h3>
                 <?php
                     if (($countr == 0) && ($mode == 0)) {
                         echo "<div class=\"card shadow mb-4\">
