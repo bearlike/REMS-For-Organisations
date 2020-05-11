@@ -33,7 +33,7 @@ echo '
 			<nav id="navbar" class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
 				<div class="container-fluid d-flex flex-column p-0">
 					<a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
-						<div class="sidebar-brand-icon"><img class="logo" src="'.$startPath.'/assets/img/Logo_Banner_White.png"></div>
+						<div class="sidebar-brand-icon"><img loading="lazy" class="logo" src="'.$startPath.'/assets/img/Logo_Banner_White.png"></div>
 						<div class="sidebar-brand-text mx-3"></div>
 					</a>
 					<hr class="sidebar-divider my-0">
@@ -106,7 +106,7 @@ echo '
 if(!(empty($alertArray))){
 	foreach ($alertArray as $alert){
 		if(empty($displayCircles[$alert["type"]])){
-			echo '<a class="d-flex align-items-center dropdown-item" href="'.$alert["clickURL"].'"><div class="dropdown-list-image mr-3"><img class="rounded-circle" src="'.$startPath.'/assets/img/avatars/users/'.$alert["imgsrc"].'" />
+			echo '<a class="d-flex align-items-center dropdown-item" href="'.$alert["clickURL"].'"><div class="dropdown-list-image mr-3"><img loading="lazy" class="rounded-circle" src="'.$startPath.'/assets/img/avatars/users/'.$alert["imgsrc"].'" />
 				<div class="bg-success"></div>
 			</div>
 			<div class="font-weight-bold">
@@ -139,7 +139,7 @@ echo '					<a class="text-center dropdown-item small text-gray-500" href="#">Sho
 					</li>
 					<div class="d-none d-sm-block topbar-divider"></div>
 					<li class="nav-item dropdown no-arrow" role="presentation">
-						<div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="d-none d-lg-inline mr-2 text-gray-600 small">'.$loginUser.'</span><img class="border rounded-circle img-profile" src="'.retProfilePic($_SESSION['uname']).'"></a>
+						<div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="d-none d-lg-inline mr-2 text-gray-600 small">'.$loginUser.'</span><img loading="lazy" class="border rounded-circle img-profile" src="'.retProfilePic($_SESSION['uname']).'"></a>
 							<div class="dropdown-menu shadow dropdown-menu-right animated--grow-in" role="menu"><a class="dropdown-item" role="presentation" href="'.$startPath.'/members/profile.php"><i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Profile</a>
 							<a class="dropdown-item" role="presentation" href="'.$startPath.'/members/activity-log.php"><i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Activity log</a>
 							<div class="dropdown-divider"></div><a class="dropdown-item" role="presentation" href="'.$startPath.'/members/logout.php"><i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Logout</a></div>
