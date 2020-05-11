@@ -316,7 +316,7 @@
                             <form class="col-md-6">
                                 <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
                                     <ul class="pagination">
-                                        <li class="page-item <?php if($page==1){echo 'disabled';} ?>"><button name="page" value="<?php echo ($page-1); ?>" class="page-link" aria-label="Previous"><span aria-hidden="true">«</span></button></li>
+                                        <li class="page-item <?php if($page==1){echo 'disabled';} ?>"><button name="page" value="<?php echo ($page-1); ?>" class="page-link" aria-label="Previous"><span aria-hidden="true"><</span></button></li>
                                         <input type="hidden" name="event" value="<?php echo $_GET['event']; ?>"/>
                                         <input type="hidden" name="perPage" value="<?php echo $perPage; ?>"/>
                                         <?php
@@ -324,14 +324,24 @@
                                             for ($x=1; $x<=$totalPages; $x++){
                                                 if($x==$page){
                                                     echo '<li class="page-item active"><button name="page" value="'.$x.'" class="page-link">'.$x.'</button></li>';
+                                                    $flag=1;
                                                 }
-                                                else{
+                                                if(($x==3) && ($totalPages>5)){
+                                                    if($x<=$page){
+                                                        if($flag!=1)
+                                                            echo '<li class="page-item active"><button name="page" value="'.$page.'" class="page-link">'.$page.'</button></li>';
+                                                    }
+                                                    $x1=($totalPages-1);
+                                                    if($x1==3){
+                                                        $x1++;
+                                                    }
+                                                    $x=$x1;
+                                                }
+                                                if($page!=$x)
                                                     echo '<li class="page-item"><button name="page" value="'.$x.'" class="page-link">'.$x.'</button></li>';
-                                                }
-                                             }
+                                            }
                                         ?>
-
-                                        <li class="page-item <?php if($page==$totalPages){echo 'disabled';} ?>"><button name="page" value="<?php echo ($page+1); ?>" class="page-link" aria-label="Next"><span aria-hidden="true">»</span></button></li>
+                                        <li class="page-item <?php if($page==$totalPages){echo 'disabled';} ?>"><button name="page" value="<?php echo ($page+1); ?>" class="page-link" aria-label="Next"><span aria-hidden="true">></span></button></li>
                                     </ul>
                                 </nav>
                             </form>
