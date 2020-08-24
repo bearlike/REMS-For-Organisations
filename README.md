@@ -115,7 +115,7 @@ Perhaps our most desired feature, it gives an option to toggle the page between 
 | Krishnakanth Alagiri | Mahalakshumi V |
 |----------------------|----------------|
 | [![f](https://avatars1.githubusercontent.com/u/39209037?s=86)](https://github.com/bearlike) | [![f](https://avatars2.githubusercontent.com/u/40058339?s=86)](https://github.com/mahavisvanathan) | 
-| [@K-Kraken](https://github.com/bearlike) | [@mahavisvanathan](https://github.com/mahavisvanathan) |
+| [@bearlike](https://github.com/bearlike) | [@mahavisvanathan](https://github.com/mahavisvanathan) |
 
 
 ## Outside Contributors
