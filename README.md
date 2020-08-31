@@ -6,10 +6,10 @@
 <h4 align="center">Responsive Resources and Event Management System for small organisations and clubs. Form Generator, Mailer, Certificate Generator and much more :)</h4>
 
 <p align="center">
-  <img src="https://img.shields.io/github/last-commit/K-Kraken/REMS-For-Organisations?color=blue&style=flat-square">
-  <a href="/LICENSE"><img src="https://img.shields.io/github/license/K-Kraken/REMS-For-Organisations.svg?style=flat-square"></a>
-  <a href="https://github.com/K-Kraken/REMS-For-Organisations/issues"><img src="https://img.shields.io/github/issues-raw/K-Kraken/REMS-For-Organisations?color=red&style=flat-square"/></a>
-    <a href="https://github.com/K-Kraken/REMS-For-Organisations/releases"><img src="https://img.shields.io/github/v/tag/K-Kraken/REMS-For-Organisations?label=stable&style=flat-square"/></a>
+  <img src="https://img.shields.io/github/last-commit/bearlike/REMS-For-Organisations?color=blue&style=flat-square">
+  <a href="/LICENSE"><img src="https://img.shields.io/github/license/bearlike/REMS-For-Organisations.svg?style=flat-square"></a>
+  <a href="https://github.com/bearlike/REMS-For-Organisations/issues"><img src="https://img.shields.io/github/issues-raw/bearlike/REMS-For-Organisations?color=red&style=flat-square"/></a>
+    <a href="https://github.com/bearlike/REMS-For-Organisations/releases"><img src="https://img.shields.io/github/v/tag/bearlike/REMS-For-Organisations?label=stable&style=flat-square"/></a>
 </p>
 
 
@@ -32,7 +32,7 @@ What things you need to run the software:
 
 
 ### Installation
-1. Download the latest stable release from [here](https://github.com/K-Kraken/REMS-For-Organisations/releases)
+1. Download the latest stable release from [here](https://github.com/bearlike/REMS-For-Organisations/releases)
 2. Create and Import the Main Database dump for  **MySQL-MariaDB** from [here](/docs/files/Sample_REMS_Database.sql) 
 3. Create a Forms Database.
 4. Copy the files from this repository to a location in the root directory of the web server
