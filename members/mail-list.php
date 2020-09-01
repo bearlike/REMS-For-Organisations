@@ -150,7 +150,7 @@ try{
 
      <footer class="bg-white sticky-footer">
           <div class="container my-auto">
-               <div class="text-center my-auto copyright"><span>SVCE ACM Student Chapter</span></div>
+               <div class="text-center">Made with ❤️ by <a href="https://thekrishna.in/">Krishnakanth</a> and <a href="https://mahav.me/">Mahalakshumi</a></div>
           </div>
      </footer>
 

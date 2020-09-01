@@ -55,6 +55,7 @@
                                     <div class="text-center"><a class="small" href="../index.php">Looking for our Certificate Distribution System (CDS)?</a></div>
                                     <div class="text-center"></div>
                                 </div>
+                                <div class="text-center"><p class="small">Made with ❤️ by <a href="https://thekrishna.in/">Krishnakanth</a> and <a href="https://mahav.me/">Mahalakshumi</a></p></div>
                             </div>
                         </div>
                     </div>

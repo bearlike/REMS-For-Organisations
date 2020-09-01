@@ -43,6 +43,7 @@
                                     <div class="text-center"><a class="small" href="public/cds-public.php?mode">Don't Know the Event Name? Click here.</a></div>
                                     <div class="text-center"><a class="small" href="members/member-login.php">Are you a member? Login!</a></div>
                                 </div>
+                                <div class="text-center"><p class="small">Made with ❤️ by <a href="https://thekrishna.in/">Krishnakanth</a> and <a href="https://mahav.me/">Mahalakshumi</a></p></div>
                             </div>
                         </div>
                     </div>
