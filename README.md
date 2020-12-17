@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <img src="https://i.imgur.com/w5PZAuO.png" alt="CMS For Organisations" height="250px">
+  <img src="https://cdn.thekrishna.in/img/common/rems.png" alt="CMS For Organisations" height="250px">
   <br>
 </h1>
 <h4 align="center">Responsive Resources and Event Management System for small organisations and clubs. Form Generator, Mailer, Certificate Generator and much more :)</h4>
