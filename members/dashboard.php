@@ -1,28 +1,49 @@
 <?php
     include("header.php");
-    $conn1 = new mysqli($servername, $username, $password, $dbname);
-    // Check connection
-    if ($conn1->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
+    try{
+        $conn1 = new PDO('mysql:dbname='.$MainDB.';host='.$servername.';charset=utf8', $username, $password);
+        $conn1->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+        $conn1->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    }catch(PDOException $e){
+        $message = $e->getMessage()  ;
+        header('pages/error.php?error='.$e->getMessage());
+        die();
     }
-    $conn2 = new mysqli($servername, $username, $password, $formDB);
-    // Check connection
-    if ($conn2->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
+
+    try{
+        $conn2 = new PDO('mysql:dbname='.$formDB.';host='.$servername.';charset=utf8', $username, $password);
+        $conn2->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+        $conn2->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    }catch(PDOException $e){
+        $message = $e->getMessage()  ;
+        header('pages/error.php?error='.$e->getMessage());
+        die();
     }
-    $resultc = $conn1->query('SELECT CONCAT("event_",LOWER(REPLACE((SELECT `event_name` FROM `events` order by `date` desc limit 1)," ","_"))) as code');
-    $rowc = $resultc->fetch_row();
-    $eventsCount = $rowc[0]; // Count total responses
-    $resultc = $conn2->query('SELECT COUNT(*) as code FROM '.$eventsCount);
-    if($resultc){
-        $rowc = $resultc->fetch_row();
-        $registrationCount = $rowc[0]; // Count total responses
+
+    $resultc = $conn1->prepare('SELECT CONCAT("event_",REPLACE((SELECT `event_name` FROM `events` order by `date` desc limit 1)," ","_")) as code');
+    $resultc->execute();
+    $rowc = $resultc->fetch();
+    $eventTable = $rowc[0]; // Return Latest Event Name
+    //echo $eventTable;
+    $ifTableExistSQL = $conn2->prepare('SELECT count(1) FROM information_schema.TABLES WHERE (TABLE_SCHEMA = :formDB) AND (TABLE_NAME = :eventTable)');
+    $ifTableExistSQL->bindValue(':formDB', $formDB);
+    $ifTableExistSQL->bindValue(':eventTable', $eventTable);
+    $ifTableExistSQL->execute();
+    $ifTableExist = $ifTableExistSQL->fetch();
+
+    if($ifTableExist[0]==1){
+        $evCountStmt = $conn2->prepare('SELECT count(*) from '.$eventTable);
+        $evCountStmt->execute();
+        $resultc = $evCountStmt->fetch();
+        $registrationCount = $resultc[0]; // Count total responses
     }
     else{
-        $registrationCount = 0;
+        $registrationCount = "Form not Generated";
     }
-    $resultc = $conn1->query('SELECT COUNT(*) as code FROM events;');
-    $rowc = $resultc->fetch_row();
+    $conn2=null;
+    $resultc = $conn1->prepare('SELECT COUNT(*) as code FROM events;');
+    $resultc->execute();
+    $rowc = $resultc->fetch();
     $eventsCount = $rowc[0]; // Count total responses
 
 ?>
@@ -31,11 +52,11 @@
 <head id="head_tag">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Dashboard: SVCE-ACM CMS</title>
-    <link rel="icon" type="image/png" sizes="600x600" href="../assets/img/Logo_White.png">
+    <title>Dashboard:<?php echo " ".$OrgName; ?></title>
+    <link rel="icon" type="image/png" sizes="600x600" href="../assets/img/Logo_White.png" async>
     <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css" async>
     <link rel="stylesheet" href="../assets/css/custom.css">
 </head>
 
@@ -44,7 +65,7 @@
      <?php include("navigation.php"); ?>
             <div class="container-fluid">
                 <div class="d-sm-flex justify-content-between align-items-center mb-4">
-                    <h3 class="text-dark mb-0">Welcome!</h3><a class="btn btn-danger btn-sm d-none d-sm-inline-block" role="button" href="https://github.com/K-Kraken/cms-for-organisations/issues" style="background-color: #ce1126;border-color: #e5053a;"><i class="fas fa-bug fa-sm text-white-50"></i>&nbsp;Raise a Issue</a></div>
+                    <h3 class="text-dark mb-0">Welcome!</h3><a class="btn btn-danger btn-sm d-none d-sm-inline-block" role="button" href="https://github.com/K-Kraken/REMS-For-Organisations/issues" style="background-color: #ce1126;border-color: #e5053a;"><i class="fas fa-bug fa-sm text-white-50"></i>&nbsp;Raise a Issue</a></div>
                 <div
                     class="row">
                     <div class="col-md-6 col-xl-4 mb-4">
@@ -52,7 +73,7 @@
                             <div class="card-body">
                                 <div class="row align-items-center no-gutters">
                                     <div class="col mr-2">
-                                        <div class="text-uppercase text-primary font-weight-bold text-xs mb-1"><span>Registrations (Latest)</span></div>
+                                        <div class="text-uppercase text-primary font-weight-bold text-xs mb-1"><span>Registrations for <?php echo ucwords(str_replace("event ","",(str_replace("_"," ",$eventTable)))); ?> (Latest)</span></div>
                                         <div class="text-dark font-weight-bold h5 mb-0"><span><?php echo $registrationCount; ?></span></div>
                                     </div>
                                     <div class="col-auto"><i class="fas fa-user-friends fa-2x text-gray-300"></i></div>
@@ -128,7 +149,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col"></div>
+                        <div id="newCol" class=""></div>
                     </div>
                 </div>
             </div>
@@ -136,7 +157,7 @@
     </div>
     <footer class="bg-white sticky-footer">
         <div class="container my-auto">
-            <div class="text-center my-auto copyright"><span>SVCE ACM Student Chapter</span></div>
+            <div class="text-center">Made with ❤️ by <a href="https://thekrishna.in/">Krishnakanth</a> and <a href="https://mahav.me/">Mahalakshumi</a></div>
         </div>
     </footer>
     </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a></div>
@@ -144,6 +165,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
     <script src="../assets/js/theme.js"></script>
+    <script>
+        if(!(isMobile)){
+            document.getElementById('newCol').classList.add('col');
+        }
+    </script>
 </body>
 
 </html>

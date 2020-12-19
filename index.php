@@ -1,14 +1,13 @@
+<?php include("members/secrets_.php");  ?>
 <html>
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Certificate Distribution System (CDS): SVCE-ACM</title>
+    <title>Certificate Distribution System (CDS):<?php echo " ".$OrgName; ?></title>
     <link rel="icon" type="image/png" sizes="600x600" href="assets/img/Logo_White.png">
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
-    <link rel="stylesheet" href="assets/css/custom.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&display=swap" async>
 </head>
 
 <body class="bg-gradient-primary">
@@ -44,6 +43,7 @@
                                     <div class="text-center"><a class="small" href="public/cds-public.php?mode">Don't Know the Event Name? Click here.</a></div>
                                     <div class="text-center"><a class="small" href="members/member-login.php">Are you a member? Login!</a></div>
                                 </div>
+                                <div class="text-center"><p class="small">Made with ❤️ by <a href="https://thekrishna.in/">Krishnakanth</a> and <a href="https://mahav.me/">Mahalakshumi</a></p></div>
                             </div>
                         </div>
                     </div>

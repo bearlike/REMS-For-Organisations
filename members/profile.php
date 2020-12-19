@@ -2,32 +2,32 @@
 
 <?php
    // Create connection
-   $conn = mysqli_connect($servername, $username, $password, $dbname);
-   // Check connection
-   if (!$conn) {
-      header('Location: ../pages/error.php?error=' . mysqli_connect_error()  );
-   }
+   try{
+        $conn = new PDO('mysql:dbname='.$MainDB.';host='.$servername.';charset=utf8', $username, $password);
+        $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    }catch(PDOException $e){
+        $message = $e->getMessage()  ;
+        header('pages/error.php?error='.$e->getMessage());
+        die();
+    }
    //profile pic upload
    if(isset($_POST['photo_settings'])){
       $name = $_FILES['file']['name'];
       $target_dir = "../assets/img/avatars/users/";
       $target_file = $target_dir . basename($_FILES["file"]["name"]);
-
       // Select file type
       $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
-
       // Valid file extensions
       $extensions_arr = array("jpg","jpeg","png","gif");
-
       // Check extension
       if( in_array($imageFileType,$extensions_arr) ){
-         // Convert to base64
-         $image_base64 = base64_encode(file_get_contents($_FILES['file']['tmp_name']) );
-         $image = 'data:image/'.$imageFileType.';base64,'.$image_base64;
          // Insert record
-         $query = "UPDATE login SET imgsrc='$name' where LoginName = '$loginUser'";
-         mysqli_query($conn,$query);
-         logActivity($_SESSION['uname'], "In Profile Editor, Update in [db=".$dbname."] SET [imgsrc=".$name."] ");
+         $sql = $conn->prepare("UPDATE login SET imgsrc=:imgSRC where LoginName=:currentUser");
+         $sql->bindValue(':imgSRC', $name);
+         $sql->bindValue(':currentUser', $_SESSION['uname']);
+         $sql->execute();
+         logActivity($_SESSION['uname'], "In Profile Editor, Update in [db=".$MainDB."] SET [imgsrc=".$name."] ");
 
          // Upload file
          move_uploaded_file($_FILES['file']['tmp_name'],$target_dir.$name);
@@ -36,9 +36,10 @@
    }
    //retrieve profile picture
 
-   $sql1 = "select imgsrc from login where LoginName = '$loginUser'";
-   $result1 = mysqli_query($conn,$sql1);
-   $row1 = mysqli_fetch_array($result1);
+   $sql1 = $conn->prepare("select imgsrc from login where LoginName=:currentUser limit 1");
+   $sql1->bindValue(':currentUser', $_SESSION['uname']);
+   $sql1->execute();
+   $row1 = $sql1->fetch();
    if($row1['imgsrc']==""){
       $image_src="../assets/img/avatars/image2.png";
    }else{
@@ -47,44 +48,43 @@
    }
    //user details form
    if(isset($_POST['user_settings'])) {
-          $email          =$_POST['email'];
-          $firstname      =$_POST['first_name'];
-          $lastname       =$_POST['last_name'];
-          $query = "UPDATE login SET lastname='$lastname', FirstName='$firstname', Email='$email' where LoginName = '$loginUser'";
-
-          if (!mysqli_query($conn, $query)) {
-               header('Location: ../pages/error.php?error=' . mysqli_error($conn));
-          }
-          logActivity($_SESSION['uname'], "In Profile Editor, Update in [db=".$dbname."] SET [lastname=".$lastname.", FirstName=".$firstname.", Email=".$email."] ");
+          $email = $_POST['email'];
+          $firstname = $_POST['first_name'];
+          $lastname = $_POST['last_name'];
+          $query = $conn->prepare("UPDATE login SET lastname = :lastname, FirstName = :firstname, Email = :email where LoginName =:currentUser");
+          $query->bindValue(':lastname', $lastname);
+          $query->bindValue(':firstname', $firstname);
+          $query->bindValue(':email', $email);
+          $query->bindValue(':currentUser', $_SESSION['uname']);
+          $query->execute();
+          logActivity($_SESSION['uname'], "In Profile Editor, Update in [db=".$MainDB."] SET [lastname=".$lastname.", FirstName=".$firstname.", Email=".$email."] ");
      }
      // contact details form
      if(isset($_POST['contact_settings'])){
-          $address         =$_POST['address'];
-          $phno            =$_POST['phno'];
-
-          $query = "UPDATE login SET Address='$address', Phno='$phno' where LoginName = '$loginUser'";
-
-          if (!mysqli_query($conn, $query)) {
-               header('Location: ../pages/error.php?error=' . mysqli_error($conn));
-          }
-          logActivity($_SESSION['uname'], "In Profile Editor, Update in [db=".$dbname."] SET [address=".$address.", phno=".$phno."] ");
+          $address = $_POST['address'];
+          $phno = $_POST['phno'];
+          $query = $conn->prepare("UPDATE login SET Address= :address, Phno= :phno where LoginName =:currentUser");
+          $query->bindValue(':address', $address);
+          $query->bindValue(':phno', $phno);
+          $query->bindValue(':currentUser', $_SESSION['uname']);
+          $query->execute();
+          logActivity($_SESSION['uname'], "In Profile Editor, Update in [db=".$MainDB."] SET [address=".$address.", phno=".$phno."] ");
      }
-
-   $sql = "SELECT * from login where LoginName = '$loginUser'";
-   $result = mysqli_query($conn, $sql);
 
    //signature details form
    if(isset($_POST['signature_settings'])){
-     $signature         =$_POST['signature'];
-     $query = "UPDATE login SET Signature='$signature' where LoginName = '$loginUser'";
-     if (!mysqli_query($conn, $query)) {
-          echo "Error updating record: " . mysqli_error($conn);
-     }
-     logActivity($_SESSION['uname'], "In Profile Editor, Update in [db=".$dbname."]  SET [signature=".$signature."] ");
+     $signature = $_POST['signature'];
+     $query = $conn->prepare("UPDATE login SET Signature= :signature where LoginName =:currentUser");
+     $query->bindValue(':signature', $signature);
+     $query->bindValue(':currentUser', $_SESSION['uname']);
+     $query->execute();
+     logActivity($_SESSION['uname'], "In Profile Editor, Update in [db=".$MainDB."]  SET [signature=".$signature."] ");
    }
 
-   $sql = "SELECT * from login where LoginName = '$loginUser'";
-   $result = mysqli_query($conn, $sql);
+   $sql3 = $conn->prepare("SELECT * from login where LoginName =:currentUser");
+   $sql3->bindValue(':currentUser', $_SESSION['uname']);
+   $sql3->execute();
+   $row = $sql3->fetch();
 
 ?>
 
@@ -93,7 +93,7 @@
 <head id="head_tag">
      <meta charset="utf-8">
      <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-     <title>Profile: SVCE-ACM CMS</title>
+     <title>Profile:<?php echo " ".$OrgName; ?></title>
      <link rel="icon" type="image/png" sizes="600x600" href="../assets/img/Logo_White.png">
      <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
@@ -116,10 +116,6 @@
           }
      </style>
 </head>
-<?php if (mysqli_num_rows($result) > 0) {
-      // output data of each row
-      while($row = mysqli_fetch_assoc($result)) { ?>
-
 <body id="page-top">
      <div id="wrapper">
           <?php include("navigation.php"); ?>
@@ -142,7 +138,7 @@
                                         <button class="btn btn-primary btn-sm" id="btnFileUpload"><i
                                                   class="fa fa-upload" aria-hidden="true"></i></button>
                                         <span id="spnFilePath"></span> -->
-                                        <input type="submit" class="btn btn-primary btn-sm" type="button"
+                                        <br><input type="submit" class="btn btn-primary btn-sm" type="button"
                                              value="Change Photo" name="photo_settings" style="margin-top:10px;" />
                                         <script type="text/javascript">
                                              // To hide the ugly file upload input and replace it with a button
@@ -277,13 +273,8 @@
      </div>
      <footer class="bg-white sticky-footer">
           <div class="container my-auto">
-               <div class="text-center my-auto copyright"><span>SVCE ACM Student Chapter</span></div>
+               <div class="text-center">Made with ❤️ by <a href="https://thekrishna.in/">Krishnakanth</a> and <a href="https://mahav.me/">Mahalakshumi</a></div>
           </div>
-          <?php
-               }
-            }
-            mysqli_close($conn);
-         ?>
      </footer>
      </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a></div>
      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>

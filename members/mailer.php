@@ -10,12 +10,19 @@ require '..\src\PHPMailer\Exception.php';
 require '..\src\PHPMailer\PHPMailer.php';
 require '..\src\PHPMailer\SMTP.php';
 $conn = new mysqli($servername, $username, $password, $mailerDB);
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+try{
+    $conn = new PDO('mysql:dbname='.$mailerDB.';host='.$servername.';charset=utf8', $username, $password);
+    $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+}catch(PDOException $e){
+    $message = $e->getMessage()  ;
+    header('Location:pages/error.php?error='.$e->getMessage());
+    die();
 }
 $sql = "show TABLES from ".$mailerDB;
-$tableNames = $conn->query($sql);
+$tableNames = $conn->prepare($sql);
+$tableNames->execute();  
+$tableNames = $tableNames->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <html>
@@ -23,7 +30,7 @@ $tableNames = $conn->query($sql);
 <head id="head_tag">
      <meta charset="utf-8">
      <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-     <title>Bulk Mailer: SVCE-ACM CMS</title>
+     <title>Bulk Mailer:<?php echo " ".$OrgName; ?></title>
      <link rel="icon" type="image/png" sizes="600x600" href="../assets/img/Logo_White.png">
      <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
      <link rel="stylesheet"
@@ -183,7 +190,7 @@ $tableNames = $conn->query($sql);
      </div>
      <footer class="bg-white sticky-footer">
           <div class="container my-auto">
-               <div class="text-center my-auto copyright"><span>SVCE ACM Student Chapter</span></div>
+               <div class="text-center">Made with ❤️ by <a href="https://thekrishna.in/">Krishnakanth</a> and <a href="https://mahav.me/">Mahalakshumi</a></div>
           </div>
      </footer>
 

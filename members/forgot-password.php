@@ -9,10 +9,15 @@ require '../src/PHPMailer/Exception.php';
 require '../src/PHPMailer/PHPMailer.php';
 require '../src/PHPMailer/SMTP.php';
 
+try{
+    $conn = new PDO('mysql:dbname='.$MainDB.';host='.$servername.';charset=utf8', $username, $password);
 
-$conn = new mysqli($servername, $username, $password, $dbname);
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+}catch(PDOException $e){
+    $message = $e->getMessage()  ;
+    header('Location:../public/error.html');
+    die();
 }
 ?>
 <html>
@@ -20,7 +25,7 @@ if ($conn->connect_error) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Forgotten Password - SVCE-ACM: CMS</title>
+    <title>Forgotten Password -<?php echo " ".$OrgName; ?></title>
     <link rel="icon" type="image/png" sizes="600x600" href="../assets/img/Logo_White.png">
     <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
@@ -56,15 +61,19 @@ if ($conn->connect_error) {
                                     <?php
                                         if (isset($_POST["submit"])){
                                             $email = $_POST['email'];
-                                            $check_sql = 'SELECT count(1) as isPresent from login where Email="'.$email.'"';
-                                            $list_check = $conn->query($check_sql);
-                                            foreach ($list_check as $entry) {
+                                            $check_sql = $conn->prepare('SELECT count(1) as isPresent from login where Email=:email');
+                                            $check_sql->bindValue(":email",$email);
+                                            $check_sql->execute();
+
+                                            foreach ($check_sql as $entry) {
                                                 $isUser =  $entry['isPresent'];
                                             }
                                             if($isUser){
-                                                $hash_sql = 'SELECT ForgotPasswordHash("'.$email.'") as link_value';
-                                                $list  = $conn->query($hash_sql);
-                                                foreach ($list as $row) {
+                                                $hash_sql = $conn->prepare('SELECT ForgotPasswordHash(:email) as link_value');
+                                                $hash_sql->bindValue(":email",$email);
+                                                $hash_sql->execute();
+
+                                                foreach ($hash_sql as $row) {
                                                     $key =  $row['link_value'];
                                                 }
                                                 $mail = new PHPMailer();  // create a new object
