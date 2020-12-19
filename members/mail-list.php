@@ -1,10 +1,14 @@
 <?php
 include("header.php");
 $Uploaded_Files = "Mailing-list/Uploaded files/";
-$conn = new mysqli($servername, $username, $password, $mailerDB);
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+try{
+    $conn = new PDO('mysql:dbname='.$mailerDB.';host='.$servername.';charset=utf8', $username, $password);
+    $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+}catch(PDOException $e){
+    $message = $e->getMessage()  ;
+    header('Location:pages/error.php?error='.$e->getMessage());
+    die();
 }
 ?>
 <html>
@@ -12,7 +16,7 @@ if ($conn->connect_error) {
 <head id="head_tag">
      <meta charset="utf-8">
      <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-     <title>Mailing List: SVCE-ACM CMS</title>
+     <title>Mailing List:<?php echo " ".$OrgName; ?></title>
      <link rel="icon" type="image/png" sizes="600x600" href="../assets/img/Logo_White.png">
      <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
      <link rel="stylesheet"
@@ -100,33 +104,28 @@ if ($conn->connect_error) {
                         }
                         //Create a table for this list
                         $table_name = str_replace(" ", "_", $_POST["mailer_name"]);
-                        $creation_query = "CREATE TABLE IF NOT EXISTS " . $table_name . " (id int PRIMARY KEY AUTO_INCREMENT NOT NULL,name VARCHAR(255),email VARCHAR(255));";
-                        $submit_stmt = $conn->prepare($creation_query);
-                        if (!$submit_stmt) {
-                            echo "Prepare failed: (" . $conn->errno . ") " . $conn->error . "<br>";
-                        }
-                        $submit_stmt->execute();
 
+                            $creation_query = $conn->prepare("CREATE TABLE IF NOT EXISTS " . $table_name . " (id int PRIMARY KEY AUTO_INCREMENT NOT NULL,name VARCHAR(255),email VARCHAR(255));");
+                            $creation_query->execute();
 
-                        echo "<br>";
-                        $flag = true;
-                        if (isset($storagename) && $handle = fopen($Uploaded_Files . $_FILES["file"]["name"], "r")) {
-                            while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-                                if ($flag) {
-                                    $flag = false;
-                                    continue;
+                            echo "<br>";
+                            $flag = true;
+                            if (isset($storagename) && $handle = fopen($Uploaded_Files . $_FILES["file"]["name"], "r")) {
+                                while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                                    if ($flag) {
+                                        $flag = false;
+                                        continue;
+                                    }
+                                    $name = ucwords($data[0]);
+                                    $email = $data[1];
+                                    $insert_query = $conn->prepare('INSERT INTO '.$table_name.' VALUES(NULL,:name,:email)');
+                                    $insert_query->bindValue(':name', $name);
+                                    $insert_query->bindValue(':email', $email);
+                                    $insert_query->execute();
+                                    $executed = true;
                                 }
-                                $name = ucwords($data[0]);
-                                $email = $data[1];
-                                $insert_query = 'INSERT INTO `' . $table_name . '` (`name`,`email`) VALUES ("' . $name . '","' . $email . '");';
-                                $insert_stmt = $conn->prepare($insert_query);
-                                if (!$insert_stmt) {
-                                    echo "Prepare failed: (" . $conn->errno . ") " . $conn->error . "<br>";
-                                }
-                                $insert_stmt->execute();
-                                $executed = 'true';
                             }
-                        }
+
                     }
 
 
@@ -151,7 +150,7 @@ if ($conn->connect_error) {
 
      <footer class="bg-white sticky-footer">
           <div class="container my-auto">
-               <div class="text-center my-auto copyright"><span>SVCE ACM Student Chapter</span></div>
+               <div class="text-center">Made with ❤️ by <a href="https://thekrishna.in/">Krishnakanth</a> and <a href="https://mahav.me/">Mahalakshumi</a></div>
           </div>
      </footer>
 

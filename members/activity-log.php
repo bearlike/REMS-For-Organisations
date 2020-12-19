@@ -1,32 +1,42 @@
 <?php
-include("header.php");
-$page = 1;
-$perPage = 10;;
-$totalPages = 1;
-if (empty($_GET['page'])) {
+    include("header.php");
     $page = 1;
-} else {
-    $page = $_GET['page'];
-}
-if (empty($_GET['perPage'])) {
-    $perPage = 10;
-} else {
-    $perPage = $_GET['perPage'];
-}
-$conn = new mysqli($servername, $username, $password, $dbname);
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-$resultc = $conn->query('select count(*) from logging where userid="' . $_SESSION['uname'] . '";');
-$rowc = $resultc->fetch_row();
-$countr = $rowc[0]; // Count total responses
-// calculate number of pages needed
-$totalPages = ceil($countr / $perPage);
-// Find the starting element for the current $page
-$startPage = $perPage * ($page - 1);
-$sql = "select timestamp, log from logging where userid=\"" . $_SESSION['uname'] . "\" order by id desc limit " . $startPage . "," . $perPage . ";";
-$logResults  = $conn->query($sql);
+    $perPage = 10;;
+    $totalPages = 1;
+    if (empty($_GET['page'])) {
+        $page = 1;
+    } else {
+        $page = $_GET['page'];
+    }
+    if (empty($_GET['perPage'])) {
+        $perPage = 10;
+    } else {
+        $perPage = $_GET['perPage'];
+    }
+    try{
+        $conn = new PDO('mysql:dbname='.$MainDB.';host='.$servername.';charset=utf8', $username, $password);
+        $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    }catch(PDOException $e){
+        $message = $e->getMessage()  ;
+        header('pages/error.php?error='.$e->getMessage());
+        die();
+    }
+    $resultc = $conn->prepare('select count(*) from logging where userid=:currentUser');
+    $resultc->bindValue(':currentUser', $_SESSION['uname']);
+    $resultc->execute();
+    $rowc = $resultc->fetch();
+    $countr = $rowc[0]; // Count total responses
+    // calculate number of pages needed
+    $totalPages = ceil($countr / $perPage);
+    // Find the starting element for the current $page
+    $startPage = $perPage * ($page - 1);
+    $sql =  $conn->prepare("select timestamp, log from logging where userid=:currentUser order by id desc limit :startpage , :perpage");
+    $sql->bindValue(':currentUser', $_SESSION['uname']);
+    $sql->bindValue(':startpage', (int) $startPage, PDO::PARAM_INT);
+    $sql->bindValue(':perpage', (int) $perPage, PDO::PARAM_INT);
+    $sql->execute();
+    $logResults  = $sql->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <html>
@@ -34,7 +44,7 @@ $logResults  = $conn->query($sql);
 <head id="head_tag">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Activity Log: SVCE-ACM</title>
+    <title>Activity Log:<?php echo " ".$OrgName; ?></title>
     <link rel="icon" type="image/png" sizes="600x600" href="../assets/img/Logo_White.png">
     <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
@@ -155,7 +165,7 @@ $logResults  = $conn->query($sql);
     </div>
     <footer class="bg-white sticky-footer">
         <div class="container my-auto">
-            <div class="text-center my-auto copyright"><span>SVCE ACM Student Chapter</span></div>
+            <div class="text-center">Made with ❤️ by <a href="https://thekrishna.in/">Krishnakanth</a> and <a href="https://mahav.me/">Mahalakshumi</a></div>
         </div>
     </footer>
     </div>

@@ -9,6 +9,16 @@ $Certificate_Template = "CDS_Admin/Certificate Templates/";
 $Empty_Template = "CDS_Admin/Certificate Templates/Participation.png";
 $Fonts_Path = "CDS_Admin/Fonts/";
 /* Directory Path Variables END */
+try{
+    $conn = new PDO('mysql:dbname='.$MainDB.';host='.$servername.';charset=utf8', $username, $password);
+
+    $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+}catch(PDOException $e){
+    $message = $e->getMessage()  ;
+    header('Location:pages/error.php?error='.$e->getMessage());
+    die();
+}
 ?>
 <head id="head_tag">
     <meta charset="utf-8">
@@ -18,7 +28,7 @@ $Fonts_Path = "CDS_Admin/Fonts/";
             echo "<title>Generating</title>";
         }
         else{
-            echo "<title>CDS Admin: SVCE-ACM CMS</title>";
+            echo "<title>CDS Admin:".$OrgName."</title>";
         }
     ?>
     <link rel="icon" type="image/png" sizes="600x600" href="../assets/img/Logo_White.png">
@@ -113,10 +123,7 @@ $Fonts_Path = "CDS_Admin/Fonts/";
         }
     }
     echo "<br>";
-    $conn = new mysqli($servername, $username, $password, $dbname);
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error); // IF-Fail to Connect
-    }
+
     if (isset($_FILES["file"])){
         $foldername = explode('.', $_FILES["file"]["name"]);
         // echo $foldername[0];
@@ -203,12 +210,19 @@ $Fonts_Path = "CDS_Admin/Fonts/";
                     $cert_link = $Generated_Certificate . $foldername[0] . '/Certificate-' . str_replace(" ","_",$event_name) . "_" . str_replace(" ","_",$participant_name) . "_" . $participant_id . '.png';
                     imagedestroy($im);
                     $participant_id++;
-                    $submit_sql = "INSERT INTO `certificates` (`name`,`regno`,`dept`,`year`,`section`,`position`,`cert_link`,`event_name`,`email`) VALUES ('" . $participant_name . "','" . $registration_number . "','" . $department . "','" . $year . "','" . $section . "','" . $position . "','" . $cert_link . "','" . $event_name . "','".$email."');";
-                    $submit_stmt = $conn->prepare($submit_sql);
-                    if (!$submit_stmt) {
-                        echo "Prepare failed: (" . $conn->errno . ") " . $conn->error . "<br>";
-                    }
-                    $submit_stmt->execute();
+                    //$submit_sql = "INSERT INTO `certificates` (`name`,`regno`,`dept`,`year`,`section`,`position`,`cert_link`,`event_name`,`email`) VALUES ('" . $participant_name . "','" . $registration_number . "','" . $department . "','" . $year . "','" . $section . "','" . $position . "','" . $cert_link . "','" . $event_name . "','".$email."');";
+                    $submit_sql = $conn->prepare("INSERT INTO certificates VALUES (NULL,:participant_name,:registration_number,:department,:year,:section,:email,:position,:cert_link,:event_name)");
+                    $submit_sql->bindValue(":participant_name",$participant_name);
+                    $submit_sql->bindValue(":registration_number",$registration_number);
+                    $submit_sql->bindValue(":department",$department);
+                    $submit_sql->bindValue(":year",$year);
+                    $submit_sql->bindValue(":section",$section);
+                    $submit_sql->bindValue(":position",$position);
+                    $submit_sql->bindValue(":cert_link",$cert_link);
+                    $submit_sql->bindValue(":event_name",$event_name);
+                    $submit_sql->bindValue(":email",$email);
+                    $submit_sql->execute();
+
                 }
     	       else{
                     $im = imagecreatefrompng($Certificate_Template.$position.".png");
@@ -254,12 +268,19 @@ $Fonts_Path = "CDS_Admin/Fonts/";
                     $cert_link = $Generated_Certificate . $foldername[0] . '/Certificate-' . str_replace(" ","_",$event_name) . "_" . str_replace(" ","_",$participant_name) . "_" . $participant_id . '.png';
                     imagedestroy($im);
                     $participant_id++;
-                    $submit_sql = "INSERT INTO `certificates` (`name`,`regno`,`dept`,`year`,`section`,`position`,`cert_link`,`event_name`,`email`,`college`) VALUES (\"" . $participant_name . "\",\"" . $registration_number . "\",\"" . $department . "\",\"" . $year . "\",\"" . $section . "\",\"" . $position . "\",\"" . $cert_link . "\",\"" . $event_name . "\",\"".$email."\",\"".$college."\");";
-                    $submit_stmt = $conn->prepare($submit_sql);
-                    if (!$submit_stmt) {
-                        echo "Prepare failed: (" . $conn->errno . ") " . $conn->error . "<br>";
-                    }
-                    $submit_stmt->execute();
+                    $submit_sql = $conn->prepare("INSERT INTO certificates VALUES (NULL,:participant_name,:registration_number,:department,:year,:section,:email,:position,:cert_link,:event_name,:college)");
+                    $submit_sql->bindValue(":participant_name",$participant_name);
+                    $submit_sql->bindValue(":registration_number",$registration_number);
+                    $submit_sql->bindValue(":department",$department);
+                    $submit_sql->bindValue(":year",$year);
+                    $submit_sql->bindValue(":section",$section);
+                    $submit_sql->bindValue(":position",$position);
+                    $submit_sql->bindValue(":cert_link",$cert_link);
+                    $submit_sql->bindValue(":event_name",$event_name);
+                    $submit_sql->bindValue(":email",$email);
+                    $submit_sql->bindValue(":college",$college);
+
+                    $submit_sql->execute();
                }
                 if($_POST["eventType"]==0){
                     echo '<tr><td>' . $participant_id . ' </td><td> ' . $participant_name . '</td><td> ' . $registration_number . '</td><td> ' . $position . '</td><td> ' . $event_name . '</td><td> <a href="' . $cert_link . '">Link</a></td></tr>';
@@ -267,7 +288,6 @@ $Fonts_Path = "CDS_Admin/Fonts/";
                 else {
                     echo '<tr><td>' . $participant_id . ' </td><td> ' . $participant_name . '</td><td> ' . $college . '</td><td> ' . $position . '</td><td> ' . $event_name . '</td><td> <a href="' . $cert_link . '">Link</a></td></tr>';
                 }
-                $submit_stmt->close();
 	        }
             fclose($handle);
 	    }
@@ -284,7 +304,7 @@ $Fonts_Path = "CDS_Admin/Fonts/";
 
         <footer class="bg-white sticky-footer">
             <div class="container my-auto">
-                <div class="text-center my-auto copyright"><span>SVCE ACM Student Chapter</span></div>
+                <div class="text-center">Made with ❤️ by <a href="https://thekrishna.in/">Krishnakanth</a> and <a href="https://mahav.me/">Mahalakshumi</a></div>
             </div>
         </footer>
     </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a></div>

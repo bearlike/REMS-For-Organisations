@@ -1,5 +1,5 @@
 -- CMS For Organisations
--- Link: https://github.com/K-Kraken/cms-for-organisations
+-- Link: https://github.com/K-Kraken/REMS-For-Organisations
 -- --------------------------------------------------------------
 -- Name: SQL Dump
 -- Made on version 4.9.1
@@ -9,7 +9,7 @@
 --
 
 --
--- Database: `main_cms_database` represented by $dbname in the secrets.php
+-- Database: `main_rems_database` represented by $MainDB in the secrets.php
 --
 
 DELIMITER $$
@@ -35,6 +35,37 @@ BEGIN
 SELECT LoginName as code from login where Email=pEmail;
 END$$
 
+CREATE FUNCTION `ForgotPasswordHash` (`mailid` VARCHAR(255)) RETURNS VARCHAR(255) CHARSET utf8mb4 NO SQL
+BEGIN	
+SELECT NOW() INTO @Now;
+SELECT id from login where Email=mailid INTO @id;
+SELECT sha(concat(id,LoginName,PasswordHash,Email,@Now)) from login where Email=mailid INTO @Hashstring;
+INSERT INTO forgot_password VALUES (@Hashstring,@id,@Now);
+RETURN @Hashstring;
+END$$
+
+CREATE FUNCTION `GetUserName` (`gen` VARCHAR(255)) RETURNS VARCHAR(255) CHARSET utf8mb4 NO SQL
+BEGIN
+SELECT id from forgot_password where gen_key=gen INTO @id;
+SELECT LoginName from login where id=@id into @UserName;
+RETURN @UserName;
+END$$
+
+CREATE FUNCTION `PasswordLinkVerification` (`gen` VARCHAR(255)) RETURNS INT(11) NO SQL
+BEGIN 
+    SELECT times FROM forgot_password where gen_key=gen INTO @pwd_time;
+    SELECT TIMESTAMPDIFF(SECOND, @pwd_time, NOW()) INTO @Time_diff;
+    return @Time_diff;
+END$$
+
+
+CREATE PROCEDURE `SetPassword` (IN `Hashstring` VARCHAR(255), IN `Password` VARCHAR(255))  NO SQL
+BEGIN
+	SELECT @ident := id from forgot_password where gen_key=Hashstring;
+    UPDATE login SET PasswordHash=sha(Password) WHERE id=@ident;
+    DELETE FROM forgot_password where gen_key=Hashstring;
+END$$
+
 DELIMITER ;
 
 -- --------------------------------------------------------
@@ -48,7 +79,7 @@ CREATE TABLE `certificates` (
   `id` int(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `regno` varchar(255) DEFAULT NULL,
-  `dept` varchar(40) DEFAULT NULL,
+  `dept` varchar(255) DEFAULT NULL,
   `year` int(10) DEFAULT NULL,
   `section` varchar(10) DEFAULT NULL,
   `email` varchar(255) NOT NULL,
@@ -127,7 +158,28 @@ CREATE TABLE `login` (
 --
 
 INSERT INTO `login` (`id`, `LoginName`, `PasswordHash`, `Email`, `FullName`, `IsAdmin`, `FirstName`, `LastName`, `Address`, `Phno`, `Signature`, `imgsrc`) VALUES
-(3, 'admin', 'd033e22ae348aeb5660fc2140aec35850c4da997', 'krishna.alagiri03@gmail.com', 'admin', 1, NULL, NULL, NULL, NULL, NULL, '../image2.png');
+(3, 'admin', 'd033e22ae348aeb5660fc2140aec35850c4da997', 'test@test.com', 'admin', 1, NULL, NULL, NULL, NULL, NULL, '../image2.png');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `forgot_password`
+--
+
+CREATE TABLE `forgot_password` (
+  `gen_key` varchar(255) NOT NULL,
+  `id` int(11) NOT NULL DEFAULT current_timestamp(),
+  `times` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Indexes for table `forgot_password`
+--
+ALTER TABLE `forgot_password`
+  ADD PRIMARY KEY (`gen_key`);
+
 
 --
 -- Indexes for table `certificates`

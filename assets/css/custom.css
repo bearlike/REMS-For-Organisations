@@ -1,46 +1,47 @@
 .logo {
-  width: 100%;
-  height: auto;
-  padding-top: 5px;
-  max-width: inherit;
+    width: 100%;
+    height: auto;
+    padding-top: 5px;
+    max-width: inherit;
 }
 
 @media screen and (max-width: 576px) {
-  .logo {
-    width: 100%;
-    height: auto;
-    max-width: inherit;
-  }
+    .logo {
+        width: 100%;
+        height: auto;
+        max-width: inherit;
+    }
 }
 
-.alert-success{
+.alert-success {
     width: 60%;
     margin-left: 20%;
     margin-right: 20%;
 }
+
 
 /* #mode_toggler{
     font-size: 22px !important;
     color: #f0e609;
 } */
 
-.center{
-    text-align:center !important;
+.center {
+    text-align: center !important;
 }
 
-.link_copy{
+.link_copy {
     display: inline-flex;
     width: 100%;
 }
 
-.link_copy a{
+.link_copy a {
     display: flex;
     align-items: center;
     margin-left: 10px;
     font-size: 20px;
 }
 
-.link{
+.link {
     font-size: 20px;
     color: #ffffff !important;
     margin-left: 10px;
@@ -49,79 +50,109 @@
 
 .file_button_container,
 .file_button_container input {
-     height: auto;
+    height: auto;
 }
 
 .file_button_container {
-     background: transparent url(https://cdn2.iconfinder.com/data/icons/circle-icons-1/64/upload-32.png) left top no-repeat;
+    background: transparent url(https://cdn2.iconfinder.com/data/icons/circle-icons-1/64/upload-32.png) left top no-repeat;
 }
 
 .file_button_container input {
-     opacity: 0;
+    opacity: 0;
 }
 
 .toggle {
-  display: -webkit-box;
-  display: flex;
-  -webkit-box-align: center;
-          align-items: center;
-  justify-content: space-around;
-  max-width: 140px;
-  margin-top: 25px;
-  font-size: 20px;
-}
-.toggle span {
-  margin: 0 0.5rem;
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    justify-content: space-around;
+    max-width: 140px;
+    margin-top: 25px;
+    font-size: 20px;
 }
 
-.icon{
+.toggle span {
+    margin: 0 0.5rem;
+}
+
+.icon {
     padding-bottom: 8px;
 }
 
-.sun{
+.sun {
     color: #f0e609;
 }
 
-.moon{
-    color: rgba(0,0,0,0.1);
+.moon {
+    color: rgba(0, 0, 0, 0.1);
 }
 
 .toggle input[type="checkbox"] {
-  height: 0;
-  width: 0;
-  visibility: hidden;
+    height: 0;
+    width: 0;
+    visibility: hidden;
 }
 
 .toggle label {
-  cursor: pointer;
-  width: 50px;
-  height: 20px;
-  background: rgba(0, 0, 0, 0.27);
-  display: block;
-  border-radius: 40px;
-  position: relative;
+    cursor: pointer;
+    width: 50px;
+    height: 20px;
+    background: rgba(0, 0, 0, 0.27);
+    display: block;
+    border-radius: 40px;
+    position: relative;
 }
+
 .toggle label:after {
-  content: "";
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 16px;
-  height: 16px;
-  background: #fff;
-  border-radius: 40px;
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    background: #fff;
+    border-radius: 40px;
 }
 
 .screen-reader-text {
-  border: 0;
-  clip: rect(1px, 1px, 1px, 1px);
-  -webkit-clip-path: inset(50%);
-          clip-path: inset(50%);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute !important;
-  width: 1px;
-  word-wrap: normal !important;
+    border: 0;
+    clip: rect(1px, 1px, 1px, 1px);
+    -webkit-clip-path: inset(50%);
+    clip-path: inset(50%);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute !important;
+    width: 1px;
+    word-wrap: normal !important;
+}
+
+
+/* width */
+
+ ::-webkit-scrollbar {
+    width: 10px;
+}
+
+
+/* Track */
+
+ ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+
+/* Handle */
+
+ ::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+
+/* Handle on hover */
+
+ ::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }

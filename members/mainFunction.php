@@ -3,36 +3,35 @@
 // Call Example: logActivity($_SESSION['uname'], "Log Something");
 function logActivity($loggedOnUser, $log) {
       include("secrets_.php");
-  $logActivityConn = new mysqli($servername, $username, $password, $dbname);
-  if ($logActivityConn->connect_error) {
-      die("Connection failed: " . $logActivityConn->connect_error);
-  }
-  $logSQL = 'CALL enterLog("' . $loggedOnUser . '","' . $log . '");';
-  // echo $logSQL; // For Debugging
-  if ($logActivityConn->query($logSQL) === TRUE) {
-      // echo "Successfully Logged"; // For Debugging
-  } else {
-      // echo "Error: " . $logActivityConn->error; // For Debugging
-      header('Location: '.$startPath.'/members/member-login.php');
-  }
-      $logActivityConn->close();
+         $logActivityConn = new PDO('mysql:dbname='.$MainDB.';host='.$servername.';charset=utf8',$username,$password);
+
+         $logActivityConn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+         $logActivityConn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+         $logSQL = $logActivityConn->prepare('CALL enterLog(:loggedOnUser,:log);');
+         $logSQL->bindValue(":loggedOnUser",$loggedOnUser);
+         $logSQL->bindValue(":log",$log);
+         $logSQL->execute();
+         $logActivityConn = null;
 }
 
 // returns 1 if user has admin privileges, else returns 0
 // Call Example: retIsAdmin($_SESSION['uname']);
 function retIsAdmin($loggedOnUser) {
       include("secrets_.php");
-      $retIsAdmin = new mysqli($servername, $username, $password, $dbname);
-      if ($retIsAdmin->connect_error) {
-            die("Connection failed: " . $retIsAdmin->connect_error);
-      }
-      $retIsAdminSQL = 'select count(1) as code from login where LoginName="' . $loggedOnUser . '" and IsAdmin=1;';
+      $retIsAdmin = new PDO('mysql:dbname='.$MainDB.';host='.$servername.';charset=utf8', $username, $password);
+
+      $retIsAdmin->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+      $retIsAdmin->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+      $retIsAdminSQL = $retIsAdmin->prepare('select count(1) as code from login where LoginName= :loggedOnUser and IsAdmin=1;');
+      $retIsAdminSQL->bindValue(":loggedOnUser",$loggedOnUser);
       // echo $retIsAdminSQL; // For Debugging
-      $Results  = $retIsAdmin->query($retIsAdminSQL);
-      foreach ($Results as $row) {
+      $retIsAdminSQL->execute();
+      foreach ($retIsAdminSQL as $row) {
             return $row["code"];
       }
-      $retIsAdmin->close();
+      $retIsAdmin=null;
 }
 
 
@@ -40,17 +39,19 @@ function retIsAdmin($loggedOnUser) {
 // Call Example: retProfilePic($_SESSION['uname']);
 function retProfilePic($loggedOnUser) {
       include("secrets_.php");
-      $retProfilePic = new mysqli($servername, $username, $password, $dbname);
-      if ($retProfilePic->connect_error) {
-            die("Connection failed: " . $retProfilePic->connect_error);
-      }
-      $retProfilePicSQL = 'select imgsrc from login where LoginName="' . $loggedOnUser . '" limit 1;';
-      // echo $retProfilePicSQL; // For Debugging
-      $logResults  = $retProfilePic->query($retProfilePicSQL);
-      foreach ($logResults as $row) {
+      $retProfilePic = new PDO('mysql:dbname='.$MainDB.';host='.$servername.';charset=utf8', $username, $password);
+      $retProfilePic ->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+      $retProfilePic ->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+      $retProfilePicSQL = $retProfilePic->prepare('select imgsrc from login where LoginName= :loggedOnUser limit 1;');
+      $retProfilePicSQL->bindValue(":loggedOnUser",$loggedOnUser);
+
+      $retProfilePicSQL->execute();
+
+      foreach ($retProfilePicSQL as $row) {
             return $startPath . '/assets/img/avatars/users/' . $row["imgsrc"];
       }
-      $retProfilePic->close();
+      $retProfilePic=null;
 }
 
 ?>
