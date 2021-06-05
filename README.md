@@ -21,6 +21,16 @@ We are running a chapter (club) at our college. We organize 20+ events for our 1
 
 ## Getting Started
 
+### Running REMS in Docker (Easiest)
+Modify the default values in `docker/mysql/database.sql` and `docker-run-vanilla.sh` to your requirement. 
+By default, exposes to host port `8080`. A `krishnaalagiri/rems` and `mysql` container would be configured and deployed.
+```bash
+# From the root of the repository
+sudo chmod +x docker-run-vanilla.sh
+./docker-run-vanilla.sh 
+```
+
+
 ### Prerequisites
 What things you need to run the software:
 - A **web server** with **PHP** preferably Apache2.
@@ -46,7 +56,7 @@ What things you need to run the software:
 
 ## Features and Screenshots (Click to enlarge)
 
-```bash
+```
 Tested on Apache/2.4.41 (Win64) OpenSSL/1.1.1c PHP/7.3.11 with 10.4.8-MariaDB
 ```
 

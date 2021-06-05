@@ -1,6 +1,6 @@
 <?php
-    include("secrets_.php");
     session_start();
+    include("secrets_.php");
     if (!empty($_SESSION)){
         if ($_SESSION['remember']==1){
             if ($_SESSION['uname']){
@@ -55,7 +55,7 @@
                                     <div class="text-center"><a class="small" href="../index.php">Looking for our Certificate Distribution System (CDS)?</a></div>
                                     <div class="text-center"></div>
                                 </div>
-                                <div class="text-center"><p class="small">Made with ❤️ by <a href="https://thekrishna.in/">Krishnakanth</a> and <a href="https://mahav.me/">Mahalakshumi</a></p></div>
+                                <div class="text-center"><p class="small">Made with ❤️ by <a href="https://thekrishna.in/">Krishnakanth</a> and <a href="https://www.linkedin.com/in/mahavisvanathan/">Mahalakshumi</a></p></div>
                             </div>
                         </div>
                     </div>

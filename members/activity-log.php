@@ -1,5 +1,6 @@
 <?php
-    include("header.php");
+    session_start();
+include("header.php");
     $page = 1;
     $perPage = 10;;
     $totalPages = 1;
@@ -165,7 +166,7 @@
     </div>
     <footer class="bg-white sticky-footer">
         <div class="container my-auto">
-            <div class="text-center">Made with ❤️ by <a href="https://thekrishna.in/">Krishnakanth</a> and <a href="https://mahav.me/">Mahalakshumi</a></div>
+            <div class="text-center">Made with ❤️ by <a href="https://thekrishna.in/">Krishnakanth</a> and <a href="https://www.linkedin.com/in/mahavisvanathan/">Mahalakshumi</a></div>
         </div>
     </footer>
     </div>
