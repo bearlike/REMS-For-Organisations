@@ -14,9 +14,6 @@
 
 
 
-
-
-
 ### Why are we doing it?
 We are running a chapter (club) at our college. We organize 20+ events for our 1500+ participants. It was a tedious process to manually make forms, certificates, advertising via mail so we decided to automate that process. Any organization, clubs or institutions looking for a similar service can fork our project and tweak it according to their needs.
 
@@ -36,7 +33,7 @@ What things you need to run the software:
 2. Create and Import the Main Database dump for  **MySQL-MariaDB** from [here](/docs/files/Sample_REMS_Database.sql) 
 3. Create a Forms Database.
 4. Copy the files from this repository to a location in the root directory of the web server
-5. Rename `member/secrets.php_` to `member/secrets.php`
+5. Rename `member/secrets.php_` to `member/secrets_.php`
 6. Update your database credentials, databases names (Main and Forms) and API Keys in `member/secrets.php` and `public/cds-public.php`
 7. With your Web Server and MySQL server running, visit the site
    - ```
@@ -57,8 +54,8 @@ Tested on Apache/2.4.41 (Win64) OpenSSL/1.1.1c PHP/7.3.11 with 10.4.8-MariaDB
 
 A two-ended system (Both for **admin** and **public**) that'll automatically  generate certificates and make them available for distribution. The admin will have to upload a **Certificate Template** and a **CSV file** with Participant Names, Position Awarded, and Event Name. The generated certificates would be later automatically made for distribution.
 
-| CDS Public (Collection)                                  | CDS Admin (Generation)                                   | Generated Certificates                         |
-| -------------------------------------------------------- | -------------------------------------------------------- | ---------------------------------------------- |
+| CDS Public (Collection)                                  | CDS Admin (Generation)                                   | Generated Certificates                                   |
+| -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- |
 | <img src="https://i.imgur.com/gaMfSOr.png" width="650"/> | <img src="https://i.imgur.com/APt8LDL.png" width="650"/> | <img src="https://i.imgur.com/av6OHek.png" width="650"/> |
 
 ### Database Management
@@ -112,15 +109,15 @@ Perhaps our most desired feature, it gives an option to toggle the page between 
 
 ## Authors
 
-| Krishnakanth Alagiri | Mahalakshumi V |
-|----------------------|----------------|
-| [![f](https://avatars1.githubusercontent.com/u/39209037?s=86)](https://github.com/bearlike) | [![f](https://avatars2.githubusercontent.com/u/40058339?s=86)](https://github.com/mahavisvanathan) | 
-| [@bearlike](https://github.com/bearlike) | [@mahavisvanathan](https://github.com/mahavisvanathan) |
+| Krishnakanth Alagiri                                                                        | Mahalakshumi V                                                                                     |
+| ------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| [![f](https://avatars1.githubusercontent.com/u/39209037?s=86)](https://github.com/bearlike) | [![f](https://avatars2.githubusercontent.com/u/40058339?s=86)](https://github.com/mahavisvanathan) |
+| [@bearlike](https://github.com/bearlike)                                                    | [@mahavisvanathan](https://github.com/mahavisvanathan)                                             |
 
 
 ## Outside Contributors
-| Contributors | Profile Links                                 | PR                                                           |
-| ------------ | --------------------------------------------- | ------------------------------------------------------------ |
+| Contributors | Profile Links                                 | PR                                                                |
+| ------------ | --------------------------------------------- | ----------------------------------------------------------------- |
 | **Dhiraj V** | [dhirajv2000](https://github.com/dhirajv2000) | [#28](https://github.com/bearlike/REMS-For-Organisations/pull/28) |
 
 ## Acknowledgments
