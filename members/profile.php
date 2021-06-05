@@ -1,4 +1,5 @@
-<?php include("header.php"); ?>
+<?php session_start();
+include("header.php"); ?>
 
 <?php
    // Create connection
@@ -273,7 +274,7 @@
      </div>
      <footer class="bg-white sticky-footer">
           <div class="container my-auto">
-               <div class="text-center">Made with ❤️ by <a href="https://thekrishna.in/">Krishnakanth</a> and <a href="https://mahav.me/">Mahalakshumi</a></div>
+               <div class="text-center">Made with ❤️ by <a href="https://thekrishna.in/">Krishnakanth</a> and <a href="https://www.linkedin.com/in/mahavisvanathan/">Mahalakshumi</a></div>
           </div>
      </footer>
      </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a></div>
