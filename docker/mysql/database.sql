@@ -1,21 +1,29 @@
 -- CMS For Organisations
 -- Link: https://github.com/bearlike/REMS-For-Organisations
 -- --------------------------------------------------------------
--- Name: SQL Dump
+-- Name: SQL Dump for Docker Container
 -- Made on version 4.9.1
--- Generation Time: Apr 09, 2020 at 09:13 AM
+-- Generation Time: Jun 06, 2021 at 02:30 AM
 -- Server version: 10.4.8-MariaDB
 -- PHP Version: 7.3.11
 --
 
---
--- Database: `main_rems_database` represented by $MainDB in the secrets.php
---
+CREATE DATABASE IF NOT EXISTS `db_cms`;
+CREATE DATABASE IF NOT EXISTS `db_forms`;
+CREATE DATABASE IF NOT EXISTS `db_mailer`;
+
+CREATE USER 'cmsuser'@'localhost' IDENTIFIED BY 'random_password';
+GRANT ALL ON *.* TO 'cmsuser'@'localhost';
+
+-- --------------------------------------------------------------
+
+USE `db_cms`;
 
 DELIMITER $$
 --
 -- Procedures
 --
+
 CREATE PROCEDURE `AddUser` (IN `pLogin` VARCHAR(40), IN `pPassword` VARCHAR(255), IN `pName` VARCHAR(80), IN `pEmail` VARCHAR(255))  BEGIN
 	INSERT INTO login (LoginName, PasswordHash, FullName, Email) VALUES(pLogin, SHA(pPassword), pName, pEmail);
 END$$
@@ -74,7 +82,6 @@ DELIMITER ;
 -- Table structure for table `certificates`
 -- Certicates generated are stored here
 --
-
 CREATE TABLE `certificates` (
   `id` int(255) NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -168,7 +175,7 @@ INSERT INTO `login` (`id`, `LoginName`, `PasswordHash`, `Email`, `FullName`, `Is
 
 CREATE TABLE `forgot_password` (
   `gen_key` varchar(255) NOT NULL,
-  `id` int(11) NOT NULL DEFAULT current_timestamp(),
+  `id` int(11) NOT NULL,
   `times` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

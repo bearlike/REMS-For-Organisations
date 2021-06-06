@@ -1,5 +1,6 @@
 <?php
-    include("header.php");
+    session_start();
+include("header.php");
     $page = 1;
     $perPage = 10;;
     $totalPages = 1;
@@ -137,6 +138,7 @@
                                                                 echo 'disabled';
                                                             } ?>"><button name="page" value="<?php echo ($page - 1); ?>" class="page-link" aria-label="Previous"><span aria-hidden="true">«</span></button>
                                     </li>
+                                    <input type="hidden" name="event" value="<?php echo $_GET['event']; ?>" />
                                     <input type="hidden" name="perPage" value="<?php echo $perPage; ?>" />
                                     <?php
                                     // Generate buttons for choosing pages
@@ -164,7 +166,7 @@
     </div>
     <footer class="bg-white sticky-footer">
         <div class="container my-auto">
-            <div class="text-center my-auto copyright"><span>SVCE ACM Student Chapter</span></div>
+            <div class="text-center">Made with ❤️ by <a href="https://thekrishna.in/">Krishnakanth</a> and <a href="https://www.linkedin.com/in/mahavisvanathan/">Mahalakshumi</a></div>
         </div>
     </footer>
     </div>

@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+    rems-app:
+        image: krishna/rems:latest
+        ports: 
+            - 8080:80
+        volumes:
+            - rems_gen_certs:/var/www/html/public/Generated Certificate
+        networks:
+            - rems-network
+
+    rems-mysql:
+        image: mysql
+        ports:
+            - 3306:3306
+        volumes:
+            - rems_mysql:/var/lib/mysql
+            - ./docker/mysql:/docker-entrypoint-initdb.d
+        environment:
+            - MYSQL_ROOT_PASSWORD="0000" 
+            - MYSQL_DATABASE="db_cms" 
+        networks:
+            rems-network:
+                ipv4_address: 172.16.238.10
+
+networks:
+    rems-network:
+        driver: bridge
+        ipam:
+            driver: default
+            config:
+            - subnet: 172.16.238.0/24
+
+volumes:
+    rems_mysql:
+    rems_gen_certs:
+

@@ -116,14 +116,32 @@
     <title>Certificate Distribution System (CDS):<?php echo " ".$OrgName; ?></title>
     <link rel="icon" type="image/png" sizes="600x600" href="../assets/img/Logo_White.png">
     <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&display=swap" as="style">
     <link rel="stylesheet" href="../assets/css/custom.css">
-    <link rel="stylesheet" href="../src/fakeLoader.js-2.0.0/css/fakeLoader.css">
+    <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css"> -->
+    <!-- <link rel="stylesheet" href="../src/fakeLoader.js-2.0.0/css/fakeLoader.css"> -->
+    <style>
+        .sidebar #sidebarToggle:after {
+            content: "<";
+            font-family: Nunito;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-right: .1rem;
+            color: hsla(0,0%,100%,.5);
+        }
+        .sidebar.toggled #sidebarToggle:after {
+            content: ">";
+            font-family:Nunito;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-left: .25rem;
+            color: hsla(0,0%,100%,.5);
+        }
+    </style>
 </head>
 
 <body id="page-top">
-    <div class="fakeLoader"></div>
+    <!-- <div class="fakeLoader"></div> -->
     <div id="wrapper">
         <nav id="navbar" class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
             <div class="container-fluid d-flex flex-column p-0">
@@ -132,8 +150,8 @@
                 </a>
                 <hr class="sidebar-divider my-0">
                 <ul class="nav navbar-nav text-light" id="accordionSidebar">
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="../index.php" style="padding-top: 20px;"><i class="fas fa-award"></i><span>CDS</span></a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="../members/member-login.php"><i class="far fa-user-circle"></i><span>Member Login</span></a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="../index.php" style="padding-top: 20px;"><ion-icon name="trophy"></ion-icon><span>&nbsp;CDS</span></a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="../members/member-login.php"><ion-icon name="people"></ion-icon><span>&nbsp;Member Login</span></a></li>
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
             </div>
@@ -144,15 +162,15 @@
                     <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle mr-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
                         <form action="cds-public.php" method="GET" class="form-inline d-none d-sm-inline-block mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                             <div class="input-group"><input class="bg-light form-control border-0 small" type="text" name="event" placeholder="Search for Event">
-                                <div class="input-group-append"><button class="btn btn-primary py-0" type="submit"><i class="fas fa-search"></i></button></div>
+                                <div class="input-group-append"><button class="btn btn-primary py-0" type="submit"><ion-icon name="search"></ion-icon></button></div>
                             </div>
                         </form>
                         <ul class="nav navbar-nav flex-nowrap ml-auto">
-                            <li class="nav-item dropdown d-sm-none no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><i class="fas fa-search"></i></a>
+                            <li class="nav-item dropdown d-sm-none no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><ion-icon name="search"></ion-icon></a>
                                 <div class="dropdown-menu dropdown-menu-right p-3 animated--grow-in" role="menu" aria-labelledby="searchDropdown">
                                     <form class="form-inline mr-auto navbar-search w-100">
                                         <div class="input-group"><input class="bg-light form-control border-0 small" type="text" name="event" placeholder="Search for Event">
-                                            <div class="input-group-append"><button class="btn btn-primary py-0" type="submit"><i class="fas fa-search"></i></button></div>
+                                            <div class="input-group-append"><button class="btn btn-primary py-0" type="submit"><ion-icon name="search"></ion-icon></button></div>
                                         </div>
                                     </form>
                                 </div>
@@ -167,7 +185,7 @@
             </div>
             </nav>
             <div class="container-fluid">
-                <h3 class="text-dark mb-4">Certificates Distrubution System (CDS)</h3>
+                <h3 class="text-dark mb-4">Certificates Distribution System (CDS)</h3>
                 <?php
                     if (($countr == 0) && ($mode == 0)) {
                         echo "<div class=\"card shadow mb-4\">
@@ -316,7 +334,7 @@
                             <form class="col-md-6">
                                 <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
                                     <ul class="pagination">
-                                        <li class="page-item <?php if($page==1){echo 'disabled';} ?>"><button name="page" value="<?php echo ($page-1); ?>" class="page-link" aria-label="Previous"><span aria-hidden="true">«</span></button></li>
+                                        <li class="page-item <?php if($page==1){echo 'disabled';} ?>"><button name="page" value="<?php echo ($page-1); ?>" class="page-link" aria-label="Previous"><span aria-hidden="true"><</span></button></li>
                                         <input type="hidden" name="event" value="<?php echo $_GET['event']; ?>"/>
                                         <input type="hidden" name="perPage" value="<?php echo $perPage; ?>"/>
                                         <?php
@@ -324,14 +342,24 @@
                                             for ($x=1; $x<=$totalPages; $x++){
                                                 if($x==$page){
                                                     echo '<li class="page-item active"><button name="page" value="'.$x.'" class="page-link">'.$x.'</button></li>';
+                                                    $flag=1;
                                                 }
-                                                else{
+                                                if(($x==3) && ($totalPages>5)){
+                                                    if($x<=$page){
+                                                        if($flag!=1)
+                                                            echo '<li class="page-item active"><button name="page" value="'.$page.'" class="page-link">'.$page.'</button></li>';
+                                                    }
+                                                    $x1=($totalPages-1);
+                                                    if($x1==3){
+                                                        $x1++;
+                                                    }
+                                                    $x=$x1;
+                                                }
+                                                if($page!=$x)
                                                     echo '<li class="page-item"><button name="page" value="'.$x.'" class="page-link">'.$x.'</button></li>';
-                                                }
-                                             }
+                                            }
                                         ?>
-
-                                        <li class="page-item <?php if($page==$totalPages){echo 'disabled';} ?>"><button name="page" value="<?php echo ($page+1); ?>" class="page-link" aria-label="Next"><span aria-hidden="true">»</span></button></li>
+                                        <li class="page-item <?php if($page==$totalPages){echo 'disabled';} ?>"><button name="page" value="<?php echo ($page+1); ?>" class="page-link" aria-label="Next"><span aria-hidden="true">></span></button></li>
                                     </ul>
                                 </nav>
                             </form>
@@ -342,23 +370,20 @@
         </div>
         <footer class="bg-white sticky-footer">
             <div class="container my-auto">
-                <div class="text-center my-auto copyright"><span>SVCE ACM Student Chapter</span></div>
+                <div class="text-center">Made with ❤️ by <a href="https://thekrishna.in/">Krishnakanth</a> and <a href="https://www.linkedin.com/in/mahavisvanathan/">Mahalakshumi</a></div>
             </div>
         </footer>
-    </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a></div>
+    </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><ion-icon size="large" name="chevron-up"></ion-icon></a></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
-    <script src="../assets/js/theme.js"></script>
-    <script src="../src/fakeLoader.js-2.0.0/js/fakeLoader.js"></script>
+    <!--<script src="../src/fakeLoader.js-2.0.0/js/fakeLoader.js"></script>!-->
     <script>
-        $(document).ready(function(){
+        /*$(document).ready(function(){
             $.fakeLoader({
-                timeToHide:1200,
+                timeToHide:1000,
                 bgColor:"#4e73df",
                 spinner:"spinner6"
             });
-        });
+        });*/
         var isMobile = false; //initiate as false
         // device detection
         if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|ipad|iris|kindle|Android|Silk|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(navigator.userAgent)
@@ -366,8 +391,13 @@
             isMobile = true;
             document.getElementById('navbar').classList.add('toggled');
         }
-
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.1.0/fontfaceobserver.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule="" src="https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
+    <script src="../assets/js/theme.js"></script>
 
 </body>
 

@@ -313,7 +313,7 @@
 																		<div class="card-heading"></div>
 																		<div class="card-body">
 																			<h2 class="title">Registration for '.ucwords($event_name).'</h2>
-																			<div id="event_description" class="desc"></div><br>';
+																			<div id="event_description" class="desc" style="line-height: 1.6em;"></div><br>';
 												//Form section starts here
 												$html_file = $html_file.'<form action="../entry.php" method="post" onSubmit="return verify()" id="entry_form">';
 												$html_file = $html_file.'<input type="hidden" name="event_name" value="'.$event_name.'">';
@@ -426,7 +426,7 @@
      </div>
      <footer class="bg-white sticky-footer">
           <div class="container my-auto">
-               <div class="text-center my-auto copyright"><span>SVCE ACM Student Chapter</span></div>
+               <div class="text-center">Made with ❤️ by <a href="https://thekrishna.in/">Krishnakanth</a> and <a href="https://www.linkedin.com/in/mahavisvanathan/">Mahalakshumi</a></div>
           </div>
      </footer>
      </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a></div>
