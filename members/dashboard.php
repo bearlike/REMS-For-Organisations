@@ -1,5 +1,6 @@
 <?php
-    include("header.php");
+    session_start();
+include("header.php");
     try{
         $conn1 = new PDO('mysql:dbname='.$MainDB.';host='.$servername.';charset=utf8', $username, $password);
         $conn1->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
@@ -20,7 +21,7 @@
         die();
     }
 
-    $resultc = $conn1->prepare('SELECT CONCAT("event_",LOWER(REPLACE((SELECT `event_name` FROM `events` order by `date` desc limit 1)," ","_"))) as code');
+    $resultc = $conn1->prepare('SELECT CONCAT("event_",REPLACE((SELECT `event_name` FROM `events` order by `date` desc limit 1)," ","_")) as code');
     $resultc->execute();
     $rowc = $resultc->fetch();
     $eventTable = $rowc[0]; // Return Latest Event Name
@@ -53,10 +54,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>Dashboard:<?php echo " ".$OrgName; ?></title>
-    <link rel="icon" type="image/png" sizes="600x600" href="../assets/img/Logo_White.png">
+    <link rel="icon" type="image/png" sizes="600x600" href="../assets/img/Logo_White.png" async>
     <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css" async>
     <link rel="stylesheet" href="../assets/css/custom.css">
 </head>
 
@@ -65,7 +66,7 @@
      <?php include("navigation.php"); ?>
             <div class="container-fluid">
                 <div class="d-sm-flex justify-content-between align-items-center mb-4">
-                    <h3 class="text-dark mb-0">Welcome!</h3><a class="btn btn-danger btn-sm d-none d-sm-inline-block" role="button" href="https://github.com/K-Kraken/REMS-For-Organisations/issues" style="background-color: #ce1126;border-color: #e5053a;"><i class="fas fa-bug fa-sm text-white-50"></i>&nbsp;Raise a Issue</a></div>
+                    <h3 class="text-dark mb-0">Welcome!</h3><a class="btn btn-danger btn-sm d-none d-sm-inline-block" role="button" href="https://github.com/bearlike/REMS-For-Organisations/issues" style="background-color: #ce1126;border-color: #e5053a;"><i class="fas fa-bug fa-sm text-white-50"></i>&nbsp;Raise a Issue</a></div>
                 <div
                     class="row">
                     <div class="col-md-6 col-xl-4 mb-4">
@@ -157,7 +158,7 @@
     </div>
     <footer class="bg-white sticky-footer">
         <div class="container my-auto">
-            <div class="text-center my-auto copyright"><span>SVCE ACM Student Chapter</span></div>
+            <div class="text-center">Made with ❤️ by <a href="https://thekrishna.in/">Krishnakanth</a> and <a href="https://www.linkedin.com/in/mahavisvanathan/">Mahalakshumi</a></div>
         </div>
     </footer>
     </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a></div>

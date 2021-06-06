@@ -1,19 +1,16 @@
 <h1 align="center">
   <br>
-  <img src="https://i.imgur.com/w5PZAuO.png" alt="CMS For Organisations" height="250px">
+  <img src="https://cdn.thekrishna.in/img/common/rems.png" alt="CMS For Organisations" height="250px">
   <br>
 </h1>
 <h4 align="center">Responsive Resources and Event Management System for small organisations and clubs. Form Generator, Mailer, Certificate Generator and much more :)</h4>
 
 <p align="center">
-  <img src="https://img.shields.io/github/last-commit/K-Kraken/REMS-For-Organisations?color=blue&style=flat-square">
-  <a href="/LICENSE"><img src="https://img.shields.io/github/license/K-Kraken/REMS-For-Organisations.svg?style=flat-square"></a>
-  <a href="https://github.com/K-Kraken/REMS-For-Organisations/issues"><img src="https://img.shields.io/github/issues-raw/K-Kraken/REMS-For-Organisations?color=red&style=flat-square"/></a>
-    <a href="https://github.com/K-Kraken/REMS-For-Organisations/releases"><img src="https://img.shields.io/github/v/tag/K-Kraken/REMS-For-Organisations?label=stable&style=flat-square"/></a>
+  <img src="https://img.shields.io/github/last-commit/bearlike/REMS-For-Organisations?color=blue&style=flat-square">
+  <a href="/LICENSE"><img src="https://img.shields.io/github/license/bearlike/REMS-For-Organisations.svg?style=flat-square"></a>
+  <a href="https://github.com/bearlike/REMS-For-Organisations/issues"><img src="https://img.shields.io/github/issues-raw/bearlike/REMS-For-Organisations?color=red&style=flat-square"/></a>
+    <a href="https://github.com/bearlike/REMS-For-Organisations/releases"><img src="https://img.shields.io/github/v/tag/bearlike/REMS-For-Organisations?label=stable&style=flat-square"/></a>
 </p>
-
-
-
 
 
 
@@ -24,6 +21,16 @@ We are running a chapter (club) at our college. We organize 20+ events for our 1
 
 ## Getting Started
 
+### Running REMS in Docker (Easiest)
+Modify the default values in `docker/mysql/database.sql` and `docker-run-vanilla.sh` to your requirement. 
+By default, exposes to host port `8080`. A `krishnaalagiri/rems` and `mysql` container would be configured and deployed.
+```bash
+# From the root of the repository
+sudo chmod +x docker-run-vanilla.sh
+./docker-run-vanilla.sh 
+```
+
+
 ### Prerequisites
 What things you need to run the software:
 - A **web server** with **PHP** preferably Apache2.
@@ -32,11 +39,11 @@ What things you need to run the software:
 
 
 ### Installation
-1. Download the latest stable release from [here](https://github.com/K-Kraken/REMS-For-Organisations/releases)
+1. Download the latest stable release from [here](https://github.com/bearlike/REMS-For-Organisations/releases)
 2. Create and Import the Main Database dump for  **MySQL-MariaDB** from [here](/docs/files/Sample_REMS_Database.sql) 
 3. Create a Forms Database.
 4. Copy the files from this repository to a location in the root directory of the web server
-5. Rename `member/secrets.php_` to `member/secrets.php`
+5. Rename `member/secrets.php_` to `member/secrets_.php`
 6. Update your database credentials, databases names (Main and Forms) and API Keys in `member/secrets.php` and `public/cds-public.php`
 7. With your Web Server and MySQL server running, visit the site
    - ```
@@ -49,7 +56,7 @@ What things you need to run the software:
 
 ## Features and Screenshots (Click to enlarge)
 
-```bash
+```
 Tested on Apache/2.4.41 (Win64) OpenSSL/1.1.1c PHP/7.3.11 with 10.4.8-MariaDB
 ```
 
@@ -57,8 +64,8 @@ Tested on Apache/2.4.41 (Win64) OpenSSL/1.1.1c PHP/7.3.11 with 10.4.8-MariaDB
 
 A two-ended system (Both for **admin** and **public**) that'll automatically  generate certificates and make them available for distribution. The admin will have to upload a **Certificate Template** and a **CSV file** with Participant Names, Position Awarded, and Event Name. The generated certificates would be later automatically made for distribution.
 
-| CDS Public (Collection)                                  | CDS Admin (Generation)                                   | Generated Certificates                         |
-| -------------------------------------------------------- | -------------------------------------------------------- | ---------------------------------------------- |
+| CDS Public (Collection)                                  | CDS Admin (Generation)                                   | Generated Certificates                                   |
+| -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- |
 | <img src="https://i.imgur.com/gaMfSOr.png" width="650"/> | <img src="https://i.imgur.com/APt8LDL.png" width="650"/> | <img src="https://i.imgur.com/av6OHek.png" width="650"/> |
 
 ### Database Management
@@ -112,16 +119,16 @@ Perhaps our most desired feature, it gives an option to toggle the page between 
 
 ## Authors
 
-| Authors             | Profile Links                            |
-| ------------------- | :--------------------------------------- |
-| **Krishna Alagiri** | [K-Kraken](https://github.com/K-Kraken/) |
-| **Mahalakshumi V**  | [mahavisvanathan](https://github.com/mahavisvanathan/) |
+| Krishnakanth Alagiri                                                                        | Mahalakshumi V                                                                                     |
+| ------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| [![f](https://avatars1.githubusercontent.com/u/39209037?s=86)](https://github.com/bearlike) | [![f](https://avatars2.githubusercontent.com/u/40058339?s=86)](https://github.com/mahavisvanathan) |
+| [@bearlike](https://github.com/bearlike)                                                    | [@mahavisvanathan](https://github.com/mahavisvanathan)                                             |
 
 
 ## Outside Contributors
-| Contributors | Profile Links                                 | PR                                                           |
-| ------------ | --------------------------------------------- | ------------------------------------------------------------ |
-| **Dhiraj V** | [dhirajv2000](https://github.com/dhirajv2000) | [#28](https://github.com/K-Kraken/REMS-For-Organisations/pull/28) |
+| Contributors | Profile Links                                 | PR                                                                |
+| ------------ | --------------------------------------------- | ----------------------------------------------------------------- |
+| **Dhiraj V** | [dhirajv2000](https://github.com/dhirajv2000) | [#28](https://github.com/bearlike/REMS-For-Organisations/pull/28) |
 
 ## Acknowledgments
 
