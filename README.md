@@ -8,15 +8,15 @@
 <p align="center">
   <img src="https://img.shields.io/github/last-commit/bearlike/REMS-For-Organisations?color=blue&style=flat-square">
   <a href="/LICENSE"><img src="https://img.shields.io/github/license/bearlike/REMS-For-Organisations.svg?style=flat-square"></a>
-  <a href="https://github.com/bearlike/REMS-For-Organisations/issues"><img src="https://img.shields.io/github/issues-raw/bearlike/REMS-For-Organisations?color=red&style=flat-square"/></a>
-    <a href="https://github.com/bearlike/REMS-For-Organisations/releases"><img src="https://img.shields.io/github/v/tag/bearlike/REMS-For-Organisations?label=stable&style=flat-square"/></a>
+  <a href="https://hub.docker.com/r/krishnaalagiri/rems"><img src="https://img.shields.io/docker/image-size/krishnaalagiri/rems/latest?label=Image%20Size&logo=docker&style=flat-square" /></a>
+   <a href="https://github.com/bearlike/REMS-For-Organisations/issues"><img src="https://img.shields.io/github/issues-raw/bearlike/REMS-For-Organisations?color=red&style=flat-square"/></a>
+  <a href="https://github.com/bearlike/REMS-For-Organisations/releases"><img src="https://img.shields.io/github/v/tag/bearlike/REMS-For-Organisations?label=stable&style=flat-square"/></a>
 </p>
 
 
 
 ### Why are we doing it?
 We are running a chapter (club) at our college. We organize 20+ events for our 1500+ participants. It was a tedious process to manually make forms, certificates, advertising via mail so we decided to automate that process. Any organization, clubs or institutions looking for a similar service can fork our project and tweak it according to their needs.
-
 
 
 ## Getting Started
@@ -30,12 +30,10 @@ sudo chmod +x docker-run-vanilla.sh
 ./docker-run-vanilla.sh 
 ```
 
-
 ### Prerequisites
 What things you need to run the software:
 - A **web server** with **PHP** preferably Apache2.
 - A **MySQL Database Server**. (Done and tested on 10.4.8-MariaDB)
-
 
 
 ### Installation
@@ -51,7 +49,6 @@ What things you need to run the software:
       Default Password: admin
      ```
 8. If any error occurs, check your configurations in `member/secrets.php` and `public/cds-public.php` and try again
-
 
 
 ## Features and Screenshots (Click to enlarge)
