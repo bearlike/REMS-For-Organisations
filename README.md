@@ -21,13 +21,13 @@ We are running a chapter (club) at our college. We organize 20+ events for our 1
 
 ## Getting Started
 
-### Running REMS in Docker (Easiest)
-Modify the default values in `docker/mysql/database.sql` and `docker-run-vanilla.sh` to your requirement. 
-By default, exposes to host port `8080`. A `krishnaalagiri/rems` and `mysql` container would be configured and deployed.
+### Running REMS as a Docker stack (Easiest)
+- Modify the default values in `docker-compose.yml`, `docker/mysql/database.sql` and `docker/secrets_.php` to your requirement. 
+- By default, exposes to host port `8080`. A `krishnaalagiri/rems` and `mariadb` container would be configured and deployed.
+- Installation guide for [Docker](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-22-04) and [docker-compose](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-compose-on-ubuntu-22-04).
 ```bash
 # From the root of the repository
-sudo chmod +x docker-run-vanilla.sh
-./docker-run-vanilla.sh 
+docker-compose up -d
 ```
 
 ### Prerequisites
@@ -116,10 +116,10 @@ Perhaps our most desired feature, it gives an option to toggle the page between 
 
 ## Authors
 
-| Krishnakanth Alagiri                                                                        | Mahalakshumi V                                                                                     |
-| ------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| [![f](https://avatars1.githubusercontent.com/u/39209037?s=86)](https://github.com/bearlike) | [![f](https://avatars2.githubusercontent.com/u/40058339?s=86)](https://github.com/mahavisvanathan) |
-| [@bearlike](https://github.com/bearlike)                                                    | [@mahavisvanathan](https://github.com/mahavisvanathan)                                             |
+| Krishnakanth Alagiri                                                                            | Mahalakshumi V                                                                                     |
+| ----------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| [![f](https://avatars1.githubusercontent.com/u/39209037?s=86)](https://go.thekrishna.in/github) | [![f](https://avatars2.githubusercontent.com/u/40058339?s=86)](https://github.com/mahavisvanathan) |
+| [@bearlike](https://github.com/bearlike)                                                        | [@mahavisvanathan](https://github.com/mahavisvanathan)                                             |
 
 
 ## Outside Contributors

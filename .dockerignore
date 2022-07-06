@@ -1,0 +1,7 @@
+# Project specific files
+.github/
+.git/
+docs/
+Dockerfile
+*.log
+.dockerignore
