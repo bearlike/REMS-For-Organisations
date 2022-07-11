@@ -26,3 +26,8 @@ members/secrets_.php
 assets/img/avatars/users/*
 
 members/test.php
+
+# IDE specific files
+.DS_Store
+.vscode/
+.idea/

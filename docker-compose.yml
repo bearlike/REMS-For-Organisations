@@ -1,38 +1,53 @@
+# Docker compose file for bearlike/REMS-for-Organisations
+
+# Docker build related issues can be raised here:
+# * https://github.com/bearlike/REMS-For-Organisations/issues/new?labels=Docker
+
+# Execute by running:
+# docker-compose up -d
+
 version: '3'
 
 services:
-    rems-app:
-        image: krishna/rems:latest
-        ports: 
-            - 8080:80
-        volumes:
-            - rems_gen_certs:/var/www/html/public/Generated Certificate
-        networks:
-            - rems-network
-
-    rems-mysql:
-        image: mysql
+    database:
+        image: mariadb:10.7.3-focal
+        restart: always
         ports:
+            # We recommend commenting the ports block for increased security.
+            # Exposing the database port is intended only for debugging.
             - 3306:3306
         volumes:
-            - rems_mysql:/var/lib/mysql
-            - ./docker/mysql:/docker-entrypoint-initdb.d
+            - database_volume:/var/lib/mysql
+            - ./docker/mysql:/docker-entrypoint-initdb.d # Load SQL files during database creation
         environment:
-            - MYSQL_ROOT_PASSWORD="0000" 
-            - MYSQL_DATABASE="db_cms" 
-        networks:
-            rems-network:
-                ipv4_address: 172.16.238.10
+            MYSQL_ROOT_PASSWORD: "0000"
+            MYSQL_PASSWORD: "0000"
+            MYSQL_DATABASE: "db_cms"
+            MYSQL_USER: "cmsuser"
+        healthcheck:
+            test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+            timeout: 20s
+            retries: 15
 
-networks:
-    rems-network:
-        driver: bridge
-        ipam:
-            driver: default
-            config:
-            - subnet: 172.16.238.0/24
+    app:
+        image: krishnaalagiri/rems:1.1.6
+        restart: on-failure
+        depends_on:
+            - database
+        ports:
+            # <host port>:<container port (default=80)>
+            - 8080:80
+        volumes:
+            # Replace generated_certificates_volume with an absolute path if you
+            #   need direct access to the certificates. Usually not required.
+            - "generated_certificates_volume:/var/www/html/public/Generated Certificate"
+            - ./docker/secrets_.php:/var/www/html/members/secrets_.php
+        environment:
+            # * Edit docker/secrets_.php for other enviroiment variables.
+            MYSQL_HOST: database
+            MYSQL_PASSWORD: "0000"
+            MYSQL_USER: "cmsuser"
 
 volumes:
-    rems_mysql:
-    rems_gen_certs:
-
+    database_volume:
+    generated_certificates_volume:

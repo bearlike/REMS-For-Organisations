@@ -12,7 +12,9 @@ CREATE DATABASE IF NOT EXISTS `db_cms`;
 CREATE DATABASE IF NOT EXISTS `db_forms`;
 CREATE DATABASE IF NOT EXISTS `db_mailer`;
 
-CREATE USER 'cmsuser'@'localhost' IDENTIFIED BY 'random_password';
+
+-- Make sure the username and password are set right below.
+CREATE USER 'cmsuser'@'localhost' IDENTIFIED BY '0000';
 GRANT ALL ON *.* TO 'cmsuser'@'localhost';
 
 -- --------------------------------------------------------------
