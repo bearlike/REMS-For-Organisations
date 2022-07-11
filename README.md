@@ -14,21 +14,11 @@
 </p>
 
 
-
 ### Why are we doing it?
 We are running a chapter (club) at our college. We organize 20+ events for our 1500+ participants. It was a tedious process to manually make forms, certificates, advertising via mail so we decided to automate that process. Any organization, clubs or institutions looking for a similar service can fork our project and tweak it according to their needs.
 
 
 ## Getting Started
-
-### Running REMS as a Docker stack (Easiest)
-- Modify the default values in `docker-compose.yml`, `docker/mysql/database.sql` and `docker/secrets_.php` to your requirement. 
-- By default, exposes to host port `8080`. A `krishnaalagiri/rems` and `mariadb` container would be configured and deployed.
-- Installation guide for [Docker](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-22-04) and [docker-compose](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-compose-on-ubuntu-22-04).
-```bash
-# From the root of the repository
-docker-compose up -d
-```
 
 ### Prerequisites
 What things you need to run the software:
@@ -49,6 +39,19 @@ What things you need to run the software:
       Default Password: admin
      ```
 8. If any error occurs, check your configurations in `member/secrets.php` and `public/cds-public.php` and try again
+
+
+### Running REMS as a Docker stack (Experimental).
+- Installation guide for [Docker](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-22-04) and [docker-compose](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-compose-on-ubuntu-22-04).
+- Modify the default values in `docker-compose.yml`, `docker/mysql/database.sql` and `docker/secrets_.php` to your requirement. 
+- By default, exposes to host port `8080`. A `krishnaalagiri/rems` and `mariadb` container would be configured and deployed.
+- For only the first time, the stack needs to be restarted due `initdb` in database containers. From the second time, you can directly start the stack.
+```bash
+# From the root of the repository
+docker-compose up -d
+sleep 60
+docker-compose restart
+```
 
 
 ## Features and Screenshots (Click to enlarge)
@@ -119,7 +122,7 @@ Perhaps our most desired feature, it gives an option to toggle the page between 
 | Krishnakanth Alagiri                                                                            | Mahalakshumi V                                                                                     |
 | ----------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
 | [![f](https://avatars1.githubusercontent.com/u/39209037?s=86)](https://go.thekrishna.in/github) | [![f](https://avatars2.githubusercontent.com/u/40058339?s=86)](https://github.com/mahavisvanathan) |
-| [@bearlike](https://github.com/bearlike)                                                        | [@mahavisvanathan](https://github.com/mahavisvanathan)                                             |
+| [@bearlike](https://go.thekrishna.in/github)                                                    | [@mahavisvanathan](https://github.com/mahavisvanathan)                                             |
 
 
 ## Outside Contributors

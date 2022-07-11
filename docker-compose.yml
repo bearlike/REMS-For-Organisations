@@ -24,19 +24,24 @@ services:
             MYSQL_PASSWORD: "0000"
             MYSQL_DATABASE: "db_cms"
             MYSQL_USER: "cmsuser"
+        healthcheck:
+            test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+            timeout: 20s
+            retries: 15
 
     app:
         image: krishnaalagiri/rems:1.1.6
-        restart: always
+        restart: on-failure
         depends_on:
             - database
         ports:
             # <host port>:<container port (default=80)>
             - 8080:80
         volumes:
-            # Replace generated_certificates_volume with a absolute path if you
+            # Replace generated_certificates_volume with an absolute path if you
             #   need direct access to the certificates. Usually not required.
             - "generated_certificates_volume:/var/www/html/public/Generated Certificate"
+            - ./docker/secrets_.php:/var/www/html/members/secrets_.php
         environment:
             # * Edit docker/secrets_.php for other enviroiment variables.
             MYSQL_HOST: database

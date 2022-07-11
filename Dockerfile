@@ -16,6 +16,6 @@ RUN chmod +x /usr/local/bin/install-php-extensions && sync && \
     install-php-extensions gd xdebug
 RUN install-php-extensions pdo_mysql
 
-# Copying project and secrets file
+# Copying project and (template) secrets file
 COPY . /var/www/html/
 COPY docker/secrets_.php /var/www/html/members
