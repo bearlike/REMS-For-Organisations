@@ -3,7 +3,7 @@
   <img src="https://cdn.thekrishna.in/img/common/rems.png" alt="CMS For Organisations" height="250px">
   <br>
 </h1>
-<h4 align="center">Responsive Resources and Event Management System for small organisations and clubs. Form Generator, Mailer, Certificate Generator and much more :)</h4>
+<h4 align="center">Efficiently manage resources and events with ease. Our system includes a Form Generator, Mailer, Certificate Generator, and more – perfect for small organizations and clubs!</h4>
 
 <p align="center">
   <img src="https://img.shields.io/github/last-commit/bearlike/REMS-For-Organisations?color=blue&style=flat-square">
@@ -14,9 +14,10 @@
 </p>
 
 
-### Why are we doing it?
-We are running a chapter (club) at our college. We organize 20+ events for our 1500+ participants. It was a tedious process to manually make forms, certificates, advertising via mail so we decided to automate that process. Any organization, clubs or institutions looking for a similar service can fork our project and tweak it according to their needs.
+# Introduction
+Looking to streamline your organization's event planning process? REMS can help you! Originally created for our college chapter, we've automated the tedious task of creating forms, certificates, and advertising via mail for our 20+ events with 1500+ participants. Now, any organization, club, or institution can easily fork our project and customize it to fit their unique needs. Join the thousands who have already benefited from our service and give it a try today!
 
+> ✨ Looking to contribute to our GitHub project? We'd love to have you on board! Feel free to raise issues and pull requests for bug fixes, new features, and improvements. ✨
 
 ## Getting Started
 
@@ -24,6 +25,7 @@ We are running a chapter (club) at our college. We organize 20+ events for our 1
 What things you need to run the software:
 - A **web server** with **PHP** preferably Apache2.
 - A **MySQL Database Server**. (Done and tested on 10.4.8-MariaDB)
+- PHP Extensions [`pdo_mysql`](https://www.php.net/manual/en/ref.pdo-mysql.php), [`xdebug`](https://xdebug.org/docs/install), and [`gd`](https://www.php.net/manual/en/image.installation.php) needs to be installed.
 
 
 ### Installation
@@ -116,6 +118,9 @@ Perhaps our most desired feature, it gives an option to toggle the page between 
 | <img src="https://i.imgur.com/itX7cW9.gif" width="550"/> |
 
 
+## Got Issues?
+If you're new to the project and run into any blockers, please open an issue on this repository. We'd love to get it fixed for you! Please use the appropriate issue template as it would help us understand the issue faster.
+
 
 ## Authors
 
@@ -131,7 +136,6 @@ Perhaps our most desired feature, it gives an option to toggle the page between 
 | **Dhiraj V** | [dhirajv2000](https://github.com/dhirajv2000) | [#28](https://github.com/bearlike/REMS-For-Organisations/pull/28) |
 
 ## Acknowledgments
-
 * Hat tip to anyone whose code was used.
 
 
