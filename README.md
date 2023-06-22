@@ -13,11 +13,10 @@
   <a href="https://github.com/bearlike/REMS-For-Organisations/releases"><img src="https://img.shields.io/github/v/tag/bearlike/REMS-For-Organisations?label=stable&style=flat-square"/></a>
 </p>
 
+> *This repository is currently not actively maintained due to our team's commitments elsewhere. :speech_balloon: We're seeking open-source contributors who can lend a hand! If you're interested in contributing, don't hesitate. Every bit of help makes a difference. :sparkles:*
 
 # Introduction
 Looking to streamline your organization's event planning process? REMS can help you! Originally created for our college chapter, we've automated the tedious task of creating forms, certificates, and advertising via mail for our 20+ events with 1500+ participants. Now, any organization, club, or institution can easily fork our project and customize it to fit their unique needs. Join the thousands who have already benefited from our service and give it a try today!
-
-> ✨ Looking to contribute to our GitHub project? We'd love to have you on board! Feel free to raise issues and pull requests for bug fixes, new features, and improvements. ✨
 
 ## Getting Started
 
@@ -122,18 +121,13 @@ Perhaps our most desired feature, it gives an option to toggle the page between 
 If you're new to the project and run into any blockers, please open an issue on this repository. We'd love to get it fixed for you! Please use the appropriate issue template as it would help us understand the issue faster.
 
 
-## Authors
+## Contributors 🌟
+> ✨ Looking to contribute to our GitHub project? We'd love to have you on board! Feel free to raise issues and pull requests for bug fixes, new features, and improvements. ✨
 
-| Krishnakanth Alagiri                                                                            | Mahalakshumi V                                                                                     |
-| ----------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| [![f](https://avatars1.githubusercontent.com/u/39209037?s=86)](https://go.thekrishna.in/github) | [![f](https://avatars2.githubusercontent.com/u/40058339?s=86)](https://github.com/mahavisvanathan) |
-| [@bearlike](https://go.thekrishna.in/github)                                                    | [@mahavisvanathan](https://github.com/mahavisvanathan)                                             |
-
-
-## Outside Contributors
-| Contributors | Profile Links                                 | PR                                                                |
-| ------------ | --------------------------------------------- | ----------------------------------------------------------------- |
-| **Dhiraj V** | [dhirajv2000](https://github.com/dhirajv2000) | [#28](https://github.com/bearlike/REMS-For-Organisations/pull/28) |
+| Krishnakanth Alagiri 👨‍💻                                                                         | Mahalakshumi V 👩‍💻                                                                                   | Dhiraj V                                                                                        |
+| ----------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| [![f](https://avatars1.githubusercontent.com/u/39209037?s=86)](https://kanth.tech/github/) | [![f](https://avatars2.githubusercontent.com/u/40058339?s=86)](https://github.com/mahavisvanathan) | [![f](https://i.imgur.com/KqeCBQX.jpg)](https://github.com/dhirajv2000)                         |
+| [@bearlike](https://kanth.tech/github/)                                                    | [@mahavisvanathan](https://github.com/mahavisvanathan)                                             | [@dhirajv2000](https://github.com/dhirajv2000)                                                  |
 
 ## Acknowledgments
 * Hat tip to anyone whose code was used.
