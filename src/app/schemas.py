@@ -3,8 +3,8 @@ from __future__ import annotations
 
 """Pydantic schemas for request parsing."""
 
-from datetime import date
 from typing import Optional
+from datetime import date as date_type
 from pydantic import BaseModel, Field
 
 
@@ -46,7 +46,7 @@ class EventMetadata(BaseModel):
     """Metadata for a certificate generation event."""
 
     event_name: str
-    date: date = Field(..., alias="event_date")
+    date: date_type = Field(..., alias="event_date")
     is_inter: bool = False
 
 

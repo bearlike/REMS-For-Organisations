@@ -1,15 +1,16 @@
+#!/usr/bin/env python3
+"""Simple email sending helper."""
 from __future__ import annotations
 
-"""Simple email sending helper."""
+from typing import Any
 
 import smtplib
 from email.mime.text import MIMEText
 
-from typing import Any
 
 from flask import render_template
 
-from ..config import docker_secrets
+from ...config import docker_secrets
 
 
 CONFIG = docker_secrets.CONFIG
