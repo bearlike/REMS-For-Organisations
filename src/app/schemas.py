@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 """Pydantic schemas for request parsing."""
+from __future__ import annotations
 
 from typing import Optional
 from datetime import date as date_type
