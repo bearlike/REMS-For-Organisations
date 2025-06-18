@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Database Manage</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/bootstrap/css/bootstrap.min.css') }}">
+  </head>
+  <body>
+    <div class="container mt-4">
+      <h3>Database Browser</h3>
+      <form method="get" class="mb-3">
+        <div class="row">
+          <div class="col-md-3">
+            <select name="db" class="form-control" onchange="this.form.submit()">
+              <option value="1" {{ 'selected' if db_code == '1' else '' }}>CMS</option>
+              <option value="2" {{ 'selected' if db_code == '2' else '' }}>Forms</option>
+              <option value="3" {{ 'selected' if db_code == '3' else '' }}>Mailer</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <select name="table" class="form-control" onchange="this.form.submit()">
+              <option value="">Choose table</option>
+              {% for t in tables %}
+              <option value="{{ t }}" {{ 'selected' if t == table else '' }}>{{ t }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+      </form>
+
+      {% if table %}
+      <table class="table table-sm table-striped">
+        <thead>
+          <tr>
+            {% for col in columns %}
+            <th>{{ col }}</th>
+            {% endfor %}
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <form action="{{ url_for('db.insert_row') }}" method="post">
+              <input type="hidden" name="db" value="{{ db_code }}">
+              <input type="hidden" name="table" value="{{ table }}">
+              {% for col in columns %}
+              <td>
+                {% if col not in ('id', 'timestamp') %}
+                <input type="text" name="{{ col }}" class="form-control">
+                {% endif %}
+              </td>
+              {% endfor %}
+              <td><button class="btn btn-success btn-sm">Add</button></td>
+            </form>
+          </tr>
+          {% for row in rows %}
+          <tr>
+            {% for col in columns %}
+            <td>{{ row[col] }}</td>
+            {% endfor %}
+            <td>
+              <a class="btn btn-info btn-sm" href="{{ url_for('db.modify_row', row_id=row.id, db=db_code, table=table) }}">Edit</a>
+              <a class="btn btn-danger btn-sm" href="{{ url_for('db.delete_row', db=db_code, table=table, id=row.id) }}">Delete</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <nav>
+        <ul class="pagination">
+          {% for p in range(1, total_pages + 1) %}
+          <li class="page-item {{ 'active' if p == page else '' }}">
+            <a class="page-link" href="{{ url_for('db.manage', db=db_code, table=table, page=p, perPage=per_page) }}">{{ p }}</a>
+          </li>
+          {% endfor %}
+        </ul>
+      </nav>
+      {% endif %}
+    </div>
+  </body>
+</html>

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Modify Row</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/bootstrap/css/bootstrap.min.css') }}">
+  </head>
+  <body>
+    <div class="container mt-4">
+      <h3>Modify Row</h3>
+      <form method="post">
+        <input type="hidden" name="db" value="{{ db_code }}">
+        <input type="hidden" name="table" value="{{ table }}">
+        {% for col in columns %}
+        <div class="mb-2">
+          <label>{{ col }}</label>
+          {% if col == 'id' %}
+          <input type="text" class="form-control" value="{{ row[col] }}" readonly>
+          {% else %}
+          <input type="text" name="{{ col }}" class="form-control" value="{{ row[col] }}">
+          {% endif %}
+        </div>
+        {% endfor %}
+        <button class="btn btn-primary">Save</button>
+      </form>
+    </div>
+  </body>
+</html>
