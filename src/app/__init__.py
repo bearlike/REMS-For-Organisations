@@ -20,6 +20,10 @@ def create_app() -> Flask:
             f"mysql+pymysql://{config.username}:{config.password}"
             f"@{config.servername}/{config.MainDB}"
         ),
+        SQLALCHEMY_BINDS={
+            "forms": f"mysql+pymysql://{config.username}:{config.password}@{config.servername}/{config.formDB}",
+            "mail": f"mysql+pymysql://{config.username}:{config.password}@{config.servername}/{config.mailerDB}",
+        },
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
         SECRET_KEY="change-this-key",
     )
@@ -35,10 +39,14 @@ def create_app() -> Flask:
     from .routes.forms import forms_bp
     from .routes.logs import logs_bp
     from .routes.certificates import cert_bp
+    from .routes.auth import auth_bp
+    from .routes.dashboard import dashboard_bp
 
     app.register_blueprint(public_bp)
     app.register_blueprint(forms_bp)
     app.register_blueprint(logs_bp)
     app.register_blueprint(cert_bp)
+    app.register_blueprint(auth_bp)
+    app.register_blueprint(dashboard_bp)
 
     return app

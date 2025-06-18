@@ -6,6 +6,26 @@ from datetime import date
 from pydantic import BaseModel, Field
 
 
+class LoginForm(BaseModel):
+    """Form values for user login."""
+
+    username: str
+    password: str
+    remember: bool = False
+
+
+class ChangePasswordForm(BaseModel):
+    """Password reset submission."""
+
+    pwd: str
+    pwd_confirm: str
+
+    @property
+    def is_valid(self) -> bool:
+        """Return ``True`` if the passwords match."""
+        return self.pwd == self.pwd_confirm
+
+
 class CertificateCSVRow(BaseModel):
     """Represents a row from the uploaded certificate CSV."""
 

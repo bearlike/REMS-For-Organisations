@@ -10,8 +10,8 @@ This file tracks the migration of PHP files to the Python + Jinja2 stack. When m
 | index.php | Completed |
 | members/activity-log.php | Completed |
 | members/cds-admin.php | Completed |
-| members/change-password.php | Incomplete |
-| members/dashboard.php | Incomplete |
+| members/change-password.php | Completed |
+| members/dashboard.php | Completed |
 | members/db-manage.php | Incomplete |
 | members/db-ops/delete.php | Incomplete |
 | members/db-ops/insert.php | Incomplete |
@@ -106,3 +106,10 @@ src/
 | src/PHPMailer/SMTP.php | replaced by `utils/email.py` using smtplib | Email helper classes |
 
 These notes serve as the guiding strategy for the full migration to Python. Update this file as features are implemented.
+
+## Migration Notes
+- Converted dashboard and password reset pages to Flask.
+- Introduced `auth` and `dashboard` blueprints with session-based login and statistics view.
+- Configured multiple database binds for forms and mail data in the application factory.
+- Added Pydantic schemas for login and password reset forms for better validation.
+

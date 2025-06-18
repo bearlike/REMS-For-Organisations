@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/bootstrap/css/bootstrap.min.css') }}">
+  </head>
+  <body id="page-top">
+    <div class="container mt-4">
+      <h3>Welcome!</h3>
+      <p class="mb-4">Latest event registrations: {{ registration_count }}</p>
+      <p class="mb-4">Total events: {{ events_count }}</p>
+    </div>
+  </body>
+</html>
