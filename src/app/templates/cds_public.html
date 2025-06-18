@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>CDS Results</title>
+    <link rel="icon" type="image/png" sizes="600x600" href="{{ url_for('static', filename='assets/img/Logo_White.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/bootstrap/css/bootstrap.min.css') }}">
+  </head>
+  <body class="bg-gradient-primary">
+    <div class="container mt-4">
+      <h3 class="text-white">{{ event|title }}</h3>
+      <table class="table table-striped table-light">
+        <thead>
+          <tr>
+            {% if mode %}
+              <th>Event Name</th>
+              <th>Date</th>
+            {% elif is_inter %}
+              <th>Name</th>
+              <th>College</th>
+              <th>Year</th>
+              <th>Position</th>
+              <th>Link</th>
+            {% else %}
+              <th>Name</th>
+              <th>Reg No</th>
+              <th>Department</th>
+              <th>Year</th>
+              <th>Section</th>
+              <th>Position</th>
+              <th>Link</th>
+            {% endif %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in results %}
+            <tr>
+              {% if mode %}
+                <td>{{ row.event_name }}</td>
+                <td>{{ row.date }}</td>
+              {% elif is_inter %}
+                <td>{{ row.name }}</td>
+                <td>{{ row.college }}</td>
+                <td>{{ row.year }}</td>
+                <td>{{ row.position }}</td>
+                <td><a href="{{ row.cert_link }}">Here</a></td>
+              {% else %}
+                <td>{{ row.name }}</td>
+                <td>{{ row.regno }}</td>
+                <td>{{ row.dept }}</td>
+                <td>{{ row.year }}</td>
+                <td>{{ row.section }}</td>
+                <td>{{ row.position }}</td>
+                <td><a href="{{ row.cert_link }}">Here</a></td>
+              {% endif %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

@@ -1,5 +1,9 @@
+"""Flask application factory and database setup."""
+
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+import os
+import time
 
 from src.config import docker_secrets
 
@@ -20,9 +24,17 @@ def create_app() -> Flask:
         SECRET_KEY="change-this-key",
     )
 
+    # Configure default timezone similar to pheader.php
+    os.environ.setdefault("TZ", "Asia/Kolkata")
+    if hasattr(time, "tzset"):
+        time.tzset()
+
     db.init_app(app)
 
     from .routes.public import public_bp
+    from .routes.forms import forms_bp
+
     app.register_blueprint(public_bp)
+    app.register_blueprint(forms_bp)
 
     return app

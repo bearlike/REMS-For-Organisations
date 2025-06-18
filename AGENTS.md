@@ -36,9 +36,9 @@ This file tracks the migration of PHP files to the Python + Jinja2 stack. When m
 | members/profile.php | Incomplete |
 | members/settings.php | Incomplete |
 | members/validate.php | Incomplete |
-| public/cds-public.php | Incomplete |
-| public/entry.php | Incomplete |
-| public/pheader.php | Incomplete |
+| public/cds-public.php | Completed |
+| public/entry.php | Completed |
+| public/pheader.php | Completed |
 | src/PHPMailer/Exception.php | Incomplete |
 | src/PHPMailer/PHPMailer.php | Incomplete |
 | src/PHPMailer/SMTP.php | Incomplete |
