@@ -7,7 +7,7 @@ This file tracks the migration of PHP files to the Python + Jinja2 stack. When m
 | PHP File | Status |
 |---------|-------|
 | docker/secrets_.php | Completed |
-| index.php | Incomplete |
+| index.php | Completed |
 | members/activity-log.php | Incomplete |
 | members/cds-admin.php | Incomplete |
 | members/change-password.php | Incomplete |
