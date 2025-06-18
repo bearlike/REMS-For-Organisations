@@ -48,6 +48,7 @@ This file tracks the migration of PHP files to the Python + Jinja2 stack. When m
 This repository contains a certificate distribution and resource management platform used by organizations. It includes modules for member authentication, certificate generation, form creation, bulk mailing and generic database maintenance. The system relies on three MariaDB/MySQL databases for CMS, form data and mail templates. Public users can search for certificates and submit event registration forms, while members access administrative functions after logging in.
 
 ## Execution Flow
+
 1. **Public access** starts at `index.php` which lets visitors search for certificates. This page links to `public/cds-public.php` where certificates and event information are displayed.
 2. **Form submissions** are handled by `public/entry.php` which inserts registration data into the forms database.
 3. **Member login** occurs via `members/member-login.php` and is processed by `members/validate.php`. Once authenticated a session is created.
@@ -57,7 +58,9 @@ This repository contains a certificate distribution and resource management plat
 7. Additional pages allow password resets (`forgot-password.php` and `change-password.php`), log viewing, profile editing and other maintenance tasks.
 
 ## Python Migration Strategy
+
 The PHP code will be migrated to a Flask application. Each major feature will become a Flask blueprint with SQLAlchemy models for database access. Jinja2 templates will replace the existing PHP HTML. The configuration already lives in `src/config/docker_secrets.py`. The proposed package layout:
+
 ```text
 src/
   app/
@@ -66,7 +69,9 @@ src/
     templates/
     utils/
 ```
+
 ### File Mapping
+
 | PHP File | Planned Python Component | Purpose |
 |---------|---------------------------|---------|
 | index.php | `routes/public.py:home` | Landing page to search events |
@@ -108,6 +113,7 @@ src/
 These notes serve as the guiding strategy for the full migration to Python. Update this file as features are implemented.
 
 ## Migration Notes
+
 - Converted dashboard and password reset pages to Flask.
 - Introduced `auth` and `dashboard` blueprints with session-based login and statistics view.
 - Configured multiple database binds for forms and mail data in the application factory.
@@ -122,3 +128,4 @@ These notes serve as the guiding strategy for the full migration to Python. Upda
 - Implemented user profile editor with image uploads and detail updates.
 - Added navigation template and placeholder settings route.
 - Created generic error handlers with 404 and database error pages.
+- All legacy PHP modules migrated to Flask with updated Docker configuration and documentation.

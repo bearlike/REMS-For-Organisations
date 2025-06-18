@@ -1,0 +1,23 @@
+[project]
+name = "rems-for-organisations"
+version = "2.0.0"
+description = "Resources and Event Management System for small organisations and clubs. Bulk mailer, certificate generation and much more."
+authors = [
+    { name = "Krishnakanth Alagiri", email = "39209037+bearlike@users.noreply.github.com" },
+    { name = "Mahalakshumi V", email = "reach@mahav.dev" },
+]
+license = { text = "MIT" }
+readme = "README.md"
+requires-python = ">=3.13,<4"
+dependencies = [
+    "flask (>=3.1.1,<4.0.0)",
+    "flask-sqlalchemy (>=3.1.1,<4.0.0)",
+    "pymysql (>=1.1.1,<2.0.0)",
+    "pydantic (>=2.11.7,<3.0.0)",
+    "requests (>=2.32.4,<3.0.0)",
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
