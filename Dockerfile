@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM python:3.11-slim
+FROM python:3.13-slim
 
 # Metadata
 LABEL org.opencontainers.image.title="Resources and Event Management System (REMS)"
@@ -20,4 +20,4 @@ ENV FLASK_APP=src.app
 ENV FLASK_RUN_HOST=0.0.0.0
 ENV PYTHONUNBUFFERED=1
 
-CMD ["flask", "run"]
+CMD ["python", "-m", "flask", "run"]
