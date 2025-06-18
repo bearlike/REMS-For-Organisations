@@ -1,8 +1,10 @@
+#!/usr/bin/env python3
 from __future__ import annotations
 
 """Pydantic schemas for request parsing."""
 
 from datetime import date
+from typing import Optional
 from pydantic import BaseModel, Field
 
 
@@ -30,14 +32,14 @@ class CertificateCSVRow(BaseModel):
     """Represents a row from the uploaded certificate CSV."""
 
     name: str
-    regno: str | None = None
-    dept: str | None = None
-    year: int | None = None
-    section: str | None = None
+    regno: Optional[str] = None
+    dept: Optional[str] = None
+    year: Optional[int] = None
+    section: Optional[str] = None
     email: str
-    position: str | None = None
+    position: Optional[str] = None
     event_name: str
-    college: str | None = None
+    college: Optional[str] = None
 
 
 class EventMetadata(BaseModel):
@@ -80,10 +82,10 @@ class ShortenURLForm(BaseModel):
 class ProfileUpdateForm(BaseModel):
     """Form data for updating a user profile."""
 
-    email: str | None = None
-    first_name: str | None = None
-    last_name: str | None = None
-    address: str | None = None
-    phno: str | None = None
-    signature: str | None = None
+    email: Optional[str] = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    address: Optional[str] = None
+    phno: Optional[str] = None
+    signature: Optional[str] = None
 

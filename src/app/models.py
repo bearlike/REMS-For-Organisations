@@ -1,9 +1,7 @@
 """Database models used by the application."""
 
-from __future__ import annotations
-
 from datetime import date, datetime
-from flask_sqlalchemy import SQLAlchemy
+from typing import Optional
 from sqlalchemy.orm import Mapped, mapped_column
 
 from . import db
@@ -16,15 +14,15 @@ class Certificate(db.Model):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str]
-    regno: Mapped[str] | None
-    dept: Mapped[str] | None
-    year: Mapped[str] | None
-    section: Mapped[str] | None
+    regno: Mapped[Optional[str]]
+    dept: Mapped[Optional[str]]
+    year: Mapped[Optional[str]]
+    section: Mapped[Optional[str]]
     email: Mapped[str]
-    position: Mapped[str] | None
+    position: Mapped[Optional[str]]
     cert_link: Mapped[str]
     event_name: Mapped[str]
-    college: Mapped[str] | None
+    college: Mapped[Optional[str]]
 
 
 class Event(db.Model):
@@ -58,11 +56,11 @@ class Login(db.Model):
     LoginName: Mapped[str]
     PasswordHash: Mapped[str]
     Email: Mapped[str]
-    FullName: Mapped[str] | None
+    FullName: Mapped[Optional[str]]
     IsAdmin: Mapped[bool]
-    FirstName: Mapped[str] | None
-    LastName: Mapped[str] | None
-    Address: Mapped[str] | None
-    Phno: Mapped[str] | None
-    Signature: Mapped[str] | None
-    imgsrc: Mapped[str] | None
+    FirstName: Mapped[Optional[str]]
+    LastName: Mapped[Optional[str]]
+    Address: Mapped[Optional[str]]
+    Phno: Mapped[Optional[str]]
+    Signature: Mapped[Optional[str]]
+    imgsrc: Mapped[Optional[str]]
