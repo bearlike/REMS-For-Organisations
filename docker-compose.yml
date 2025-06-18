@@ -28,9 +28,10 @@ services:
     volumes:
       - "generated_certificates_volume:/app/public/Generated Certificate"
     environment:
-      MYSQL_HOST: database
-      MYSQL_PASSWORD: "0000"
-      MYSQL_USER: "cmsuser"
+      MAIN_DB_URI: "mysql+pymysql://cmsuser:0000@database/db_cms"
+      FORMS_DB_URI: "mysql+pymysql://cmsuser:0000@database/forms_db"
+      MAIL_DB_URI: "mysql+pymysql://cmsuser:0000@database/mail_db"
+
 
 volumes:
   database_volume:
