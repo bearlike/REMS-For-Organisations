@@ -115,5 +115,6 @@ These notes serve as the guiding strategy for the full migration to Python. Upda
 - Added form generation blueprint routes for creating tables, viewing registrations and downloading CSV exports.
 - Implemented password reset request flow with email sending using `smtplib`.
 - Added mailing list generator and bulk mailer routes with new templates.
+- Added database management blueprint with routes to browse, insert, modify and delete rows.
 - Introduced generic email builder and forgot-password email template.
 
