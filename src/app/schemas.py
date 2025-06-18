@@ -70,3 +70,20 @@ class BulkMailForm(BaseModel):
     mail_coverimg_url: str
     mail_body: str
 
+
+class ShortenURLForm(BaseModel):
+    """Form input for the URL shortener."""
+
+    url: str
+
+
+class ProfileUpdateForm(BaseModel):
+    """Form data for updating a user profile."""
+
+    email: str | None = None
+    first_name: str | None = None
+    last_name: str | None = None
+    address: str | None = None
+    phno: str | None = None
+    signature: str | None = None
+

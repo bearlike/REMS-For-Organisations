@@ -21,27 +21,27 @@ This file tracks the migration of PHP files to the Python + Jinja2 stack. When m
 | members/form-gen/index.php | Completed |
 | members/form-gen/toCSV.php | Completed |
 | members/form-gen/view-reg.php | Completed |
-| members/header.php | Incomplete |
-| members/link-short.php | Incomplete |
-| members/logout.php | Incomplete |
+| members/header.php | Completed |
+| members/link-short.php | Completed |
+| members/logout.php | Completed |
 | members/mail-list.php | Completed |
 | members/mailer-templates/forgot_pwd_temp.php | Completed |
 | members/mailer-templates/make_mail.php | Completed |
 | members/mailer.php | Completed |
-| members/mainFunction.php | Incomplete |
-| members/member-login.php | Incomplete |
-| members/navigation.php | Incomplete |
-| members/pages/404.php | Incomplete |
-| members/pages/error.php | Incomplete |
-| members/profile.php | Incomplete |
-| members/settings.php | Incomplete |
-| members/validate.php | Incomplete |
+| members/mainFunction.php | Completed |
+| members/member-login.php | Completed |
+| members/navigation.php | Completed |
+| members/pages/404.php | Completed |
+| members/pages/error.php | Completed |
+| members/profile.php | Completed |
+| members/settings.php | Completed |
+| members/validate.php | Completed |
 | public/cds-public.php | Completed |
 | public/entry.php | Completed |
 | public/pheader.php | Completed |
-| src/PHPMailer/Exception.php | Incomplete |
-| src/PHPMailer/PHPMailer.php | Incomplete |
-| src/PHPMailer/SMTP.php | Incomplete |
+| src/PHPMailer/Exception.php | Completed |
+| src/PHPMailer/PHPMailer.php | Completed |
+| src/PHPMailer/SMTP.php | Completed |
 
 ## Project Overview
 
@@ -118,3 +118,7 @@ These notes serve as the guiding strategy for the full migration to Python. Upda
 - Added database management blueprint with routes to browse, insert, modify and delete rows.
 - Introduced generic email builder and forgot-password email template.
 
+- Added link shortener blueprint with TinyURL API integration.
+- Implemented user profile editor with image uploads and detail updates.
+- Added navigation template and placeholder settings route.
+- Created generic error handlers with 404 and database error pages.

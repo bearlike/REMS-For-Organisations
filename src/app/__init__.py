@@ -43,6 +43,10 @@ def create_app() -> Flask:
     from .routes.dashboard import dashboard_bp
     from .routes.db import db_bp
     from .routes.mailing import mailing_bp
+    from .routes.link_short import link_short_bp
+    from .routes.profile import profile_bp
+    from .routes.settings import settings_bp
+    from .routes.errors import errors_bp
 
     app.register_blueprint(public_bp)
     app.register_blueprint(forms_bp)
@@ -52,5 +56,9 @@ def create_app() -> Flask:
     app.register_blueprint(dashboard_bp)
     app.register_blueprint(db_bp)
     app.register_blueprint(mailing_bp)
+    app.register_blueprint(link_short_bp)
+    app.register_blueprint(profile_bp)
+    app.register_blueprint(settings_bp)
+    app.register_blueprint(errors_bp)
 
     return app

@@ -1,0 +1,35 @@
+{% extends 'dashboard.html' %}
+{% block content %}
+<h2>Profile</h2>
+<form method="post" enctype="multipart/form-data">
+  <div class="form-group">
+    <label for="picture">Profile Picture</label>
+    <input id="picture" name="picture" type="file" class="form-control-file" />
+  </div>
+  <div class="form-group">
+    <label>Email</label>
+    <input name="email" type="email" value="{{ user.Email }}" class="form-control" />
+  </div>
+  <div class="form-group">
+    <label>First Name</label>
+    <input name="first_name" type="text" value="{{ user.FirstName }}" class="form-control" />
+  </div>
+  <div class="form-group">
+    <label>Last Name</label>
+    <input name="last_name" type="text" value="{{ user.LastName }}" class="form-control" />
+  </div>
+  <div class="form-group">
+    <label>Address</label>
+    <input name="address" type="text" value="{{ user.Address }}" class="form-control" />
+  </div>
+  <div class="form-group">
+    <label>Phone</label>
+    <input name="phno" type="text" value="{{ user.Phno }}" class="form-control" />
+  </div>
+  <div class="form-group">
+    <label>Signature</label>
+    <input name="signature" type="text" value="{{ user.Signature }}" class="form-control" />
+  </div>
+  <button class="btn btn-primary" type="submit">Update</button>
+</form>
+{% endblock %}
