@@ -33,8 +33,12 @@ def create_app() -> Flask:
 
     from .routes.public import public_bp
     from .routes.forms import forms_bp
+    from .routes.logs import logs_bp
+    from .routes.certificates import cert_bp
 
     app.register_blueprint(public_bp)
     app.register_blueprint(forms_bp)
+    app.register_blueprint(logs_bp)
+    app.register_blueprint(cert_bp)
 
     return app
