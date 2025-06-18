@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Registrations</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/bootstrap/css/bootstrap.min.css') }}">
+  </head>
+  <body>
+    <div class="container mt-4">
+      <h3>View Registrations</h3>
+      <form method="get" class="form-inline mb-3">
+        <select name="event" class="form-control mr-2" onchange="this.form.submit()">
+          <option value="">Select event</option>
+          {% for t in events %}
+          <option value="{{ t }}" {{ 'selected' if t == selected_event else '' }}>{{ t }}</option>
+          {% endfor %}
+        </select>
+        <input type="hidden" name="perPage" value="{{ pagination.per_page }}">
+      </form>
+      {% if selected_event %}
+      <table class="table table-sm table-striped">
+        <thead>
+          <tr>
+            {% for col in columns %}
+            <th>{{ col }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in rows %}
+          <tr>
+            {% for col in columns %}
+            <td>{{ row[col] }}</td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <nav>
+        <ul class="pagination">
+          {% for p in range(1, (total // pagination.per_page) + 2) %}
+          <li class="page-item {{ 'active' if p == pagination.page else '' }}">
+            <a class="page-link" href="{{ url_for('forms.view_registrations', event=selected_event, page=p, perPage=pagination.per_page) }}">{{ p }}</a>
+          </li>
+          {% endfor %}
+        </ul>
+      </nav>
+      <a class="btn btn-secondary" href="{{ url_for('forms.download_csv', event=selected_event) }}">Download CSV</a>
+      {% endif %}
+    </div>
+  </body>
+</html>

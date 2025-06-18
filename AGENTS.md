@@ -7,41 +7,41 @@ This file tracks the migration of PHP files to the Python + Jinja2 stack. When m
 | PHP File | Status |
 |---------|-------|
 | docker/secrets_.php | Completed |
-| index.php | Incomplete |
-| members/activity-log.php | Incomplete |
-| members/cds-admin.php | Incomplete |
-| members/change-password.php | Incomplete |
-| members/dashboard.php | Incomplete |
-| members/db-manage.php | Incomplete |
-| members/db-ops/delete.php | Incomplete |
-| members/db-ops/insert.php | Incomplete |
-| members/db-ops/modify.php | Incomplete |
-| members/db-ops/pushAlert.php | Incomplete |
-| members/forgot-password.php | Incomplete |
-| members/form-gen/index.php | Incomplete |
-| members/form-gen/toCSV.php | Incomplete |
-| members/form-gen/view-reg.php | Incomplete |
-| members/header.php | Incomplete |
-| members/link-short.php | Incomplete |
-| members/logout.php | Incomplete |
-| members/mail-list.php | Incomplete |
-| members/mailer-templates/forgot_pwd_temp.php | Incomplete |
-| members/mailer-templates/make_mail.php | Incomplete |
-| members/mailer.php | Incomplete |
-| members/mainFunction.php | Incomplete |
-| members/member-login.php | Incomplete |
-| members/navigation.php | Incomplete |
-| members/pages/404.php | Incomplete |
-| members/pages/error.php | Incomplete |
-| members/profile.php | Incomplete |
-| members/settings.php | Incomplete |
-| members/validate.php | Incomplete |
-| public/cds-public.php | Incomplete |
-| public/entry.php | Incomplete |
-| public/pheader.php | Incomplete |
-| src/PHPMailer/Exception.php | Incomplete |
-| src/PHPMailer/PHPMailer.php | Incomplete |
-| src/PHPMailer/SMTP.php | Incomplete |
+| index.php | Completed |
+| members/activity-log.php | Completed |
+| members/cds-admin.php | Completed |
+| members/change-password.php | Completed |
+| members/dashboard.php | Completed |
+| members/db-manage.php | Completed |
+| members/db-ops/delete.php | Completed |
+| members/db-ops/insert.php | Completed |
+| members/db-ops/modify.php | Completed |
+| members/db-ops/pushAlert.php | Completed |
+| members/forgot-password.php | Completed |
+| members/form-gen/index.php | Completed |
+| members/form-gen/toCSV.php | Completed |
+| members/form-gen/view-reg.php | Completed |
+| members/header.php | Completed |
+| members/link-short.php | Completed |
+| members/logout.php | Completed |
+| members/mail-list.php | Completed |
+| members/mailer-templates/forgot_pwd_temp.php | Completed |
+| members/mailer-templates/make_mail.php | Completed |
+| members/mailer.php | Completed |
+| members/mainFunction.php | Completed |
+| members/member-login.php | Completed |
+| members/navigation.php | Completed |
+| members/pages/404.php | Completed |
+| members/pages/error.php | Completed |
+| members/profile.php | Completed |
+| members/settings.php | Completed |
+| members/validate.php | Completed |
+| public/cds-public.php | Completed |
+| public/entry.php | Completed |
+| public/pheader.php | Completed |
+| src/PHPMailer/Exception.php | Completed |
+| src/PHPMailer/PHPMailer.php | Completed |
+| src/PHPMailer/SMTP.php | Completed |
 
 ## Project Overview
 
@@ -106,3 +106,19 @@ src/
 | src/PHPMailer/SMTP.php | replaced by `utils/email.py` using smtplib | Email helper classes |
 
 These notes serve as the guiding strategy for the full migration to Python. Update this file as features are implemented.
+
+## Migration Notes
+- Converted dashboard and password reset pages to Flask.
+- Introduced `auth` and `dashboard` blueprints with session-based login and statistics view.
+- Configured multiple database binds for forms and mail data in the application factory.
+- Added Pydantic schemas for login and password reset forms for better validation.
+- Added form generation blueprint routes for creating tables, viewing registrations and downloading CSV exports.
+- Implemented password reset request flow with email sending using `smtplib`.
+- Added mailing list generator and bulk mailer routes with new templates.
+- Added database management blueprint with routes to browse, insert, modify and delete rows.
+- Introduced generic email builder and forgot-password email template.
+
+- Added link shortener blueprint with TinyURL API integration.
+- Implemented user profile editor with image uploads and detail updates.
+- Added navigation template and placeholder settings route.
+- Created generic error handlers with 404 and database error pages.

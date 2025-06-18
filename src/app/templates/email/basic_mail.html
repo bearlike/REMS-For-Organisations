@@ -1,0 +1,16 @@
+<!doctype html>
+<html>
+  <body>
+    <div style="text-align:center">
+      <img src="{{ logo_url }}" alt="logo" style="max-width:200px;">
+    </div>
+    <h2>{{ title }}</h2>
+    <p>{{ body|safe }}</p>
+    <div style="text-align:center;margin:20px;">
+      <a href="{{ button_url }}" style="padding:10px 20px;background-color:#007bff;color:#fff;text-decoration:none;">
+        {{ button_label }}
+      </a>
+    </div>
+    <img src="{{ cover_img_url }}" alt="" style="max-width:100%;">
+  </body>
+</html>

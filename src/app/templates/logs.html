@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Activity Log</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/bootstrap/css/bootstrap.min.css') }}">
+  </head>
+  <body class="bg-gradient-primary">
+    <div class="container mt-4">
+      <h3 class="text-white">Activity Log</h3>
+      <table class="table table-striped table-light">
+        <thead>
+          <tr>
+            <th>Timestamp</th>
+            <th>Log</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in logs %}
+          <tr>
+            <td>{{ row.timestamp }}</td>
+            <td>{{ row.log }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
+

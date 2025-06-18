@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Create Mailing List</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/bootstrap/css/bootstrap.min.css') }}">
+  </head>
+  <body>
+    <div class="container mt-4">
+      <h3>Mailing List Generator</h3>
+      {% if error %}
+      <div class="alert alert-danger">{{ error }}</div>
+      {% elif success %}
+      <div class="alert alert-success">Mailing list created.</div>
+      {% endif %}
+      <form method="post" enctype="multipart/form-data">
+        <div class="mb-2">
+          <input type="file" name="file" class="form-control-file" required>
+        </div>
+        <div class="mb-2">
+          <input type="text" name="mailer_name" class="form-control" placeholder="List Name" required>
+        </div>
+        <button class="btn btn-primary">Upload</button>
+      </form>
+    </div>
+  </body>
+</html>
