@@ -12,22 +12,22 @@ This file tracks the migration of PHP files to the Python + Jinja2 stack. When m
 | members/cds-admin.php | Completed |
 | members/change-password.php | Completed |
 | members/dashboard.php | Completed |
-| members/db-manage.php | Incomplete |
-| members/db-ops/delete.php | Incomplete |
-| members/db-ops/insert.php | Incomplete |
-| members/db-ops/modify.php | Incomplete |
-| members/db-ops/pushAlert.php | Incomplete |
-| members/forgot-password.php | Incomplete |
-| members/form-gen/index.php | Incomplete |
-| members/form-gen/toCSV.php | Incomplete |
-| members/form-gen/view-reg.php | Incomplete |
+| members/db-manage.php | Completed |
+| members/db-ops/delete.php | Completed |
+| members/db-ops/insert.php | Completed |
+| members/db-ops/modify.php | Completed |
+| members/db-ops/pushAlert.php | Completed |
+| members/forgot-password.php | Completed |
+| members/form-gen/index.php | Completed |
+| members/form-gen/toCSV.php | Completed |
+| members/form-gen/view-reg.php | Completed |
 | members/header.php | Incomplete |
 | members/link-short.php | Incomplete |
 | members/logout.php | Incomplete |
-| members/mail-list.php | Incomplete |
-| members/mailer-templates/forgot_pwd_temp.php | Incomplete |
-| members/mailer-templates/make_mail.php | Incomplete |
-| members/mailer.php | Incomplete |
+| members/mail-list.php | Completed |
+| members/mailer-templates/forgot_pwd_temp.php | Completed |
+| members/mailer-templates/make_mail.php | Completed |
+| members/mailer.php | Completed |
 | members/mainFunction.php | Incomplete |
 | members/member-login.php | Incomplete |
 | members/navigation.php | Incomplete |
@@ -112,4 +112,8 @@ These notes serve as the guiding strategy for the full migration to Python. Upda
 - Introduced `auth` and `dashboard` blueprints with session-based login and statistics view.
 - Configured multiple database binds for forms and mail data in the application factory.
 - Added Pydantic schemas for login and password reset forms for better validation.
+- Added form generation blueprint routes for creating tables, viewing registrations and downloading CSV exports.
+- Implemented password reset request flow with email sending using `smtplib`.
+- Added mailing list generator and bulk mailer routes with new templates.
+- Introduced generic email builder and forgot-password email template.
 

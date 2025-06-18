@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Form Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/bootstrap/css/bootstrap.min.css') }}">
+  </head>
+  <body>
+    <div class="container mt-4">
+      <h3>Create Registration Form</h3>
+      {% if error %}
+      <div class="alert alert-danger">{{ error }}</div>
+      {% elif success %}
+      <div class="alert alert-success">Form table created.</div>
+      {% endif %}
+      <form method="post">
+        <div class="mb-2">
+          <label>Event name</label>
+          <input type="text" name="event_name" class="form-control" required>
+        </div>
+        <div class="mb-2">
+          <label>Description</label>
+          <textarea name="event_description" class="form-control"></textarea>
+        </div>
+        <div class="mb-2">
+          <label>Type</label>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="event_type" value="individual" checked>
+            <label class="form-check-label">Individual</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="event_type" value="team">
+            <label class="form-check-label">Team</label>
+          </div>
+        </div>
+        <div class="mb-2">
+          <label>Team size</label>
+          <select name="number_participants" class="form-control">
+            {% for i in range(1,6) %}
+            <option value="{{ i }}">{{ i }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="mb-2">
+          <label>Fields</label>
+          {% set opts = ['regno','dept','year','email','phoneno','college','github','linkedin'] %}
+          {% for opt in opts %}
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="fields[]" value="{{ opt }}">
+            <label class="form-check-label text-capitalize">{{ opt }}</label>
+          </div>
+          {% endfor %}
+        </div>
+        <button class="btn btn-primary">Generate</button>
+      </form>
+    </div>
+  </body>
+</html>

@@ -47,3 +47,26 @@ class EventMetadata(BaseModel):
     date: date = Field(..., alias="event_date")
     is_inter: bool = False
 
+
+class FormGeneratorSchema(BaseModel):
+    """Input for creating a registration form."""
+
+    event_name: str
+    event_description: str = ""
+    event_type: str = "individual"
+    number_participants: int = 1
+    fields: list[str] = Field(default_factory=list)
+
+
+class BulkMailForm(BaseModel):
+    """Input for sending bulk mail."""
+
+    mailing_list: str
+    mail_subject: str
+    mail_title: str
+    mail_button_label: str
+    mail_button_url: str
+    mail_logo_url: str
+    mail_coverimg_url: str
+    mail_body: str
+

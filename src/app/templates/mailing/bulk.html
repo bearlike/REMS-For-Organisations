@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Bulk Mailer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/bootstrap/css/bootstrap.min.css') }}">
+  </head>
+  <body>
+    <div class="container mt-4">
+      <h3>Bulk Mailer</h3>
+      {% if error %}
+      <div class="alert alert-danger">{{ error }}</div>
+      {% elif success %}
+      <div class="alert alert-success">Emails sent successfully.</div>
+      {% endif %}
+      <form method="post">
+        <div class="mb-2">
+          <label>Mailing List</label>
+          <select name="mailing_list" class="form-control">
+            {% for t in mailing_lists %}
+            <option value="{{ t }}">{{ t }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="mb-2"><input class="form-control" type="text" name="mail_subject" placeholder="Subject" required></div>
+        <div class="mb-2"><input class="form-control" type="text" name="mail_title" placeholder="Email Title" required></div>
+        <div class="mb-2">
+          <input class="form-control" type="text" name="mail_button_label" placeholder="Button label" value="{{ cfg.buttonLabel }}">
+          <input class="form-control mt-1" type="text" name="mail_button_url" placeholder="Button URL" value="{{ cfg.buttonURL }}">
+        </div>
+        <div class="mb-2">
+          <input class="form-control" type="text" name="mail_logo_url" placeholder="Logo URL" value="{{ cfg.logoURL }}">
+          <input class="form-control mt-1" type="text" name="mail_coverimg_url" placeholder="Cover image URL" value="{{ cfg.coverURL }}">
+        </div>
+        <div class="mb-2">
+          <textarea class="form-control" name="mail_body" rows="6" placeholder="Mail body"></textarea>
+        </div>
+        <button class="btn btn-primary">Send</button>
+      </form>
+    </div>
+  </body>
+</html>

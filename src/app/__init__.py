@@ -41,6 +41,8 @@ def create_app() -> Flask:
     from .routes.certificates import cert_bp
     from .routes.auth import auth_bp
     from .routes.dashboard import dashboard_bp
+    from .routes.db import db_bp
+    from .routes.mailing import mailing_bp
 
     app.register_blueprint(public_bp)
     app.register_blueprint(forms_bp)
@@ -48,5 +50,7 @@ def create_app() -> Flask:
     app.register_blueprint(cert_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(dashboard_bp)
+    app.register_blueprint(db_bp)
+    app.register_blueprint(mailing_bp)
 
     return app

@@ -11,6 +11,8 @@ from ..models import Login
 from ..schemas import LoginForm, ChangePasswordForm
 from ..utils.auth import login_required
 from ..utils.helpers import log_activity
+from ..utils.email import send_mail, build_mail
+from ..config import docker_secrets
 
 
 auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
@@ -65,3 +67,45 @@ def change_password(token: str) -> str:
         return render_template("change_password.html", token=token, success=True)
 
     return render_template("change_password.html", token=token)
+
+
+@auth_bp.route("/forgot-password", methods=["GET", "POST"])
+def forgot_password() -> str:
+    """Handle password reset requests."""
+    if request.method == "POST":
+        email = request.form.get("email", "")
+        if not email:
+            return render_template("forgot_password.html", error="Email required")
+
+        exists = (
+            db.session.execute(
+                text("SELECT count(1) FROM login WHERE Email=:email"),
+                {"email": email},
+            ).scalar()
+            or 0
+        )
+        if not exists:
+            return render_template(
+                "forgot_password.html", error="Account does not exist"
+            )
+
+        key = db.session.execute(
+            text("SELECT ForgotPasswordHash(:email) AS val"), {"email": email}
+        ).scalar()
+        cfg = docker_secrets.CONFIG
+        link = f"{cfg.hostName}{cfg.forgotPwdExtension}?gen={key}"
+        body = build_mail(
+            "email/forgot_password.html",
+            button_url=link,
+            email_reach=cfg.reachEmail,
+        )
+        try:
+            send_mail(email, "Request For Password - Reg", body)
+        except Exception:
+            return render_template(
+                "forgot_password.html", error="Failed to send email"
+            )
+        log_activity(email, "Requested password reset link")
+        return render_template("forgot_password.html", success=True)
+
+    return render_template("forgot_password.html")
