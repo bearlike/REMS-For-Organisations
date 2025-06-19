@@ -1,6 +1,6 @@
 # Migration Tracker
 
-This file tracks the migration of PHP files to the Python + Jinja2 stack. When migrating a PHP file, create a corresponding Python implementation using SQLAlchemy for database operations. Update the status of each file to **Completed** once the migration is done. If a file has not been migrated yet, keep the status as **Incomplete**.
+This file tracks the migration of PHP files to the Python + Jinja2 stack. When migrating a PHP file, create a corresponding Python implementation using SQLAlchemy for database operations. Update the status of each file to **Completed** once the migration is done. If a file has not been migrated yet, keep the status as **Incomplete**. You must constantly monitor and update this file as any commits, modifications, or new features are added. You may remove or consolidate entries as needed.
 
 ## PHP Files Migration Status
 
@@ -133,3 +133,8 @@ These notes serve as the guiding strategy for the full migration to Python. Upda
 - Adjusted certificate model to store the `year` column as an integer to match the MySQL schema.
 - Sanitized legacy PHP templates (`index.php` and `members/member-login.php`) to remove PHP code and use Jinja2 placeholders.
 - Reworked `login.html`, navigation partial and dashboard template to mirror the original Bootstrap layout from the PHP version.
+
+## What to do next? (TODO)
+
+- Fix the poorly done PHP -> HTML/j2 migrations to make the new files identical to the old ones. This includes adding but not limited to the top navigation bar, info cards, a "Raise an Issue" button, and every other other UI elements that were missed during the initial migration. I will also add the necessary CSS and JavaScript includes to ensure everything functions correctly.
+- Match the original PHP layout structure, bootstrap, css/styles and features. Faithful reproduction of the original PHP files, converting the dynamic PHP parts to Jinja2 syntax.

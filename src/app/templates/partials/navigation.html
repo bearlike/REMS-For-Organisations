@@ -1,7 +1,7 @@
 <nav id="navbar" class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
   <div class="container-fluid d-flex flex-column p-0">
     <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
-      <div class="sidebar-brand-icon"><img class="logo" src="{{ url_for('static', filename='assets/img/Logo_Banner_White.png') }}"></div>
+      <div class="sidebar-brand-icon"><img class="logo" src="{{ url_for('static', filename='assets/img/Logo_Banner_White.png') }}" alt="Logo"></div>
     </a>
     <hr class="sidebar-divider my-0">
     <ul class="nav navbar-nav text-light" id="accordionSidebar">
@@ -15,5 +15,6 @@
       <li class="nav-item" role="presentation"><a class="nav-link" href="{{ url_for('db.manage') }}"><i class="fas fa-database"></i><span>&nbsp;Maintenance</span></a></li>
       <li class="nav-item" role="presentation"><a class="nav-link" href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out-alt"></i><span>&nbsp;Logout</span></a></li>
     </ul>
+    <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
   </div>
 </nav>
