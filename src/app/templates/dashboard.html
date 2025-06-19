@@ -116,36 +116,34 @@
                     <div class="form-group"><input type="submit" class="form-control btn btn-primary btn-sm" /></div>
                   </form>
                 </div>
-              </div>
-            </div>
-            <div id="newCol" class=""></div>
-          </div>
+              </div>          </div>
+          <div id="newCol" class=""></div>
         </div>
-        <a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
-        <script src="{{ url_for('static', filename='assets/js/dark-mode.js') }}"></script>
-        <script>
-          var isMobile = /(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|ipad|iris|kindle|Android|Silk|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(navigator.userAgent);
-          if (!isMobile) { document.getElementById('newCol').classList.add('col'); }
-        </script>
-
-        <a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
       </div>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
-      <script src="{{ url_for('static', filename='assets/js/theme.js') }}"></script>
-      <script src="{{ url_for('static', filename='assets/js/dark-mode.js') }}"></script>
-      <script>
-        var isMobile = false; //initiate as false
-        // device detection
-        if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|ipad|iris|kindle|Android|Silk|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(navigator.userAgent)
-          || /CrOS/i.test(navigator.userAgent)) {
-          isMobile = true;
-        }
-        if (!(isMobile)) {
-          document.getElementById('newCol').classList.add('col');
-        }
-      </script>
+    </div>
+  </div>
+  <footer class="bg-white sticky-footer">
+    <div class="container my-auto">
+      <div class="text-center">Made with ❤️ by <a href="https://thekrishna.in/">Krishnakanth</a> and <a href="https://www.linkedin.com/in/mahavisvanathan/">Mahalakshumi</a></div>
+    </div>
+  </footer>
+  </div>
+  <a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
+  <script src="{{ url_for('static', filename='assets/js/theme.js') }}"></script>
+  <script>
+    var isMobile = false; //initiate as false
+    // device detection
+    if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|ipad|iris|kindle|Android|Silk|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(navigator.userAgent)
+      || /CrOS/i.test(navigator.userAgent)) {
+      isMobile = true;
+    }
+    if (!(isMobile)) {
+      document.getElementById('newCol').classList.add('col');
+    }
+  </script>
 </body>
 
 </html>

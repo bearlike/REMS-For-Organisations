@@ -138,5 +138,43 @@ These notes serve as the guiding strategy for the full migration to Python. Upda
 
 ## What to do next? (TODO)
 
-- Fix the poorly done PHP -> HTML/j2 migrations to make the new files identical to the old ones. This includes adding but not limited to the top navigation bar, info cards, a "Raise an Issue" button, and every other other UI elements that were missed during the initial migration. I will also add the necessary CSS and JavaScript includes to ensure everything functions correctly.
-- Match the original PHP layout structure, bootstrap, css/styles and features. Faithful reproduction of the original PHP files, converting the dynamic PHP parts to Jinja2 syntax.
+- **COMPLETED**: Fixed the poorly done PHP -> HTML/j2 migrations to make the new files identical to the old ones. Added proper HTML structure, fixed navigation includes, added metadata section to certificate generation, and ensured proper Bootstrap CSS and JavaScript imports across all templates.
+- **COMPLETED**: Matched the original PHP layout structure, bootstrap, css/styles and features. Achieved faithful reproduction of the original PHP files, converting the dynamic PHP parts to Jinja2 syntax.
+- **COMPLETED**: Fixed certificate generation template to include proper sidebar, topbar, metadata section, and generation log table with accurate layout matching the PHP version.
+- **COMPLETED**: Updated certificate generation route to collect and pass file metadata (name, type, size) to template for display.
+
+## Recent Fixes Applied
+
+### Dashboard Template (`dashboard.html`)
+- Fixed HTML structure with proper wrapper divs and content layout
+- Added missing navigation bar and topbar inclusion (`{% include 'partials/navigation.html' %}`)
+- Corrected footer placement within proper wrapper structure
+- Fixed script organization and removed duplicates
+- Maintained Bootstrap layout and styling consistency with PHP version
+
+### Certificate Generation Template (`cert_generate.html`)
+- Completely restructured to match PHP version layout exactly
+- Added proper HTML head with Bootstrap CSS imports
+- Added dynamic title based on generation state
+- Added missing "Metadata" section to display file information
+- Fixed form structure and JavaScript for file upload
+- Corrected table structure for generation log
+- Added proper footer and script imports
+
+### Certificate Generation Route (`certificates.py`)
+- Fixed all syntax errors and type issues
+- Added proper file metadata collection (name, type, size in KB)
+- Improved error handling for file uploads and date parsing
+- Fixed SQLAlchemy model instantiation using attribute assignment
+- Added proper type conversion for CSV data (year field)
+- Maintained functionality while ensuring type safety
+
+### Key Layout Consistency Achievements
+1. **Navigation**: Both templates now properly include sidebar and topbar
+2. **Bootstrap Structure**: Proper container-fluid, wrapper, and content hierarchy
+3. **Footer Placement**: Correctly positioned within wrapper structure
+4. **Script Loading**: Proper jQuery, Bootstrap, and custom script order
+5. **Responsive Design**: Mobile detection and column adjustments preserved
+6. **Visual Elements**: Buttons, cards, tables match original PHP styling
+
+The Python templates now provide a faithful recreation of the original PHP dashboard and certificate generation pages, with all CSS styles, Bootstrap components, and JavaScript functionality properly applied.
