@@ -1,183 +1,64 @@
-# Migration Tracker
+# Developer Overview
 
-This file tracks the migration of PHP files to the Python + Jinja2 stack. When migrating a PHP file, create a corresponding Python implementation using SQLAlchemy for database operations. Update the status of each file to **Completed** once the migration is done. If a file has not been migrated yet, keep the status as **Incomplete**. You must constantly monitor and update this file as any commits, modifications, or new features are added. You may remove or consolidate entries as needed.
+This document describes the Python code base for the Resources and Event Management System (REMS). The application is mainly built with **Flask**, **SQLAlchemy** and **Jinja2**. You must constantly monitor and update this file as any commits, modifications, or new features are added. You may remove or consolidate entries as needed.
 
-## PHP Files Migration Status
+## Directory Layout
 
-| PHP File | Status |
-|---------|-------|
-| docker/secrets_.php | Completed |
-| index.php | Completed |
-| members/activity-log.php | Completed |
-| members/cds-admin.php | Completed |
-| members/change-password.php | Completed |
-| members/dashboard.php | Completed |
-| members/db-manage.php | Completed |
-| members/db-ops/delete.php | Completed |
-| members/db-ops/insert.php | Completed |
-| members/db-ops/modify.php | Completed |
-| members/db-ops/pushAlert.php | Completed |
-| members/forgot-password.php | Completed |
-| members/form-gen/index.php | Completed |
-| members/form-gen/toCSV.php | Completed |
-| members/form-gen/view-reg.php | Completed |
-| members/header.php | Completed |
-| members/link-short.php | Completed |
-| members/logout.php | Completed |
-| members/mail-list.php | Completed |
-| members/mailer-templates/forgot_pwd_temp.php | Completed |
-| members/mailer-templates/make_mail.php | Completed |
-| members/mailer.php | Completed |
-| members/mainFunction.php | Completed |
-| members/member-login.php | Completed |
-| members/navigation.php | Completed |
-| members/pages/404.php | Completed |
-| members/pages/error.php | Completed |
-| members/profile.php | Completed |
-| members/settings.php | Completed |
-| members/validate.php | Completed |
-| public/cds-public.php | Completed |
-| public/entry.php | Completed |
-| public/pheader.php | Completed |
-| src/PHPMailer/Exception.php | Completed |
-| src/PHPMailer/PHPMailer.php | Completed |
-| src/PHPMailer/SMTP.php | Completed |
-
-## Project Overview
-
-This repository contains a certificate distribution and resource management platform used by organizations. It includes modules for member authentication, certificate generation, form creation, bulk mailing and generic database maintenance. The system relies on three MariaDB/MySQL databases for CMS, form data and mail templates. Public users can search for certificates and submit event registration forms, while members access administrative functions after logging in.
-
-## Execution Flow
-
-1. **Public access** starts at `index.php` which lets visitors search for certificates. This page links to `public/cds-public.php` where certificates and event information are displayed.
-2. **Form submissions** are handled by `public/entry.php` which inserts registration data into the forms database.
-3. **Member login** occurs via `members/member-login.php` and is processed by `members/validate.php`. Once authenticated a session is created.
-4. Most member pages include `members/header.php` which verifies the session and sets up navigation via `members/navigation.php`.
-5. The member dashboard (`members/dashboard.php`) provides quick statistics and links to other tools such as certificate generation (`members/cds-admin.php`), form generation, mailing list management and database maintenance.
-6. Utility functions used across the system are defined in `members/mainFunction.php`. This file logs user actions, checks admin privileges and fetches profile pictures.
-7. Additional pages allow password resets (`forgot-password.php` and `change-password.php`), log viewing, profile editing and other maintenance tasks.
-
-## Python Migration Strategy
-
-The PHP code will be migrated to a Flask application. Each major feature will become a Flask blueprint with SQLAlchemy models for database access. Jinja2 templates will replace the existing PHP HTML. The configuration already lives in `src/config/docker_secrets.py`. The proposed package layout:
-
-```text
+```
 src/
-  app/
-    __init__.py
-    routes/
-    templates/
-    utils/
+  app/             # Flask application package
+    __init__.py    # application factory and blueprint registration
+    models.py      # SQLAlchemy models
+    schemas.py     # Pydantic data models for form validation
+    routes/        # feature blueprints (auth, dashboard, forms, etc.)
+    utils/         # helper modules (auth decorators, email, logging)
+    templates/     # Jinja2 templates
+    static/        # Bootstrap, fonts and JavaScript assets
+  config/          # configuration loaded from Docker secrets
+public/            # static landing pages served by Flask
+members/           # legacy templates now rendered via Jinja2
+docker/            # Docker and database setup scripts
+docs/              # images and sample SQL
 ```
 
-### File Mapping
+## Programming Principles
 
-| PHP File | Planned Python Component | Purpose |
-|---------|---------------------------|---------|
-| index.php | `routes/public.py:home` | Landing page to search events |
-| public/cds-public.php | `routes/public.py:cds_public` | Display certificates and events |
-| public/entry.php | `routes/forms.py:submit_entry` | Record form submissions |
-| public/pheader.php | handled by config module | Load timezone and common settings |
-| members/member-login.php | `routes/auth.py:login` | Member login form |
-| members/validate.php | `routes/auth.py:validate_login` | Process login credentials |
-| members/logout.php | `routes/auth.py:logout` | End session |
-| members/header.php | auth decorator in `utils/auth.py` | Session check helper |
-| members/navigation.php | Jinja2 template `partials/navigation.html` | Sidebar and topbar navigation |
-| members/dashboard.php | `routes/dashboard.py:index` | Member dashboard |
-| members/cds-admin.php | `routes/certificates.py:generate` | Certificate generation via Pillow |
-| members/form-gen/index.php | `routes/forms.py:generator` | Build event registration forms |
-| members/form-gen/view-reg.php | `routes/forms.py:view_registrations` | Display responses |
-| members/form-gen/toCSV.php | `routes/forms.py:download_csv` | Export responses to CSV |
-| members/activity-log.php | `routes/logs.py:list_logs` | View activity logs |
-| members/mail-list.php | `routes/mailing.py:list_manager` | Manage mailing lists |
-| members/mailer.php | `routes/mailing.py:bulk_mail` | Send emails using smtplib |
-| members/mailer-templates/forgot_pwd_temp.php | Jinja2 template `email/forgot_password.html` | Password reset email |
-| members/mailer-templates/make_mail.php | `utils/email.py:build_mail` | Common mail builder |
-| members/mainFunction.php | `utils/helpers.py` | Logging and admin checks |
-| members/profile.php | `routes/profile.py:view_profile` | Profile display and picture upload |
-| members/change-password.php | `routes/auth.py:change_password` | Verify reset token and update password |
-| members/forgot-password.php | `routes/auth.py:forgot_password` | Send password reset link |
-| members/db-manage.php | `routes/db.py:manage` | Generic DB browser |
-| members/db-ops/insert.php | `routes/db.py:insert_row` | Insert record |
-| members/db-ops/delete.php | `routes/db.py:delete_row` | Delete record |
-| members/db-ops/modify.php | `routes/db.py:modify_row` | Update record |
-| members/db-ops/pushAlert.php | `routes/db.py:push_alert` | Insert alert notification |
-| members/link-short.php | `routes/link_short.py:create_short_url` | Shorten URLs using external API |
-| members/pages/404.php | Jinja2 template `errors/404.html` | Not found page |
-| members/pages/error.php | Jinja2 template `errors/db_error.html` | Display database errors |
-| members/settings.php | `routes/settings.py:page_not_found` | Placeholder settings/404 |
-| src/PHPMailer/Exception.php | replaced by `utils/email.py` using smtplib | Email helper classes |
-| src/PHPMailer/PHPMailer.php | replaced by `utils/email.py` using smtplib | Email helper classes |
-| src/PHPMailer/SMTP.php | replaced by `utils/email.py` using smtplib | Email helper classes |
+- **Blueprint modularity** – each major feature lives in its own module inside `src/app/routes`.
+- **SQLAlchemy models** – database tables are represented in `models.py` and reused across routes.
+- **Pydantic validation** – forms and CSV uploads use schemas from `schemas.py`.
+- **Jinja2 templates** – HTML pages are rendered from files under `src/app/templates`.
+- **Docker first** – use `Dockerfile` and `docker-compose.yml` for local development and deployment.
+- **Helper utilities** – common logic for authentication and logging lives under `src/app/utils`.
 
-These notes serve as the guiding strategy for the full migration to Python. Update this file as features are implemented.
+## Jinja2 Template Guidelines
 
-## Migration Notes
+Most pages share a common structure:
 
-- Converted dashboard and password reset pages to Flask.
-- Introduced `auth` and `dashboard` blueprints with session-based login and statistics view.
-- Configured multiple database binds for forms and mail data in the application factory.
-- Added Pydantic schemas for login and password reset forms for better validation.
-- Added form generation blueprint routes for creating tables, viewing registrations and downloading CSV exports.
-- Implemented password reset request flow with email sending using `smtplib`.
-- Added mailing list generator and bulk mailer routes with new templates.
-- Added database management blueprint with routes to browse, insert, modify and delete rows.
-- Introduced generic email builder and forgot-password email template.
+1. **Static assets** – include Bootstrap, FontAwesome and custom CSS in the `<head>` using `url_for('static', ...)`.
+2. **Navigation** – import `partials/navigation.html` to display the sidebar and topbar.
 
-- Added link shortener blueprint with TinyURL API integration.
-- Implemented user profile editor with image uploads and detail updates.
-- Added navigation template and placeholder settings route.
-- Created generic error handlers with 404 and database error pages.
-- All legacy PHP modules migrated to Flask with updated Docker configuration and documentation.
-- Ensured login authentication hashes passwords using SHA1 before querying the database.
-- Adjusted certificate model to store the `year` column as an integer to match the MySQL schema.
-- Sanitized legacy PHP templates (`index.php` and `members/member-login.php`) to remove PHP code and use Jinja2 placeholders.
-- Reworked `login.html`, navigation partial and dashboard template to mirror the original Bootstrap layout from the PHP version.
-- Added topbar navigation partial, restored dashboard info cards and issue button, and included FontAwesome and dark-mode scripts across templates.
-- Recreated certificate generator template with navigation, sample CSV link and generation log table. Route now returns row data for display.
-- Updated mailing list generator, bulk mailer, form generator and registrations templates to include sidebar navigation and topbar for consistent Bootstrap styling.
+This ensures consistent styling and keeps navigation identical across views.
 
-## What to do next? (TODO)
+## Key Modules
 
-- **COMPLETED**: Fixed the poorly done PHP -> HTML/j2 migrations to make the new files identical to the old ones. Added proper HTML structure, fixed navigation includes, added metadata section to certificate generation, and ensured proper Bootstrap CSS and JavaScript imports across all templates.
-- **COMPLETED**: Matched the original PHP layout structure, bootstrap, css/styles and features. Achieved faithful reproduction of the original PHP files, converting the dynamic PHP parts to Jinja2 syntax.
-- **COMPLETED**: Fixed certificate generation template to include proper sidebar, topbar, metadata section, and generation log table with accurate layout matching the PHP version.
-- **COMPLETED**: Migrated from separate `topbar.html` to unified `navigation.html` containing both sidebar and topbar components. Removed redundant topbar includes from mailing and forms templates.
+| Module | Purpose |
+|-------|---------|
+| `src/app/__init__.py` | Application factory and blueprint registration |
+| `src/app/models.py` | SQLAlchemy models for certificates, events, logs and users |
+| `src/app/schemas.py` | Pydantic schemas used for form and CSV validation |
+| `src/app/routes/auth.py` | Login, logout and password management |
+| `src/app/routes/certificates.py` | Certificate generation from CSV uploads |
+| `src/app/routes/forms.py` | Registration form creation and CSV export |
+| `src/app/routes/mailing.py` | Mailing list creation and bulk email sending |
+| `src/app/routes/db.py` | Generic database browser and edit interface |
+| `src/app/routes/public.py` | Public certificate search and event listing |
+| `src/app/routes/profile.py` | User profile view and picture upload |
+| `src/app/routes/logs.py` | Activity log listing for users |
+| `src/app/routes/link_short.py` | Short URL generator using an external API |
+| `src/app/routes/errors.py` | Custom 404 and 500 error handlers |
+| `src/app/utils/auth.py` | `login_required` decorator for protecting routes |
+| `src/app/utils/email.py` | Utilities for building and sending emails |
+| `src/app/utils/helpers.py` | Logging and admin-check helpers |
+| `src/app/utils/pagination.py` | Simple pagination helper class |
 
-## Recent Fixes Applied
-
-### Dashboard Template (`dashboard.html`)
-- Fixed HTML structure with proper wrapper divs and content layout
-- Added navigation template containing both sidebar and topbar navigation components
-- Corrected footer placement within proper wrapper structure
-- Fixed script organization and removed duplicates
-- Maintained Bootstrap layout and styling consistency with PHP version
-
-### Certificate Generation Template (`cert_generate.html`)
-- Completely restructured to match PHP version layout exactly
-- Added proper HTML head with Bootstrap CSS imports
-- Added dynamic title based on generation state
-- Added missing "Metadata" section to display file information
-- Fixed form structure and JavaScript for file upload
-- Corrected table structure for generation log
-- Added proper footer and script imports
-
-### Certificate Generation Route (`certificates.py`)
-- Fixed all syntax errors and type issues
-- Added proper file metadata collection (name, type, size in KB)
-- Improved error handling for file uploads and date parsing
-- Fixed SQLAlchemy model instantiation using attribute assignment
-- Added proper type conversion for CSV data (year field)
-- Maintained functionality while ensuring type safety
-
-
-### Template Structure Consolidation (`partials/navigation.html`)
-
-- Unified sidebar and topbar navigation into single template file
-- Removed separate `topbar.html` file references from mailing and forms templates
-- `navigation.html` now contains complete navigation structure:
-    - Lines 1-56: Sidebar navigation with menu items and branding
-    - Lines 57-222: Topbar with search, alerts, user dropdown, and mobile toggles
-- Updated template includes to use only `{% include 'partials/navigation.html' %}`
-- Maintained responsive design and Bootstrap layout consistency
-
+Keep this document up to date as modules evolve. It should help new contributors navigate the repository quickly and start coding in Python from day one.
