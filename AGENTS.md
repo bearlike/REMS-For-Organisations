@@ -132,3 +132,4 @@ These notes serve as the guiding strategy for the full migration to Python. Upda
 - Ensured login authentication hashes passwords using SHA1 before querying the database.
 - Adjusted certificate model to store the `year` column as an integer to match the MySQL schema.
 - Sanitized legacy PHP templates (`index.php` and `members/member-login.php`) to remove PHP code and use Jinja2 placeholders.
+- Reworked `login.html`, navigation partial and dashboard template to mirror the original Bootstrap layout from the PHP version.

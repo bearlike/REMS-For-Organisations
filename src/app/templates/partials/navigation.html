@@ -1,7 +1,19 @@
-<ul class="nav flex-column">
-  <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard.index') }}">Dashboard</a></li>
-  <li class="nav-item"><a class="nav-link" href="{{ url_for('forms.generator') }}">Form Generator</a></li>
-  <li class="nav-item"><a class="nav-link" href="{{ url_for('mailing.list_manager') }}">Mailing Lists</a></li>
-  <li class="nav-item"><a class="nav-link" href="{{ url_for('db.manage') }}">Database</a></li>
-  <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a></li>
-</ul>
+<nav id="navbar" class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
+  <div class="container-fluid d-flex flex-column p-0">
+    <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
+      <div class="sidebar-brand-icon"><img class="logo" src="{{ url_for('static', filename='assets/img/Logo_Banner_White.png') }}"></div>
+    </a>
+    <hr class="sidebar-divider my-0">
+    <ul class="nav navbar-nav text-light" id="accordionSidebar">
+      <li class="nav-item" role="presentation"><a class="nav-link" href="{{ url_for('dashboard.index') }}"><i class="fas fa-tachometer-alt"></i><span>&nbsp;Dashboard</span></a></li>
+      <li class="nav-item" role="presentation"><a class="nav-link" href="{{ url_for('certificates.generate') }}"><i class="fas fa-medal"></i><span>&nbsp;Certificate Generator</span></a></li>
+      <li class="nav-item" role="presentation"><a class="nav-link" href="{{ url_for('mailing.bulk_mail') }}"><i class="fas fa-mail-bulk"></i><span>&nbsp;Bulk Mailer</span></a></li>
+      <li class="nav-item" role="presentation"><a class="nav-link" href="{{ url_for('mailing.list_manager') }}"><i class="fas fa-list"></i><span>&nbsp;Update Mailing List</span></a></li>
+      <li class="nav-item" role="presentation"><a class="nav-link" href="{{ url_for('forms.generator') }}"><i class="fab fa-wpforms"></i><span>&nbsp;Form Generator</span></a></li>
+      <li class="nav-item" role="presentation"><a class="nav-link" href="{{ url_for('link_short.create_short_url') }}"><i class="fas fa-link"></i><span>&nbsp;Link Shortner</span></a></li>
+      <li class="nav-item" role="presentation"><a class="nav-link" href="{{ url_for('forms.view_registrations') }}"><i class="fa fa-eye"></i><span>&nbsp;View Registration</span></a></li>
+      <li class="nav-item" role="presentation"><a class="nav-link" href="{{ url_for('db.manage') }}"><i class="fas fa-database"></i><span>&nbsp;Maintenance</span></a></li>
+      <li class="nav-item" role="presentation"><a class="nav-link" href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out-alt"></i><span>&nbsp;Logout</span></a></li>
+    </ul>
+  </div>
+</nav>

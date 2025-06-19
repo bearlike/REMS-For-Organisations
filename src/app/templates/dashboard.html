@@ -2,23 +2,38 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Dashboard: {{ org_name }}</title>
+    <link rel="icon" type="image/png" sizes="600x600" href="{{ url_for('static', filename='assets/img/Logo_White.png') }}" async>
     <link rel="stylesheet" href="{{ url_for('static', filename='assets/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/custom.css') }}">
   </head>
   <body id="page-top">
-    <div class="container-fluid">
-      <div class="row">
-        <aside class="col-md-2 bg-light py-4">
-          {% include 'partials/navigation.html' %}
-        </aside>
-        <main class="col-md-10 mt-4">
-          {% block content %}
-          <h3>Welcome!</h3>
-          <p class="mb-4">Latest event registrations: {{ registration_count }}</p>
-          <p class="mb-4">Total events: {{ events_count }}</p>
-          {% endblock %}
-        </main>
+    <div id="wrapper">
+      {% include 'partials/navigation.html' %}
+      <div class="d-flex flex-column" id="content-wrapper">
+        <div id="content">
+          <div class="container-fluid">
+            <div class="d-sm-flex justify-content-between align-items-center mb-4">
+              <h3 class="text-dark mb-0">Welcome!</h3>
+            </div>
+            {% block content %}
+            <p class="mb-4">Latest event registrations: {{ registration_count }}</p>
+            <p class="mb-4">Total events: {{ events_count }}</p>
+            {% endblock %}
+          </div>
+        </div>
+        <footer class="bg-white sticky-footer">
+          <div class="container my-auto">
+            <div class="text-center">Made with ❤️ by <a href="https://thekrishna.in/">Krishnakanth</a> and <a href="https://www.linkedin.com/in/mahavisvanathan/">Mahalakshumi</a></div>
+          </div>
+        </footer>
       </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
+    <script src="{{ url_for('static', filename='assets/js/theme.js') }}"></script>
   </body>
 </html>
