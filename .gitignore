@@ -3,6 +3,7 @@
 
 
 # Uploaded Files for certificate generation
+/src/app/static/certificates/*/
 members/CDS_Admin/Uploaded files/
 
 #Uploaded files for mailing list updation
