@@ -133,6 +133,7 @@ These notes serve as the guiding strategy for the full migration to Python. Upda
 - Adjusted certificate model to store the `year` column as an integer to match the MySQL schema.
 - Sanitized legacy PHP templates (`index.php` and `members/member-login.php`) to remove PHP code and use Jinja2 placeholders.
 - Reworked `login.html`, navigation partial and dashboard template to mirror the original Bootstrap layout from the PHP version.
+- Added topbar navigation partial, restored dashboard info cards and issue button, and included FontAwesome and dark-mode scripts across templates.
 
 ## What to do next? (TODO)
 
