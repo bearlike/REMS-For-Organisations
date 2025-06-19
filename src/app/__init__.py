@@ -42,11 +42,11 @@ def create_app() -> Flask:
                 db_user = Login.query.filter_by(LoginName=user).first()
                 if db_user:
                     current_user = db_user
-                    # Build profile picture path similar to PHP retProfilePic function
+                    # Build profile path similar to PHP retProfilePic
                     if db_user.imgsrc:
                         profile_pic = url_for(
                             "static",
-                            filename=f"assets/img/avatars/users/{db_user.imgsrc}",
+                            filename=(f"assets/img/avatars/users/{db_user.imgsrc}"),
                         )
                     else:
                         profile_pic = url_for(
@@ -56,11 +56,13 @@ def create_app() -> Flask:
                 # If there's any database error, return default values
                 pass
 
+        from .utils.alerts import get_recent_alerts
+
         return {
             "current_user": current_user,
             "profile_pic": profile_pic,
             "org_name": CONFIG.OrgName,
-            "alerts": [],  # TODO: Implement alerts functionality
+            "alerts": get_recent_alerts(),
         }
 
     # pylint: disable=import-outside-toplevel

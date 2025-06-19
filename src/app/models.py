@@ -67,3 +67,18 @@ class Login(db.Model):
     Phno: Mapped[Optional[str]]
     Signature: Mapped[Optional[str]]
     imgsrc: Mapped[Optional[str]]
+
+
+class Notification(db.Model):
+    """Dashboard alert notification."""
+
+    __tablename__ = "notification"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    timestamp: Mapped[datetime] = mapped_column(
+        server_default=db.func.current_timestamp()
+    )
+    user: Mapped[str]
+    message: Mapped[str]
+    type: Mapped[str]
+    clickURL: Mapped[str]

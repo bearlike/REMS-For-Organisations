@@ -100,16 +100,14 @@
                     <div class="form-group">
                       <div class="dropdown">
                         <select class="btn btn-sm btn-primary dropdown-toggle" name="type">
-                          <option value="none" selected>None</option>
-                          <option value="normal">Normal</option>
-                          <option value="info">Infomation</option>
+                          <option value="info" selected>Information</option>
                           <option value="success">Success</option>
                           <option value="warning">Warning</option>
                         </select>
                       </div>
                     </div>
                     {% else %}
-                    <input type="hidden" value="none" name="type" />
+                    <input type="hidden" value="info" name="type" />
                     {% endif %}
                     <div class="form-group"><input type="text" class="form-control btn-sm"
                         placeholder="Enter the message to be sent" name="alertMessage" /></div>
