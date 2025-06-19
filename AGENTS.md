@@ -131,3 +131,4 @@ These notes serve as the guiding strategy for the full migration to Python. Upda
 - All legacy PHP modules migrated to Flask with updated Docker configuration and documentation.
 - Ensured login authentication hashes passwords using SHA1 before querying the database.
 - Adjusted certificate model to store the `year` column as an integer to match the MySQL schema.
+- Sanitized legacy PHP templates (`index.php` and `members/member-login.php`) to remove PHP code and use Jinja2 placeholders.
