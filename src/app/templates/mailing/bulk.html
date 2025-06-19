@@ -1,36 +1,63 @@
 <!doctype html>
 <html lang="en">
-  <head id="head_tag">
-    <meta charset="utf-8">
-    <title>Bulk Mailer</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='assets/bootstrap/css/bootstrap.min.css') }}">
-  </head>
-  <body>
-    <div class="container mt-4">
-      <h3>Bulk Mailer</h3>
-      {% if error %}
-      <div class="alert alert-danger">{{ error }}</div>
-      {% elif success %}
-      <div class="alert alert-success">Emails sent successfully.</div>
-      {% endif %}
-      <form method="post">
-        <div class="mb-2">
-          <label>Mailing List</label>
-          <select name="mailing_list" class="form-control">
-            {% for t in mailing_lists %}
-            <option value="{{ t }}">{{ t }}</option>
-            {% endfor %}
-          </select>
-        </div>
-        <div class="mb-2"><input class="form-control" type="text" name="mail_subject" placeholder="Subject" required></div>
-        <div class="mb-2"><input class="form-control" type="text" name="mail_title" placeholder="Email Title" required></div>
-        <div class="mb-2">
-          <input class="form-control" type="text" name="mail_button_label" placeholder="Button label" value="{{ cfg.buttonLabel }}">
-          <input class="form-control mt-1" type="text" name="mail_button_url" placeholder="Button URL" value="{{ cfg.buttonURL }}">
-        </div>
-        <div class="mb-2">
-          <input class="form-control" type="text" name="mail_logo_url" placeholder="Logo URL" value="{{ cfg.logoURL }}">
-          <input class="form-control mt-1" type="text" name="mail_coverimg_url" placeholder="Cover image URL" value="{{ cfg.coverURL }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <link rel="icon" type="image/png" sizes="600x600" href="{{ url_for('static', filename='assets/img/Logo_White.png') }}" async>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/custom.css') }}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css" async>
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/fonts/fontawesome5-overrides.min.css') }}">
+  <body id="page-top">
+    <div id="wrapper">
+      {% include 'partials/navigation.html' %}
+      <div class="d-flex flex-column" id="content-wrapper">
+        <div id="content">
+          {% include 'partials/topbar.html' %}
+          <div class="container-fluid">
+            <div class="d-sm-flex justify-content-between align-items-center mb-4">
+              <h3 class="text-dark mb-0">Bulk Mailer</h3>
+            </div>
+            {% if error %}
+            <div class="alert alert-danger">{{ error }}</div>
+            {% elif success %}
+            <div class="alert alert-success">Emails sent successfully.</div>
+            {% endif %}
+            <form method="post">
+              <div class="mb-2">
+                <label>Mailing List</label>
+                <select name="mailing_list" class="form-control">
+                  {% for t in mailing_lists %}
+                  <option value="{{ t }}">{{ t }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="mb-2"><input class="form-control" type="text" name="mail_subject" placeholder="Subject" required></div>
+              <div class="mb-2"><input class="form-control" type="text" name="mail_title" placeholder="Email Title" required></div>
+              <div class="mb-2">
+                <input class="form-control" type="text" name="mail_button_label" placeholder="Button label" value="{{ cfg.buttonLabel }}">
+                <input class="form-control mt-1" type="text" name="mail_button_url" placeholder="Button URL" value="{{ cfg.buttonURL }}">
+              </div>
+              <div class="mb-2">
+                <input class="form-control" type="text" name="mail_logo_url" placeholder="Logo URL" value="{{ cfg.logoURL }}">
+                <input class="form-control mt-1" type="text" name="mail_coverimg_url" placeholder="Cover image URL" value="{{ cfg.coverURL }}">
+              </div>
+              <div class="mb-2">
+                <textarea class="form-control" name="mail_body" rows="6" placeholder="Mail body"></textarea>
+              </div>
+              <button class="btn btn-primary">Send</button>
+            </form>
+          </div>
+        <footer class="bg-white sticky-footer">
+          <div class="container my-auto">
+            <div class="text-center">Made with ❤️ by <a href="https://thekrishna.in/">Krishnakanth</a> and <a href="https://www.linkedin.com/in/mahavisvanathan/">Mahalakshumi</a></div>
+          </div>
+        </footer>
+      </div>
+    <a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
+    <script src="{{ url_for('static', filename='assets/js/theme.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/dark-mode.js') }}"></script>
         </div>
         <div class="mb-2">
           <textarea class="form-control" name="mail_body" rows="6" placeholder="Mail body"></textarea>
