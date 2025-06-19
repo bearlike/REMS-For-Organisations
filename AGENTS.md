@@ -1,6 +1,6 @@
 # Migration Tracker
 
-This file tracks the migration of PHP files to the Python + Jinja2 stack. When migrating a PHP file, create a corresponding Python implementation using SQLAlchemy for database operations. Update the status of each file to **Completed** once the migration is done. If a file has not been migrated yet, keep the status as **Incomplete**.
+This file tracks the migration of PHP files to the Python + Jinja2 stack. When migrating a PHP file, create a corresponding Python implementation using SQLAlchemy for database operations. Update the status of each file to **Completed** once the migration is done. If a file has not been migrated yet, keep the status as **Incomplete**. You must constantly monitor and update this file as any commits, modifications, or new features are added. You may remove or consolidate entries as needed.
 
 ## PHP Files Migration Status
 
@@ -82,7 +82,7 @@ src/
 | members/validate.php | `routes/auth.py:validate_login` | Process login credentials |
 | members/logout.php | `routes/auth.py:logout` | End session |
 | members/header.php | auth decorator in `utils/auth.py` | Session check helper |
-| members/navigation.php | Jinja2 template `partials/navigation.html` | Sidebar and alerts |
+| members/navigation.php | Jinja2 template `partials/navigation.html` | Sidebar and topbar navigation |
 | members/dashboard.php | `routes/dashboard.py:index` | Member dashboard |
 | members/cds-admin.php | `routes/certificates.py:generate` | Certificate generation via Pillow |
 | members/form-gen/index.php | `routes/forms.py:generator` | Build event registration forms |
@@ -129,3 +129,55 @@ These notes serve as the guiding strategy for the full migration to Python. Upda
 - Added navigation template and placeholder settings route.
 - Created generic error handlers with 404 and database error pages.
 - All legacy PHP modules migrated to Flask with updated Docker configuration and documentation.
+- Ensured login authentication hashes passwords using SHA1 before querying the database.
+- Adjusted certificate model to store the `year` column as an integer to match the MySQL schema.
+- Sanitized legacy PHP templates (`index.php` and `members/member-login.php`) to remove PHP code and use Jinja2 placeholders.
+- Reworked `login.html`, navigation partial and dashboard template to mirror the original Bootstrap layout from the PHP version.
+- Added topbar navigation partial, restored dashboard info cards and issue button, and included FontAwesome and dark-mode scripts across templates.
+- Recreated certificate generator template with navigation, sample CSV link and generation log table. Route now returns row data for display.
+- Updated mailing list generator, bulk mailer, form generator and registrations templates to include sidebar navigation and topbar for consistent Bootstrap styling.
+
+## What to do next? (TODO)
+
+- **COMPLETED**: Fixed the poorly done PHP -> HTML/j2 migrations to make the new files identical to the old ones. Added proper HTML structure, fixed navigation includes, added metadata section to certificate generation, and ensured proper Bootstrap CSS and JavaScript imports across all templates.
+- **COMPLETED**: Matched the original PHP layout structure, bootstrap, css/styles and features. Achieved faithful reproduction of the original PHP files, converting the dynamic PHP parts to Jinja2 syntax.
+- **COMPLETED**: Fixed certificate generation template to include proper sidebar, topbar, metadata section, and generation log table with accurate layout matching the PHP version.
+- **COMPLETED**: Migrated from separate `topbar.html` to unified `navigation.html` containing both sidebar and topbar components. Removed redundant topbar includes from mailing and forms templates.
+
+## Recent Fixes Applied
+
+### Dashboard Template (`dashboard.html`)
+- Fixed HTML structure with proper wrapper divs and content layout
+- Added navigation template containing both sidebar and topbar navigation components
+- Corrected footer placement within proper wrapper structure
+- Fixed script organization and removed duplicates
+- Maintained Bootstrap layout and styling consistency with PHP version
+
+### Certificate Generation Template (`cert_generate.html`)
+- Completely restructured to match PHP version layout exactly
+- Added proper HTML head with Bootstrap CSS imports
+- Added dynamic title based on generation state
+- Added missing "Metadata" section to display file information
+- Fixed form structure and JavaScript for file upload
+- Corrected table structure for generation log
+- Added proper footer and script imports
+
+### Certificate Generation Route (`certificates.py`)
+- Fixed all syntax errors and type issues
+- Added proper file metadata collection (name, type, size in KB)
+- Improved error handling for file uploads and date parsing
+- Fixed SQLAlchemy model instantiation using attribute assignment
+- Added proper type conversion for CSV data (year field)
+- Maintained functionality while ensuring type safety
+
+
+### Template Structure Consolidation (`partials/navigation.html`)
+
+- Unified sidebar and topbar navigation into single template file
+- Removed separate `topbar.html` file references from mailing and forms templates
+- `navigation.html` now contains complete navigation structure:
+    - Lines 1-56: Sidebar navigation with menu items and branding
+    - Lines 57-222: Topbar with search, alerts, user dropdown, and mobile toggles
+- Updated template includes to use only `{% include 'partials/navigation.html' %}`
+- Maintained responsive design and Bootstrap layout consistency
+

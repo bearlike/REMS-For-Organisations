@@ -1,12 +1,14 @@
 <!doctype html>
 <html lang="en">
-  <head>
+  <head id="head_tag">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Certificate Distribution System (CDS)</title>
     <link rel="icon" type="image/png" sizes="600x600" href="{{ url_for('static', filename='assets/img/Logo_White.png') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='assets/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&display=swap" async>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css" async>
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/fonts/fontawesome5-overrides.min.css') }}">
   </head>
   <body class="bg-gradient-primary">
     <div class="container">
@@ -24,25 +26,34 @@
                       <h6 class="text-dark mb-2">SVCE-ACM Student Chapter</h6>
                       <h4 class="text-dark mb-2">Certificate Distribution System (CDS)</h4>
                       <p class="mb-4">We're here to make your life much easier. Just enter the event name and watch then watch happen!</p>
-                    </div>
-                    <form class="user" action="{{ url_for('public.home') }}" method="get">
+                    </div>                    <form class="user" action="{{ url_for('public.cds_public') }}" method="get">
                       <div class="form-group">
                         <input class="form-control form-control-user" type="text" placeholder="Enter Event Name..." name="event" required>
                       </div>
                       <button class="btn btn-primary btn-block text-white btn-user" type="submit">Search Event</button>
                     </form>
-                    <div class="text-center">
-                      <p class="mb-4 small" style="color: red;">
-                        {% if event_not_found %}
-                          Event not found. Are you sure you're spelling it right?
-                        {% endif %}
-                      </p>
+
+                    <!-- Error Alert Section -->
+                    {% if event_not_found %}
+                    <div class="text-center mt-3">
+                      <div class="alert alert-danger" role="alert">
+                        <i class="fas fa-exclamation-triangle mr-2"></i>
+                        <strong>{{ error_message or "Event not found. Are you sure you're spelling it right?" }}</strong>
+                      </div>
+                    </div>
+                    {% endif %}
+                      <!-- Success Tips Section -->
+                    <div class="text-center mt-3">
+                      <div class="alert alert-info small" role="alert">
+                        <i class="fas fa-lightbulb mr-2"></i>
+                        <strong>Tip:</strong> Try searching with the exact event name as announced. Names are case-insensitive.
+                      </div>
                     </div>
                     <div class="text-center">
                       <hr>
                     </div>
                     <div class="text-center"><a class="small" href="{{ url_for('public.home') }}?mode">Don't Know the Event Name? Click here.</a></div>
-                    <div class="text-center"><a class="small" href="/members/member-login.php">Are you a member? Login!</a></div>
+                    <div class="text-center"><a class="small" href="{{ url_for('auth.login') }}">Are you a member? Login!</a></div>
                   </div>
                   <div class="text-center">
                     <p class="small">Made with ❤️ by <a href="https://thekrishna.in/">Krishnakanth</a> and <a href="https://www.linkedin.com/in/mahavisvanathan/">Mahalakshumi</a></p>
@@ -53,10 +64,30 @@
           </div>
         </div>
       </div>
-    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    </div>    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
     <script src="{{ url_for('static', filename='assets/js/theme.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/dark-mode.js') }}"></script>    <!-- Enhanced UX JavaScript -->
+    <script>
+      $(document).ready(function() {
+        // Auto-hide alerts after 10 seconds
+        setTimeout(function() {
+          $('.alert').fadeOut('slow');
+        }, 10000);
+
+        // Focus on search input if there's an error
+        if ($('.alert-danger').length > 0) {
+          $('input[name="event"]').focus();
+        }
+
+        // Show loading state when form is submitted
+        $('form.user').on('submit', function() {
+          var btn = $(this).find('button[type="submit"]');
+          btn.html('<i class="fas fa-spinner fa-spin mr-2"></i>Searching...');
+          btn.prop('disabled', true);
+        });
+      });
+    </script>
   </body>
 </html>

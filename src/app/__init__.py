@@ -1,7 +1,8 @@
 """Flask application factory and database setup."""
 
 import os
-from flask import Flask
+from flask import Flask, session, url_for
+
 from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
 
@@ -24,6 +25,43 @@ def create_app() -> Flask:
     )
 
     db.init_app(app)
+
+    @app.context_processor
+    def inject_user_data():
+        """Inject current user data into all templates."""
+        # pylint: disable=import-outside-toplevel, relative-beyond-top-level
+        from .models import Login
+        from ..config.docker_secrets import CONFIG
+
+        user = session.get("user")
+        current_user = None
+        profile_pic = url_for("static", filename="assets/img/avatars/image2.png")
+
+        if user:
+            try:
+                db_user = Login.query.filter_by(LoginName=user).first()
+                if db_user:
+                    current_user = db_user
+                    # Build profile picture path similar to PHP retProfilePic function
+                    if db_user.imgsrc:
+                        profile_pic = url_for(
+                            "static",
+                            filename=f"assets/img/avatars/users/{db_user.imgsrc}",
+                        )
+                    else:
+                        profile_pic = url_for(
+                            "static", filename="assets/img/avatars/image2.png"
+                        )
+            except Exception:
+                # If there's any database error, return default values
+                pass
+
+        return {
+            "current_user": current_user,
+            "profile_pic": profile_pic,
+            "org_name": CONFIG.OrgName,
+            "alerts": [],  # TODO: Implement alerts functionality
+        }
 
     # pylint: disable=import-outside-toplevel
     from .routes.public import public_bp

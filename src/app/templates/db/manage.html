@@ -1,81 +1,204 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Database Manage</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='assets/bootstrap/css/bootstrap.min.css') }}">
-  </head>
-  <body>
-    <div class="container mt-4">
-      <h3>Database Browser</h3>
-      <form method="get" class="mb-3">
-        <div class="row">
-          <div class="col-md-3">
-            <select name="db" class="form-control" onchange="this.form.submit()">
-              <option value="1" {{ 'selected' if db_code == '1' else '' }}>CMS</option>
-              <option value="2" {{ 'selected' if db_code == '2' else '' }}>Forms</option>
-              <option value="3" {{ 'selected' if db_code == '3' else '' }}>Mailer</option>
+
+<head id="head_tag">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <title>Database Management: {{ org_name }}</title>
+  <link rel="icon" type="image/png" sizes="600x600" href="{{ url_for('static', filename='assets/img/Logo_White.png') }}"
+    async>
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/bootstrap/css/bootstrap.min.css') }}">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css" async>
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/custom.css') }}">
+</head>
+
+<body id="page-top">
+  <div id="wrapper">
+    {% include 'partials/navigation.html' %}
+    <div class="container-fluid">
+      <div class="d-sm-flex justify-content-between align-items-center mb-4">
+        <h3 class="text-dark mb-0">Manage Databases</h3>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-xl-3 mb-4">
+          <form action="{{ url_for('db.manage') }}" method="GET">
+            <select class="form-control border-1 small" style="width: 68%;max-width:15em;" onchange="this.form.submit()" name="db">
+              <option value="1" {{ 'selected' if db_code == '1' else '' }}>CMS database</option>
+              <option value="2" {{ 'selected' if db_code == '2' else '' }}>Forms database</option>
+              <option value="3" {{ 'selected' if db_code == '3' else '' }}>Mailer database</option>
             </select>
-          </div>
-          <div class="col-md-3">
-            <select name="table" class="form-control" onchange="this.form.submit()">
-              <option value="">Choose table</option>
+          </form>
+          <form action="{{ url_for('db.manage') }}" method="GET">
+            <input type="hidden" name="db" value="{{ db_code }}" />
+            <select onchange="this.form.submit()" class="form-control border-1 small" style="width: 68%;max-width:15em;" name="table" required>
+              <option value="">Select a table</option>
               {% for t in tables %}
               <option value="{{ t }}" {{ 'selected' if t == table else '' }}>{{ t }}</option>
               {% endfor %}
-            </select>
+            </select><br>
+          </form>
+        </div>
+        <div class="col-md-6 col-xl-3 mb-4"></div>
+        <div class="col-md-6 col-xl-3 mb-4"></div>
+        <div class="col-md-6 col-xl-3 mb-4">
+          <div class="card shadow border-left-success py-2">
+            <div class="card-body">
+              <div class="row align-items-center no-gutters">
+                <div class="col mr-2">
+                  <div class="text-uppercase text-success font-weight-bold text-xs mb-1"><span>Total Rows</span></div>
+                  <div class="text-dark font-weight-bold h5 mb-0"><span>{% if table and total_rows %}{{ total_rows }}{% else %}No table chosen{% endif %}</span></div>
+                </div>
+                <div class="col-auto"><i class="fas fa-database fa-2x text-gray-300"></i></div>
+              </div>
+            </div>
           </div>
         </div>
-      </form>
+      </div>
+      <div class="card shadow">
+        <div class="card-header py-3">
+          <p class="text-primary m-0 font-weight-bold">Table Name: {{ table if table else 'No table selected' }}</p>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6 text-nowrap">
+              <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable">
+                <label>Show&nbsp;
+                  <form action="{{ url_for('db.manage') }}" method="GET">
+                    <input type="hidden" name="table" value="{{ table }}" />
+                    <input type="hidden" name="page" value="1" />
+                    <input type="hidden" name="db" value="{{ db_code }}" />
+                    <select onchange="this.form.submit()" name="perPage" class="form-control form-control-sm custom-select custom-select-sm">
+                      <option value="10" {{ 'selected' if per_page == 10 else '' }}>10</option>
+                      <option value="25" {{ 'selected' if per_page == 25 else '' }}>25</option>
+                      <option value="50" {{ 'selected' if per_page == 50 else '' }}>50</option>
+                      <option value="100" {{ 'selected' if per_page == 100 else '' }}>100</option>
+                    </select>&nbsp;
+                  </form>
+                </label>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <!-- Search functionality can be added here if needed -->
+            </div>
+          </div>
+          {% if table %}
+          <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+            <table class="table dataTable table-sm my-0 table-striped" id="dataTable">
+              <thead>
+                <tr>
+                  {% for col in columns %}
+                  <th>{{ col }}&nbsp;&nbsp;</th>
+                  {% endfor %}
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <form action="{{ url_for('db.insert_row') }}" method="POST">
+                    <input type="hidden" value="{{ table }}" name="table">
+                    <input type="hidden" value="{{ db_code }}" name="db">
+                    {% for col in columns %}
+                    {% if col not in ('id', 'timestamp') %}
+                    <td>
+                      <input type="text" placeholder="{{ col }}" name="{{ col }}" class="form-control">
+                    </td>
+                    {% else %}
+                    <td></td>
+                    {% endif %}
+                    {% endfor %}
+                    <td align="center">
+                      <button type="submit" class="btn btn-success ml-2 btn-sm"><i class="fas fa-plus text-white"></i></button>
+                    </td>
+                  </form>
+                </tr>
+                {% for row in rows %}
+                <tr>
+                  {% for col in columns %}
+                  {% if col != "cert_link" %}
+                  <td>{{ row[col] }}</td>
+                  {% else %}
+                  <td><a href="{{ row[col] }}">Link</a></td>
+                  {% endif %}
+                  {% endfor %}
+                  <td align="center">
+                    <a href="{{ url_for('db.delete_row', table=table, id=row.id, db=db_code) }}" class="btn btn-danger ml-2 btn-sm">
+                      <i class="fas fa-trash text-white"></i>
+                    </a>
+                    <div style="padding:10px;">
+                      <a href="{{ url_for('db.modify_row', row_id=row.id, db=db_code, table=table) }}" class="btn btn-info ml-2 btn-sm">
+                        <i class="fas fa-edit text-white"></i>
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+              <tfoot>
+                <tr>
+                  {% for col in columns %}
+                  <th>{{ col }}</th>
+                  {% endfor %}
+                  <th></th>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
 
-      {% if table %}
-      <table class="table table-sm table-striped">
-        <thead>
-          <tr>
-            {% for col in columns %}
-            <th>{{ col }}</th>
-            {% endfor %}
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <form action="{{ url_for('db.insert_row') }}" method="post">
-              <input type="hidden" name="db" value="{{ db_code }}">
-              <input type="hidden" name="table" value="{{ table }}">
-              {% for col in columns %}
-              <td>
-                {% if col not in ('id', 'timestamp') %}
-                <input type="text" name="{{ col }}" class="form-control">
-                {% endif %}
-              </td>
-              {% endfor %}
-              <td><button class="btn btn-success btn-sm">Add</button></td>
+          <div class="row">
+            <div class="col-md-6 align-self-center">
+              <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite"></p>
+            </div>
+            <form class="col-md-6" action="{{ url_for('db.manage') }}" method="GET">
+              <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
+                <ul class="pagination">
+                  <li class="page-item {{ 'disabled' if page == 1 else '' }}">
+                    <button name="page" value="{{ page - 1 }}" class="page-link" aria-label="Previous" {{ 'disabled' if page == 1 else '' }}>
+                      <span aria-hidden="true">«</span>
+                    </button>
+                  </li>
+                  <input type="hidden" name="db" value="{{ db_code }}" />
+                  <input type="hidden" name="table" value="{{ table }}" />
+                  <input type="hidden" name="perPage" value="{{ per_page }}" />
+                  {% for x in range(1, total_pages + 1) %}
+                  {% if x == page %}
+                  <li class="page-item active">
+                    <button name="page" value="{{ x }}" class="page-link">{{ x }}</button>
+                  </li>
+                  {% else %}
+                  <li class="page-item">
+                    <button name="page" value="{{ x }}" class="page-link">{{ x }}</button>
+                  </li>
+                  {% endif %}
+                  {% endfor %}
+                  <li class="page-item {{ 'disabled' if page == total_pages else '' }}">
+                    <button name="page" value="{{ page + 1 }}" class="page-link" aria-label="Next" {{ 'disabled' if page == total_pages else '' }}>
+                      <span aria-hidden="true">»</span>
+                    </button>
+                  </li>
+                </ul>
+              </nav>
             </form>
-          </tr>
-          {% for row in rows %}
-          <tr>
-            {% for col in columns %}
-            <td>{{ row[col] }}</td>
-            {% endfor %}
-            <td>
-              <a class="btn btn-info btn-sm" href="{{ url_for('db.modify_row', row_id=row.id, db=db_code, table=table) }}">Edit</a>
-              <a class="btn btn-danger btn-sm" href="{{ url_for('db.delete_row', db=db_code, table=table, id=row.id) }}">Delete</a>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      <nav>
-        <ul class="pagination">
-          {% for p in range(1, total_pages + 1) %}
-          <li class="page-item {{ 'active' if p == page else '' }}">
-            <a class="page-link" href="{{ url_for('db.manage', db=db_code, table=table, page=p, perPage=per_page) }}">{{ p }}</a>
-          </li>
-          {% endfor %}
-        </ul>
-      </nav>
-      {% endif %}
+          </div>
+          {% endif %}
+        </div>
+      </div>
     </div>
-  </body>
+    <br><br>
+  </div>
+  <footer class="bg-white sticky-footer">
+    <div class="container my-auto">
+      <div class="text-center">Made with ❤️ by <a href="https://thekrishna.in/">Krishnakanth</a> and <a href="https://www.linkedin.com/in/mahavisvanathan/">Mahalakshumi</a></div>
+    </div>
+  </footer>
+  </div>
+  <a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
+  <script src="{{ url_for('static', filename='assets/js/theme.js') }}"></script>
+  <script src="{{ url_for('static', filename='assets/js/dark-mode.js') }}"></script>
+</body>
+
 </html>

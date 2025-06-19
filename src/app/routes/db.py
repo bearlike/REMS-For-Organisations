@@ -50,10 +50,11 @@ def manage() -> str:
         rows = []
         columns = []
         total_pages = 1
+        total_rows = 0
         if table:
             columns = [row[0] for row in conn.execute(text(f"SHOW COLUMNS FROM {table}"))]
-            count = conn.execute(text(f"SELECT count(*) FROM {table}")).scalar() or 0
-            total_pages = max(1, (count + per_page - 1) // per_page)
+            total_rows = conn.execute(text(f"SELECT count(*) FROM {table}")).scalar() or 0
+            total_pages = max(1, (total_rows + per_page - 1) // per_page)
             offset = per_page * (page - 1)
             sql = text(f"SELECT * FROM {table} ORDER BY id LIMIT :limit OFFSET :offset")
             rows = conn.execute(sql, {"limit": per_page, "offset": offset}).mappings().all()
@@ -68,6 +69,7 @@ def manage() -> str:
         page=page,
         per_page=per_page,
         total_pages=total_pages,
+        total_rows=total_rows,
     )
 
 

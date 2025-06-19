@@ -1,13 +1,14 @@
+#!/usr/bin/env python3
+"""URL shortening routes."""
 from __future__ import annotations
 
-"""URL shortening routes."""
-
+import json
 import requests
 from flask import Blueprint, render_template, request, redirect, url_for, g
 
 from ..utils.auth import login_required
 from ..utils.helpers import log_activity, is_admin
-from ..schemas import ShortenURLForm
+from ...config.docker_secrets import CONFIG
 
 link_short_bp = Blueprint("link_short", __name__, url_prefix="/short")
 
@@ -15,21 +16,56 @@ link_short_bp = Blueprint("link_short", __name__, url_prefix="/short")
 @link_short_bp.route("/", methods=["GET", "POST"])
 @login_required
 def create_short_url() -> str:
-    """Create a short URL using an external API."""
+    """Create a short URL using Short.cm API."""
     if not is_admin(g.user):
         return redirect(url_for("public.bad_request"))
 
     short_url: str | None = None
+    error: str | None = None
+
     if request.method == "POST":
-        form = ShortenURLForm(url=request.form.get("url", ""))
-        if form.url:
+        original_url = request.form.get("url", "")
+        url_path = request.form.get("path", "")
+
+        if original_url:
             try:
-                resp = requests.get(
-                    "https://tinyurl.com/api-create.php", params={"url": form.url}, timeout=5
+                # Prepare the payload for Short.cm API
+                payload = {"originalURL": original_url, "domain": CONFIG.shortcm_domain}
+
+                # Add path if provided
+                if url_path.strip():
+                    payload["path"] = url_path.strip()
+
+                headers = {
+                    "authorization": CONFIG.shortcm_authorization,
+                    "content-type": "application/json",
+                }
+
+                response = requests.post(
+                    "https://api.short.cm/links",
+                    data=json.dumps(payload),
+                    headers=headers,
+                    timeout=30,
                 )
-                resp.raise_for_status()
-                short_url = resp.text
-                log_activity(g.user, f"Shortened URL {form.url}")
-            except Exception:
-                return render_template("link_short.html", error="Failed to shorten URL")
-    return render_template("link_short.html", short_url=short_url)
+
+                if response.status_code == 200:
+                    result = response.json()
+                    short_url = result.get("shortURL", "")
+                    if short_url:
+                        log_activity(
+                            g.user,
+                            f"In Link-Short, [{original_url}] -> [{short_url}] shortened",
+                        )
+                    else:
+                        error = "Failed to get short URL from response"
+                else:
+                    error = f"API Error: {response.status_code}"
+
+            except requests.exceptions.RequestException as e:
+                error = f"Network error: {str(e)}"
+            except json.JSONDecodeError:
+                error = "Invalid response from URL shortening service"
+            except Exception as e:
+                error = f"Failed to shorten URL: {str(e)}"
+
+    return render_template("link_short.html", short_url=short_url, error=error)

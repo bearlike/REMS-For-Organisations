@@ -1,27 +1,52 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Create Mailing List</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='assets/bootstrap/css/bootstrap.min.css') }}">
-  </head>
-  <body>
-    <div class="container mt-4">
-      <h3>Mailing List Generator</h3>
-      {% if error %}
-      <div class="alert alert-danger">{{ error }}</div>
-      {% elif success %}
-      <div class="alert alert-success">Mailing list created.</div>
-      {% endif %}
-      <form method="post" enctype="multipart/form-data">
-        <div class="mb-2">
-          <input type="file" name="file" class="form-control-file" required>
+
+<head id="head_tag">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <title>Mail List Generator: {{ org_name }}</title>
+  <link rel="icon" type="image/png" sizes="600x600" href="{{ url_for('static', filename='assets/img/Logo_White.png') }}"
+    async>
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/bootstrap/css/bootstrap.min.css') }}">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css" async>
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/custom.css') }}">
+</head>
+
+<body id="page-top">
+  <div id="wrapper">
+    {% include 'partials/navigation.html' %}
+        <div class="container-fluid">
+          <div class="d-sm-flex justify-content-between align-items-center mb-4">
+            <h3 class="text-dark mb-0">Mailing List Generator</h3>
+          </div>
+          {% if error %}
+          <div class="alert alert-danger">{{ error }}</div>
+          {% elif success %}
+          <div class="alert alert-success">Mailing list created.</div>
+          {% endif %}
+          <form method="post" enctype="multipart/form-data">
+            <div class="mb-2">
+              <input type="file" name="file" class="form-control-file" required>
+            </div>
+            <div class="mb-2">
+              <input type="text" name="mailer_name" class="form-control" placeholder="List Name" required>
+            </div>
+            <button class="btn btn-primary">Upload</button>
+          </form>
         </div>
-        <div class="mb-2">
-          <input type="text" name="mailer_name" class="form-control" placeholder="List Name" required>
+      <footer class="bg-white sticky-footer">
+        <div class="container my-auto">
+          <div class="text-center">Made with ❤️ by <a href="https://thekrishna.in/">Krishnakanth</a> and <a href="https://www.linkedin.com/in/mahavisvanathan/">Mahalakshumi</a></div>
         </div>
-        <button class="btn btn-primary">Upload</button>
-      </form>
+      </footer>
     </div>
+    <a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
+    <script src="{{ url_for('static', filename='assets/js/theme.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/dark-mode.js') }}"></script>
   </body>
 </html>

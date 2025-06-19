@@ -16,7 +16,7 @@ class Certificate(db.Model):
     name: Mapped[str]
     regno: Mapped[Optional[str]]
     dept: Mapped[Optional[str]]
-    year: Mapped[Optional[str]]
+    year: Mapped[Optional[int]]
     section: Mapped[Optional[str]]
     email: Mapped[str]
     position: Mapped[Optional[str]]

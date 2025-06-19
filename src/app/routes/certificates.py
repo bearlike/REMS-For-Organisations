@@ -1,6 +1,5 @@
-from __future__ import annotations
-
 """Certificate generation routes."""
+from __future__ import annotations
 
 from pathlib import Path
 import csv
@@ -25,13 +24,27 @@ def generate():
     """Generate certificates from an uploaded CSV file."""
     if request.method == "POST":
         file = request.files.get("file")
+        event_date_str = request.form.get("date")
+
+        if not file or not file.filename:
+            return render_template("cert_generate.html", error="No file selected")
+
+        if not event_date_str:
+            return render_template("cert_generate.html", error="Event date is required")
+
+        try:
+            event_date = datetime.strptime(event_date_str, "%Y-%m-%d").date()
+        except ValueError:
+            return render_template("cert_generate.html", error="Invalid date format")
+
         metadata = EventMetadata(
             event_name=request.form.get("event_name", ""),
-            event_date=request.form.get("date"),
+            event_date=event_date,
             is_inter=request.form.get("eventType", "0") == "1",
         )
-        if not file or not metadata.event_name:
-            return render_template("cert_generate.html", error="Missing fields")
+
+        if not metadata.event_name:
+            return render_template("cert_generate.html", error="Event name is required")
 
         filename = secure_filename(file.filename)
         folder = Path("public/Generated Certificate") / Path(filename).stem
@@ -40,32 +53,62 @@ def generate():
         file.save(filepath)
 
         reader = csv.DictReader(open(filepath, newline=""))
+        rows = []
         counter = 0
+
         for row in reader:
-            data = CertificateCSVRow(event_name=metadata.event_name, **row)
-            cert_link = folder / f"Certificate-{counter}.png"
-            cert = Certificate(
-                name=data.name,
-                regno=data.regno,
-                dept=data.dept,
-                year=str(data.year) if data.year else None,
-                section=data.section,
-                email=data.email,
-                position=data.position,
-                cert_link=str(cert_link),
-                event_name=data.event_name,
-                college=data.college,
+            # Convert year to int if present, handle type conversion
+            year_value = None
+            if row.get('year'):
+                try:
+                    year_value = int(row['year'])
+                except (ValueError, TypeError):
+                    year_value = None
+
+            # Create data with proper types
+            data = CertificateCSVRow(
+                event_name=metadata.event_name,
+                name=row.get('name', ''),
+                regno=row.get('regno'),
+                dept=row.get('dept'),
+                year=year_value,
+                section=row.get('section'),
+                email=row.get('email', ''),
+                position=row.get('position'),
+                college=row.get('college')
             )
+            cert_link = folder / f"Certificate-{counter}.png"
+
+            cert = Certificate()
+            cert.name = data.name
+            cert.regno = data.regno
+            cert.dept = data.dept
+            cert.year = data.year
+            cert.section = data.section
+            cert.email = data.email
+            cert.position = data.position
+            cert.cert_link = str(cert_link)
+            cert.event_name = data.event_name
+            cert.college = data.college
             db.session.add(cert)
+            rows.append(
+                {
+                    "name": data.name,
+                    "regno": data.regno,
+                    "college": data.college,
+                    "position": data.position,
+                    "event_name": data.event_name,
+                    "cert_link": str(cert_link),
+                }
+            )
             counter += 1
 
         event = Event.query.filter_by(event_name=metadata.event_name).first()
         if not event:
-            event = Event(
-                event_name=metadata.event_name,
-                date=metadata.date,
-                isInter=metadata.is_inter,
-            )
+            event = Event()
+            event.event_name = metadata.event_name
+            event.date = metadata.date
+            event.isInter = metadata.is_inter
             db.session.add(event)
 
         try:
@@ -75,7 +118,22 @@ def generate():
             return render_template("cert_generate.html", error="Database error")
 
         log_activity(g.user, f"Generated {counter} certificates for {metadata.event_name}")
-        return redirect(url_for("certificates.generate", success="1"))
 
-    return render_template("cert_generate.html", success=request.args.get("success"))
+        # Calculate file metadata like PHP version
+        file.seek(0, 2)  # Seek to end to get size
+        file_size_bytes = file.tell()
+        file_size_kb = round(file_size_bytes / 1024, 2)
+        file.seek(0)  # Reset file pointer
+
+        return render_template(
+            "cert_generate.html",
+            success=True,
+            rows=rows,
+            inter=metadata.is_inter,
+            file_name=filename,
+            file_type=file.content_type,
+            file_size=f"{file_size_kb} Kb",
+        )
+
+    return render_template("cert_generate.html")
 
