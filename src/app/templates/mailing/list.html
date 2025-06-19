@@ -21,6 +21,14 @@
           <div class="d-sm-flex justify-content-between align-items-center mb-4">
             <h3 class="text-dark mb-0">Mailing List Generator</h3>
           </div>
+          <!-- Success Tips Section -->
+          <div class="text-center mt-3">
+            <div class="alert alert-info small" role="alert">
+              <i class="fas fa-lightbulb mr-2"></i>
+              <strong>Note:</strong> The CSV file must contain <kbd style="background-color: green;">email</kbd> and <kbd style="background-color: green;">name</kbd> columns in the prescribed order. Names are case-insensitive.
+            </div>
+          </div>
+
           {% if error %}
           <div class="alert alert-danger">{{ error }}</div>
           {% elif success %}
@@ -28,7 +36,7 @@
           {% endif %}
           <form method="post" enctype="multipart/form-data">
             <div class="mb-2">
-              <input type="file" name="file" class="form-control-file" required>
+              <input type="file" name="file" class="form-control-file" accept=".csv" required>
             </div>
             <div class="mb-2">
               <input type="text" name="mailer_name" class="form-control" placeholder="List Name" required>
