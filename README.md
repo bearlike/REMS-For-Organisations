@@ -5,10 +5,9 @@
 </p>
 <p align="center">All-in-one toolkit for generating forms, mailing lists and certificates—ideal for clubs and small organizations.</p>
 
-<p align="center">
-  <img src="https://img.shields.io/github/last-commit/bearlike/REMS-For-Organisations?color=blue&style=flat-square">
+<p align="center">  <img src="https://img.shields.io/github/last-commit/bearlike/REMS-For-Organisations?color=blue&style=flat-square">
   <a href="/LICENSE"><img src="https://img.shields.io/github/license/bearlike/REMS-For-Organisations.svg?style=flat-square"></a>
-  <a href="https://hub.docker.com/r/krishnaalagiri/rems"><img src="https://img.shields.io/docker/image-size/krishnaalagiri/rems/latest?label=Image%20Size&logo=docker&style=flat-square" /></a>
+  <a href="https://github.com/bearlike/REMS-For-Organisations/pkgs/container/rems-for-organisations"><img src="https://img.shields.io/badge/ghcr.io-container-blue?logo=docker&style=flat-square" /></a>
   <a href="https://github.com/bearlike/REMS-For-Organisations/issues"><img src="https://img.shields.io/github/issues-raw/bearlike/REMS-For-Organisations?color=red&style=flat-square"/></a>
   <a href="https://github.com/bearlike/REMS-For-Organisations/releases"><img src="https://img.shields.io/github/v/tag/bearlike/REMS-For-Organisations?label=stable&style=flat-square"/></a>
 </p>
@@ -40,8 +39,8 @@ REMS began as a fun PHP project in college and has since been completely migrate
 - Launch with:
 
 ```bash
-# Build the Docker image, if not already built:
-# docker-compose build
+# The docker-compose.yml uses the GitHub Container Registry image
+# No need to build locally unless you're making changes
 
 docker-compose up -d
 ```
