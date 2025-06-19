@@ -64,4 +64,6 @@ This ensures consistent styling and keeps navigation identical across views.
 
 Forms are stored in the `forms` database. The form generator and submission routes now use `db.get_engine(bind="forms")` and sanitize event names with `sanitize_identifier` from `helpers.py`.
 
+Mailing lists live in the `mail` database. The list manager creates tables using `db.get_engine(bind="mail")` and sanitizes the list name with the same helper to avoid unsafe characters.
+
 Keep this document up to date as modules evolve. It should help new contributors navigate the repository quickly and start coding in Python from day one.
