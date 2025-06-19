@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from flask import Blueprint, render_template, request, redirect, url_for, session
+import hashlib
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -30,8 +31,9 @@ def login() -> str:
             password=request.form.get("password", ""),
             remember=bool(request.form.get("remember")),
         )
+        hashed_password = hashlib.sha1(form.password.encode()).hexdigest()
         user = Login.query.filter_by(
-            LoginName=form.username, PasswordHash=form.password
+            LoginName=form.username, PasswordHash=hashed_password
         ).first()
         if user:
             session["user"] = form.username

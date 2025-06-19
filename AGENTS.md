@@ -129,3 +129,5 @@ These notes serve as the guiding strategy for the full migration to Python. Upda
 - Added navigation template and placeholder settings route.
 - Created generic error handlers with 404 and database error pages.
 - All legacy PHP modules migrated to Flask with updated Docker configuration and documentation.
+- Ensured login authentication hashes passwords using SHA1 before querying the database.
+- Adjusted certificate model to store the `year` column as an integer to match the MySQL schema.
