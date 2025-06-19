@@ -29,6 +29,7 @@ docs/              # images and sample SQL
 - **Jinja2 templates** – HTML pages are rendered from files under `src/app/templates`.
 - **Docker first** – use `Dockerfile` and `docker-compose.yml` for local development and deployment.
 - **Helper utilities** – common logic for authentication and logging lives under `src/app/utils`.
+- **Image generation** – certificate images are created using the Pillow library.
 
 ## Jinja2 Template Guidelines
 

@@ -42,7 +42,10 @@ class LogEntry(db.Model):
     __tablename__ = "logging"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    timestamp: Mapped[datetime]
+    timestamp: Mapped[datetime] = mapped_column(
+        server_default=db.func.current_timestamp(),
+        server_onupdate=db.func.current_timestamp(),
+    )
     userid: Mapped[str]
     log: Mapped[str]
 
