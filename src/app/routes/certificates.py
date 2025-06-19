@@ -40,6 +40,7 @@ def generate():
         file.save(filepath)
 
         reader = csv.DictReader(open(filepath, newline=""))
+        rows = []
         counter = 0
         for row in reader:
             data = CertificateCSVRow(event_name=metadata.event_name, **row)
@@ -57,6 +58,16 @@ def generate():
                 college=data.college,
             )
             db.session.add(cert)
+            rows.append(
+                {
+                    "name": data.name,
+                    "regno": data.regno,
+                    "college": data.college,
+                    "position": data.position,
+                    "event_name": data.event_name,
+                    "cert_link": str(cert_link),
+                }
+            )
             counter += 1
 
         event = Event.query.filter_by(event_name=metadata.event_name).first()
@@ -75,7 +86,12 @@ def generate():
             return render_template("cert_generate.html", error="Database error")
 
         log_activity(g.user, f"Generated {counter} certificates for {metadata.event_name}")
-        return redirect(url_for("certificates.generate", success="1"))
+        return render_template(
+            "cert_generate.html",
+            success=True,
+            rows=rows,
+            inter=metadata.is_inter,
+        )
 
-    return render_template("cert_generate.html", success=request.args.get("success"))
+    return render_template("cert_generate.html")
 

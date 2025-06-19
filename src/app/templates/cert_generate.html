@@ -1,31 +1,123 @@
 <!doctype html>
 <html lang="en">
-  <head id="head_tag">
-    <meta charset="utf-8">
-    <title>Certificate Generator</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='assets/bootstrap/css/bootstrap.min.css') }}">
-  </head>
-  <body class="bg-gradient-primary">
-    <div class="container mt-4">
-      <h3 class="text-white">Generate Certificates</h3>
-      {% if error %}
-      <div class="alert alert-danger">{{ error }}</div>
-      {% endif %}
-      {% if success %}
-      <div class="alert alert-success">Generation completed.</div>
-      {% endif %}
-      <form method="post" enctype="multipart/form-data">
-        <div class="form-group">
-          <input type="file" class="form-control" name="file" required>
-        </div>
-        <div class="form-group">
-          <input type="text" class="form-control" name="event_name" placeholder="Event Name" required>
-        </div>
-        <div class="form-group">
-          <input type="date" class="form-control" name="date" required>
-        </div>
-        <div class="form-group">
-          <select name="eventType" class="form-control">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <link rel="icon" type="image/png" sizes="600x600" href="{{ url_for('static', filename='assets/img/Logo_White.png') }}" async>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/custom.css') }}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css" async>
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/fonts/fontawesome5-overrides.min.css') }}">
+  <body id="page-top">
+    <div id="wrapper">
+      {% include 'partials/navigation.html' %}
+      <div class="d-flex flex-column" id="content-wrapper">
+        <div id="content">
+          {% include 'partials/topbar.html' %}
+          <div class="container-fluid">
+            <div class="d-sm-flex justify-content-between align-items-center mb-4">
+              <h3 class="text-dark mb-0">Certificate Generation</h3><a class="btn btn-primary btn-sm d-none d-sm-inline-block" role="button" href="{{ url_for('static', filename='Sample_headers.csv') }}"><i class="fas fa-download fa-sm text-white-50"></i>&nbsp;Download Sample CSV for CDS&nbsp;</a>
+            </div>
+            {% if error %}
+            <div class="alert alert-danger">{{ error }}</div>
+            {% endif %}
+            {% if success %}
+            <div class="alert alert-success">Generation completed.</div>
+            {% endif %}
+            <style>
+              .upload-btn-wrapper input[type=file] {
+                opacity: 0;
+              }
+            </style>
+            <div style="padding-bottom: 19px;">
+              <form method="post" enctype="multipart/form-data">
+                <div style="display:inline-flex">
+                  <input type="file" id="myFile" name="file" style="display: none" required />
+                  <input id="spnFilePath" class="form-control border-1 small" style="width: 100%;max-width:15em;" placeholder="Selected certificate list" disabled>
+                  <a class="btn btn-primary btn-sm link" id="btnFileUpload"><i class="fa fa-upload" aria-hidden="true"></i></a>
+                </div>
+                <script type="text/javascript">
+                  window.onload = function() {
+                    var fileupload = document.getElementById('myFile');
+                    var filePath = document.getElementById('spnFilePath');
+                    var button = document.getElementById('btnFileUpload');
+                    button.onclick = function() { fileupload.click(); };
+                    fileupload.onchange = function() {
+                      var fileName = fileupload.value.split('\\').pop();
+                      filePath.value = fileName;
+                    };
+                  };
+                </script>
+                <br><br>
+                <input type="text" name="event_name" class="form-control border-1 small" style="width: 68%;max-width:15em;" placeholder="Enter the Event Name" required />
+                <br>
+                <input type="text" name="date" class="form-control border-1 small" style="width: 68%;max-width:15em;" placeholder="Enter the Date of the event" required />
+                <br>
+                <select class="form-control border-1 small" style="width: 68%;max-width:15em;" name="eventType" required>
+                  <option value="0">Intra-College Event</option>
+                  <option value="1">Inter-College Event</option>
+                </select>
+                <br>
+                <input class="btn btn-primary" type="submit" value="Generate" />
+              </form>
+            </div>
+            {% if rows %}
+            <div class="card shadow">
+              <div class="card-header py-3">
+                <p class="text-primary m-0 font-weight-bold">Certification Creation Log</p>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive table mt-2" role="grid">
+                  <table class="table dataTable my-0">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        {% if inter %}
+                        <th>College</th>
+                        {% else %}
+                        <th>Registration Number</th>
+                        {% endif %}
+                        <th>Position</th>
+                        <th>Event Name</th>
+                        <th>Certificate Link</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for r in rows %}
+                      <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ r.name }}</td>
+                        {% if inter %}
+                        <td>{{ r.college }}</td>
+                        {% else %}
+                        <td>{{ r.regno }}</td>
+                        {% endif %}
+                        <td>{{ r.position }}</td>
+                        <td>{{ r.event_name }}</td>
+                        <td><a href="{{ r.cert_link }}">Link</a></td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <br><br>
+            {% endif %}
+          </div>
+        <footer class="bg-white sticky-footer">
+          <div class="container my-auto">
+            <div class="text-center">Made with ❤️ by <a href="https://thekrishna.in/">Krishnakanth</a> and <a href="https://www.linkedin.com/in/mahavisvanathan/">Mahalakshumi</a></div>
+          </div>
+        </footer>
+      </div>
+    <a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='assets/js/bs-init.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
+    <script src="{{ url_for('static', filename='assets/js/theme.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/dark-mode.js') }}"></script>
             <option value="0">Intra-College Event</option>
             <option value="1">Inter-College Event</option>
           </select>

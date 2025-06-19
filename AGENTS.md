@@ -134,6 +134,7 @@ These notes serve as the guiding strategy for the full migration to Python. Upda
 - Sanitized legacy PHP templates (`index.php` and `members/member-login.php`) to remove PHP code and use Jinja2 placeholders.
 - Reworked `login.html`, navigation partial and dashboard template to mirror the original Bootstrap layout from the PHP version.
 - Added topbar navigation partial, restored dashboard info cards and issue button, and included FontAwesome and dark-mode scripts across templates.
+- Recreated certificate generator template with navigation, sample CSV link and generation log table. Route now returns row data for display.
 
 ## What to do next? (TODO)
 
