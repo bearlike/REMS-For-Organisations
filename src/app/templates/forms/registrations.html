@@ -6,12 +6,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/custom.css') }}">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css" async>
     <link rel="stylesheet" href="{{ url_for('static', filename='assets/fonts/fontawesome5-overrides.min.css') }}">
-  <body id="page-top">
-    <div id="wrapper">
+  <body id="page-top">    <div id="wrapper">
       {% include 'partials/navigation.html' %}
-      <div class="d-flex flex-column" id="content-wrapper">
-        <div id="content">
-          {% include 'partials/topbar.html' %}
           <div class="container-fluid">
             <div class="d-sm-flex justify-content-between align-items-center mb-4">
               <h3 class="text-dark mb-0">View Registrations</h3>
@@ -68,12 +64,5 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
     <script src="{{ url_for('static', filename='assets/js/theme.js') }}"></script>
-    <script src="{{ url_for('static', filename='assets/js/dark-mode.js') }}"></script>
-          {% endfor %}
-        </ul>
-      </nav>
-      <a class="btn btn-secondary" href="{{ url_for('forms.download_csv', event=selected_event) }}">Download CSV</a>
-      {% endif %}
-    </div>
-  </body>
+    <script src="{{ url_for('static', filename='assets/js/dark-mode.js') }}"></script>  </body>
 </html>
