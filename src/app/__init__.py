@@ -29,7 +29,7 @@ def create_app() -> Flask:
     @app.context_processor
     def inject_user_data():
         """Inject current user data into all templates."""
-        # pylint: disable=import-outside-toplevel
+        # pylint: disable=import-outside-toplevel, relative-beyond-top-level
         from .models import Login
         from ..config.docker_secrets import CONFIG
 

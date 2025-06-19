@@ -103,33 +103,47 @@ def forgot_password() -> str:
         if not email:
             return render_template("forgot_password.html", error="Email required")
 
+        # Check if user exists - exact same query as PHP
         exists = (
             db.session.execute(
-                text("SELECT count(1) FROM login WHERE Email=:email"),
+                text("SELECT count(1) as isPresent FROM login WHERE Email=:email"),
                 {"email": email},
             ).scalar()
             or 0
         )
-        if not exists:
-            return render_template(
-                "forgot_password.html", error="Account does not exist"
+
+        if exists:
+            # Generate hash key - same function as PHP
+            key = db.session.execute(
+                text("SELECT ForgotPasswordHash(:email) AS link_value"),
+                {"email": email},
+            ).scalar()
+
+            cfg = docker_secrets.CONFIG
+            link = f"{cfg.hostName}{cfg.forgotPwdExtension}?gen={key}"
+
+            # Build email using the forgot password template
+            body = build_mail(
+                "email/forgot_password.html",
+                button_url=link,
+                email_reach=cfg.reachEmail,
+                dark_logo=cfg.darkLogo,
+                logo_href=cfg.logoHREF,
             )
 
-        key = db.session.execute(
-            text("SELECT ForgotPasswordHash(:email) AS val"), {"email": email}
-        ).scalar()
-        cfg = docker_secrets.CONFIG
-        link = f"{cfg.hostName}{cfg.forgotPwdExtension}?gen={key}"
-        body = build_mail(
-            "email/forgot_password.html",
-            button_url=link,
-            email_reach=cfg.reachEmail,
-        )
-        try:
-            send_mail(email, "Request For Password - Reg", body)
-        except Exception:
-            return render_template("forgot_password.html", error="Failed to send email")
-        log_activity(email, "Requested password reset link")
-        return render_template("forgot_password.html", success=True)
+            try:
+                send_mail(email, "Request For Password - Reg", body)
+                log_activity(email, "Requested password reset link")
+                return render_template("forgot_password.html", success=True)
+            except Exception as e:
+                # If email fails, show error like PHP
+                return render_template(
+                    "forgot_password.html", error=f"Mail error: {str(e)}"
+                )
+        else:
+            # Match exact error message from PHP
+            return render_template(
+                "forgot_password.html", error="This account does not exist!"
+            )
 
     return render_template("forgot_password.html")
