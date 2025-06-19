@@ -14,8 +14,29 @@ public_bp = Blueprint("public", __name__)
 def home():
     """Render the landing page for certificate search."""
     event_query = request.args.get("event")
-    event_not_found = bool(request.args) and not event_query
-    return render_template("home.html", event_not_found=event_not_found)
+    status = request.args.get("status")
+    searched_event = request.args.get("searched_event")
+
+    # Handle different error states
+    event_not_found = False
+    error_message = ""
+
+    if status == "notfound":
+        event_not_found = True
+        if searched_event:
+            error_message = f"Event '{searched_event}' not found. Are you sure you're spelling it right?"
+        else:
+            error_message = "Event not found. Please enter a valid event name."
+    elif event_query and not status:
+        # Event was provided but we're back at home, likely means it was found and redirected to cds-public
+        return redirect(url_for("public.cds_public", event=event_query))
+    elif request.args and not event_query and not status:
+        event_not_found = True
+        error_message = "Please enter an event name to search."
+
+    return render_template(
+        "home.html", event_not_found=event_not_found, error_message=error_message
+    )
 
 
 @public_bp.route("/cds-public")
@@ -27,6 +48,7 @@ def cds_public():
 
     if "mode" in request.args:
         total = db.session.query(func.count(Event.id)).scalar()
+        pagination.set_total_pages(total)
         events = (
             Event.query.order_by(Event.date)
             .offset(pagination.offset)
@@ -44,10 +66,11 @@ def cds_public():
 
     event = request.args.get("event", "").lower()
     if not event:
-        return redirect(url_for("public.home", status="notfound"))
+        return redirect(url_for("public.home", status="notfound", error="missing"))
 
-    if not Event.query.filter_by(event_name=event).first():
-        return redirect(url_for("public.home", status="notfound"))
+    event_exists = Event.query.filter_by(event_name=event).first()
+    if not event_exists:
+        return redirect(url_for("public.home", status="notfound", searched_event=event))
 
     is_inter = db.session.query(Event.isInter).filter_by(event_name=event).scalar()
     search = request.args.get("search", "")
@@ -56,6 +79,7 @@ def cds_public():
         base_query = base_query.filter(Certificate.name.ilike(f"%{search}%"))
 
     total = base_query.count()
+    pagination.set_total_pages(total)
     results = (
         base_query.order_by(Certificate.name)
         .offset(pagination.offset)
