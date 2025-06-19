@@ -1,7 +1,8 @@
 """Flask application factory and database setup."""
 
 import os
-from flask import Flask
+from flask import Flask, session, url_for
+
 from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
 
@@ -23,7 +24,39 @@ def create_app() -> Flask:
         SECRET_KEY="change-this-key",
     )
 
-    db.init_app(app)
+    db.init_app(app)  # Context processor to provide user data to all templates
+
+    @app.context_processor
+    def inject_user_data():
+        """Inject current user data into all templates."""
+        # pylint: disable=import-outside-toplevel
+        from .models import Login
+
+        user = session.get("user")
+        if user:
+            try:
+                db_user = Login.query.filter_by(LoginName=user).first()
+                if db_user:
+                    # Build profile picture path similar to PHP retProfilePic function
+                    if db_user.imgsrc:
+                        profile_pic = url_for(
+                            "static",
+                            filename=f"assets/img/avatars/users/{db_user.imgsrc}",
+                        )
+                    else:
+                        profile_pic = url_for(
+                            "static", filename="assets/img/avatars/image2.png"
+                        )
+
+                    return {"current_user": db_user, "profile_pic": profile_pic}
+            except Exception:
+                # If there's any database error, return default values
+                pass
+
+        return {
+            "current_user": None,
+            "profile_pic": url_for("static", filename="assets/img/avatars/image2.png"),
+        }
 
     # pylint: disable=import-outside-toplevel
     from .routes.public import public_bp
