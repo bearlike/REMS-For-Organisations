@@ -1,9 +1,10 @@
+"""Helper utilities used across the application."""
 from __future__ import annotations
 
-"""Helper utilities used across the application."""
-
+import re
 from sqlalchemy import func
 
+# pylint: disable=relative-beyond-top-level
 from .. import db
 from ..models import LogEntry, Login
 
@@ -21,4 +22,9 @@ def is_admin(username: str) -> bool:
         Login.LoginName == username, Login.IsAdmin == True
     ).scalar()
     return bool(count)
+
+
+def sanitize_identifier(name: str) -> str:
+    """Return a safe SQL identifier with only alphanumerics and underscores."""
+    return re.sub(r"[^0-9a-zA-Z_]+", "_", name).strip("_")
 

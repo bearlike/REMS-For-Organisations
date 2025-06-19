@@ -12,7 +12,6 @@
   <a href="https://github.com/bearlike/REMS-For-Organisations/releases"><img src="https://img.shields.io/github/v/tag/bearlike/REMS-For-Organisations?label=stable&style=flat-square"/></a>
 </p>
 
-
 > [!NOTE]
 > Prior to [version 1.1.5](https://github.com/bearlike/REMS-For-Organisations/tree/release/v1.1.5?tab=readme-ov-file), this project was developed in PHP and has since been fully migrated to Python.
 
@@ -51,7 +50,6 @@ docker-compose up -d
 2. Import the sample database from [`docs/files/Sample_REMS_Database.sql`](docs/files/Sample_REMS_Database.sql).
 3. Export `MYSQL_HOST`, `MYSQL_USER` and `MYSQL_PASSWORD` or update `src/config/docker_secrets.py`.
 4. Start the app with `flask --app src.app run`.
-
 
 ## Features and Screenshots
 

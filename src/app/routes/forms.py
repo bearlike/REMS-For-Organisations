@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import csv
 import io
-from pathlib import Path
 
 from flask import (
     Blueprint,
@@ -20,10 +19,10 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from .. import db
 from ..utils.auth import login_required
-from ..utils.helpers import log_activity, is_admin
+from ..utils.helpers import log_activity, is_admin, sanitize_identifier
 from ..utils.pagination import Pagination
 from ..schemas import FormGeneratorSchema
-from ...config import docker_secrets
+
 
 forms_bp = Blueprint("forms", __name__)
 
@@ -36,15 +35,15 @@ def submit_entry():
     if not event_name:
         return redirect(url_for("public.bad_request"))
 
-    table = f"event_{event_name.replace(' ', '_')}"
-    columns = ", ".join(form_data.keys())
+    table = f"event_{sanitize_identifier(event_name)}"
+    columns = ", ".join(f"`{k}`" for k in form_data.keys())
     placeholders = ", ".join(f":{k}" for k in form_data.keys())
     sql = text(f"INSERT INTO {table} ({columns}) VALUES ({placeholders})")
+    engine = db.get_engine(bind="forms")
     try:
-        db.session.execute(sql, form_data)
-        db.session.commit()
+        with engine.begin() as conn:
+            conn.execute(sql, form_data)
     except SQLAlchemyError:
-        db.session.rollback()
         return redirect(url_for("public.bad_request"))
 
     return redirect(url_for("public.congrats"))
@@ -66,7 +65,10 @@ def generator() -> str:
             fields=request.form.getlist("fields[]"),
         )
 
-        table = f"event_{form.event_name.replace(' ', '_')}"
+        if not form.event_name.strip():
+            return render_template("forms/generator.html", error="Event name required")
+
+        table = f"event_{sanitize_identifier(form.event_name)}"
         columns = [
             "id INT NOT NULL AUTO_INCREMENT PRIMARY KEY",
             "timestamp DATETIME DEFAULT CURRENT_TIMESTAMP",
@@ -79,11 +81,11 @@ def generator() -> str:
                     columns.append(f"`{field}{idx}` VARCHAR(255)")
 
         sql = text(f"CREATE TABLE IF NOT EXISTS {table} ({', '.join(columns)})")
+        engine = db.get_engine(bind="forms")
         try:
-            db.session.execute(sql)
-            db.session.commit()
+            with engine.begin() as conn:
+                conn.execute(sql)
         except SQLAlchemyError:
-            db.session.rollback()
             return render_template("forms/generator.html", error="Database error")
 
         log_activity(g.user, f"Generated form table {table}")
@@ -111,7 +113,9 @@ def view_registrations() -> str:
         columns: list[str] = []
         total = 0
         if event in events:
-            columns = [row[0] for row in conn.execute(text(f"SHOW COLUMNS FROM {event}"))]
+            columns = [
+                row[0] for row in conn.execute(text(f"SHOW COLUMNS FROM {event}"))
+            ]
             total = conn.execute(text(f"SELECT count(*) FROM {event}")).scalar() or 0
             offset = pagination.offset
             data = conn.execute(

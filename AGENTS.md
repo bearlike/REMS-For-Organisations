@@ -59,7 +59,9 @@ This ensures consistent styling and keeps navigation identical across views.
 | `src/app/routes/errors.py` | Custom 404 and 500 error handlers |
 | `src/app/utils/auth.py` | `login_required` decorator for protecting routes |
 | `src/app/utils/email.py` | Utilities for building and sending emails |
-| `src/app/utils/helpers.py` | Logging and admin-check helpers |
+| `src/app/utils/helpers.py` | Logging, admin checks and identifier sanitation |
 | `src/app/utils/pagination.py` | Simple pagination helper class |
+
+Forms are stored in the `forms` database. The form generator and submission routes now use `db.get_engine(bind="forms")` and sanitize event names with `sanitize_identifier` from `helpers.py`.
 
 Keep this document up to date as modules evolve. It should help new contributors navigate the repository quickly and start coding in Python from day one.
