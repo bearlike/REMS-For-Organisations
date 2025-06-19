@@ -28,9 +28,9 @@ services:
     volumes:
       - "generated_certificates_volume:/app/public/Generated Certificate"
     environment:
-      MAIN_DB_URI: "mysql+pymysql://cmsuser:0000@database/db_cms"
-      FORMS_DB_URI: "mysql+pymysql://cmsuser:0000@database/forms_db"
-      MAIL_DB_URI: "mysql+pymysql://cmsuser:0000@database/mail_db"
+      MAIN_DB_URI: "mysql+pymysql://root:0000@database/db_cms"
+      FORMS_DB_URI: "mysql+pymysql://root:0000@database/forms_db"
+      MAIL_DB_URI: "mysql+pymysql://root:0000@database/mail_db"
 
 
 volumes:
