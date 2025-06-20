@@ -63,6 +63,7 @@ This ensures consistent styling and keeps navigation identical across views.
 | `src/app/utils/logger.py` | Loguru configuration and shared logger |
 | `src/app/utils/helpers.py` | Logging, admin checks and identifier sanitation |
 | `src/app/utils/pagination.py` | Simple pagination helper class |
+| `src/app/utils/sql.py` | Cross-database table and column helpers |
 
 Forms are stored in the `forms` database. The form generator and submission routes now use `db.get_engine(bind="forms")` and sanitize event names with `sanitize_identifier` from `helpers.py`.
 

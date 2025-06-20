@@ -22,6 +22,7 @@ from ..utils.auth import login_required
 from ..utils.helpers import log_activity, is_admin, sanitize_identifier
 from ..utils.logger import logger
 from ..utils.pagination import Pagination
+from ..utils.sql import list_tables, list_columns
 from ..schemas import FormGeneratorSchema
 
 
@@ -78,8 +79,13 @@ def generator() -> str:
             error = "Event name required"
         else:
             table = f"event_{sanitize_identifier(form.event_name)}"
+            pk = (
+                "INTEGER PRIMARY KEY AUTOINCREMENT"
+                if engine.dialect.name == "sqlite"
+                else "INT NOT NULL AUTO_INCREMENT PRIMARY KEY"
+            )
             columns = [
-                "id INT NOT NULL AUTO_INCREMENT PRIMARY KEY",
+                f"id {pk}",
                 "timestamp DATETIME DEFAULT CURRENT_TIMESTAMP",
             ]
             for field in form.fields:
@@ -101,8 +107,7 @@ def generator() -> str:
                 logger.info(f"Form table {table} created by {g.user}")
                 success = True
 
-    with engine.connect() as conn:
-        tables = [row[0] for row in conn.execute(text("SHOW TABLES LIKE 'event_%'"))]
+    tables = list_tables(engine, pattern="event_%")
 
     events = [
         {
@@ -126,12 +131,11 @@ def register_form(event: str) -> str:
     logger.debug(f"Rendering registration form for event {event}")
     table = f"event_{sanitize_identifier(event)}"
     engine = db.get_engine(bind="forms")
-    with engine.connect() as conn:
-        tables = [row[0] for row in conn.execute(text("SHOW TABLES LIKE 'event_%'"))]
-        if table not in tables:
-            logger.warning(f"Registration form requested for unknown event {event}")
-            return redirect(url_for("public.bad_request"))
-        columns = [row[0] for row in conn.execute(text(f"SHOW COLUMNS FROM {table}"))]
+    tables = list_tables(engine, pattern="event_%")
+    if table not in tables:
+        logger.warning(f"Registration form requested for unknown event {event}")
+        return redirect(url_for("public.bad_request"))
+    columns = list_columns(engine, table)
 
     fields = [c for c in columns if c not in ("id", "timestamp")]
 
@@ -163,15 +167,13 @@ def view_registrations() -> str:
     pagination = Pagination(page, per_page)
 
     engine = db.get_engine(bind="forms")
-    with engine.connect() as conn:
-        events = [row[0] for row in conn.execute(text("SHOW TABLES LIKE 'event_%'"))]
-        rows: list[dict] = []
-        columns: list[str] = []
-        total = 0
-        if event in events:
-            columns = [
-                row[0] for row in conn.execute(text(f"SHOW COLUMNS FROM {event}"))
-            ]
+    events = list_tables(engine, pattern="event_%")
+    rows: list[dict] = []
+    columns: list[str] = []
+    total = 0
+    if event in events:
+        columns = list_columns(engine, event)
+        with engine.connect() as conn:
             total = conn.execute(text(f"SELECT count(*) FROM {event}")).scalar() or 0
             offset = pagination.offset
             # Use row._mapping to convert SQLAlchemy Row to dict and avoid TypeError
@@ -207,12 +209,12 @@ def download_csv() -> Response:
     logger.info(f"CSV download requested for event {event}")
 
     engine = db.get_engine(bind="forms")
+    tables = list_tables(engine, pattern="event_%")
+    if event not in tables:
+        logger.warning(f"CSV download for unknown event {event}")
+        return redirect(url_for("public.bad_request"))
+    columns = list_columns(engine, event)
     with engine.connect() as conn:
-        tables = [row[0] for row in conn.execute(text("SHOW TABLES LIKE 'event_%'"))]
-        if event not in tables:
-            logger.warning(f"CSV download for unknown event {event}")
-            return redirect(url_for("public.bad_request"))
-        columns = [row[0] for row in conn.execute(text(f"SHOW COLUMNS FROM {event}"))]
         data = conn.execute(text(f"SELECT * FROM {event} ORDER BY id")).fetchall()
 
     output = io.StringIO()
