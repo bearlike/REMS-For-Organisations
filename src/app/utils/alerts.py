@@ -13,7 +13,7 @@ from .logger import logger
 
 def get_recent_alerts(limit: int = 5) -> List[Dict[str, str]]:
     """Return recent dashboard alerts from the database."""
-    logger.trace("Fetching %s recent alerts", limit)
+    logger.trace(f"Fetching {limit} recent alerts")
     bind_key, _ = _get_bind("1")
     engine = db.get_engine(bind=bind_key)
     sql = text(
@@ -38,5 +38,5 @@ def get_recent_alerts(limit: int = 5) -> List[Dict[str, str]]:
     except SQLAlchemyError as exc:
         logger.exception("Failed to fetch alerts: {}", exc)
         return []
-    logger.debug("Fetched %d alerts", len(alerts))
+    logger.debug(f"Fetched {len(alerts)} alerts")
     return alerts

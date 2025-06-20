@@ -27,7 +27,7 @@ auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
 def login() -> str:
     """Render the login form and authenticate the user."""
     if request.method == "POST":
-        logger.debug("Login attempt for user %s", request.form.get("uname", ""))
+        logger.debug(f"Login attempt for user {request.form.get('uname', '')}")
         form = LoginForm(
             username=request.form.get("uname", ""),
             password=request.form.get("password", ""),
@@ -41,12 +41,12 @@ def login() -> str:
             session["user"] = form.username
             session["remember"] = form.remember
             log_activity(form.username, f"Logged in from {request.remote_addr}")
-            logger.info("User %s logged in", form.username)
+            logger.info(f"User {form.username} logged in")
             return redirect(url_for("dashboard.index"))
-        logger.warning("Invalid login attempt for user %s", form.username)
+        logger.warning(f"Invalid login attempt for user {form.username}")
         return render_template("login.html", error="Invalid credentials")
     if session.get("user"):
-        logger.debug("User %s already authenticated", session.get("user"))
+        logger.debug(f"User {session.get('user')} already authenticated")
         return redirect(url_for("dashboard.index"))
     return render_template("login.html")
 
@@ -57,14 +57,14 @@ def logout() -> str:
     """Clear the current session."""
     user = session.get("user")
     session.clear()
-    logger.info("User %s logged out", user)
+    logger.info(f"User {user} logged out")
     return redirect(url_for("auth.login"))
 
 
 @auth_bp.route("/change-password/<string:token>", methods=["GET", "POST"])
 def change_password(token: str) -> str:
     """Allow a user to reset their password using a token."""
-    logger.trace("Password reset with token %s", token)
+    logger.trace(f"Password reset with token {token}")
     diff = db.session.execute(
         text("SELECT PasswordLinkVerification(:gen) AS diff"), {"gen": token}
     ).scalar()
@@ -73,7 +73,7 @@ def change_password(token: str) -> str:
             text("DELETE FROM forgot_password WHERE gen_key=:gen"), {"gen": token}
         )
         db.session.commit()
-        logger.warning("Expired or invalid password reset token %s", token)
+        logger.warning(f"Expired or invalid password reset token {token}")
         return render_template("link_expired.html"), 400
 
     if request.method == "POST":
@@ -100,7 +100,7 @@ def change_password(token: str) -> str:
                 "change_password.html", token=token, error="Database error"
             )
         log_activity(username, "Password changed")
-        logger.info("Password changed for user %s", username)
+        logger.info(f"Password changed for user {username}")
         return render_template("change_password.html", token=token, success=True)
 
     return render_template("change_password.html", token=token)
@@ -114,7 +114,7 @@ def forgot_password() -> str:
         if not email:
             return render_template("forgot_password.html", error="Email required")
 
-        logger.info("Password reset requested for %s", email)
+        logger.info(f"Password reset requested for {email}")
 
         # Check if user exists - exact same query as PHP
         exists = (
@@ -147,7 +147,7 @@ def forgot_password() -> str:
             try:
                 send_mail(email, "Request For Password - Reg", body)
                 log_activity(email, "Requested password reset link")
-                logger.debug("Password reset email sent to %s", email)
+                logger.debug(f"Password reset email sent to {email}")
                 return render_template("forgot_password.html", success=True)
             except Exception as e:
                 logger.exception("Failed to send password reset email: {}", e)
@@ -156,7 +156,7 @@ def forgot_password() -> str:
                 )
         else:
             # Match exact error message from PHP
-            logger.warning("Password reset requested for unknown account %s", email)
+            logger.warning(f"Password reset requested for unknown account {email}")
             return render_template(
                 "forgot_password.html", error="This account does not exist!"
             )

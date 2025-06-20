@@ -26,7 +26,7 @@ def list_manager() -> str:
     if not is_admin(g.user):
         return redirect(url_for("public.bad_request"))
 
-    logger.debug("Mailing list manager accessed by %s", g.user)
+    logger.debug(f"Mailing list manager accessed by {g.user}")
 
     if request.method == "POST":
         file = request.files.get("file")
@@ -58,7 +58,7 @@ def list_manager() -> str:
             logger.exception("Failed creating mailing list: {}", exc)
             return render_template("mailing/list.html", error="Database error")
         log_activity(g.user, f"Created mailing list {table}")
-        logger.info("Mailing list %s created", table)
+        logger.info(f"Mailing list {table} created")
         return render_template("mailing/list.html", success=True)
 
     return render_template("mailing/list.html")
@@ -79,7 +79,7 @@ def bulk_mail() -> str:
         ]
 
     if request.method == "POST":
-        logger.info("Bulk mail triggered by %s", g.user)
+        logger.info(f"Bulk mail triggered by {g.user}")
         form = BulkMailForm(
             mailing_list=request.form.get("mailing_list", ""),
             mail_subject=request.form.get("mail_subject", ""),
@@ -123,7 +123,7 @@ def bulk_mail() -> str:
                 error="Failed to send emails",
             )
         log_activity(g.user, f"Sent bulk mail to list {list_name}")
-        logger.info("Bulk mail sent to list %s", list_name)
+        logger.info(f"Bulk mail sent to list {list_name}")
         return render_template(
             "mailing/bulk.html", mailing_lists=lists, cfg=cfg, success=True
         )

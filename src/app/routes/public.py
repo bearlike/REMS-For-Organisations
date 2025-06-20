@@ -18,7 +18,7 @@ def home():
     status = request.args.get("status")
     searched_event = request.args.get("searched_event")
 
-    logger.debug("Home page accessed with event=%s status=%s", event_query, status)
+    logger.debug(f"Home page accessed with event={event_query} status={status}")
 
     # Handle different error states
     event_not_found = False
@@ -28,7 +28,7 @@ def home():
         event_not_found = True
         if searched_event:
             error_message = f"Event '{searched_event}' not found. Are you sure you're spelling it right?"
-            logger.warning("Event not found: %s", searched_event)
+            logger.warning(f"Event not found: {searched_event}")
         else:
             error_message = "Event not found. Please enter a valid event name."
     elif event_query and not status:
@@ -50,7 +50,7 @@ def cds_public():
     per_page = int(request.args.get("perPage", 10))
     pagination = Pagination(page, per_page)
 
-    logger.debug("cds_public accessed: %s", request.args)
+    logger.debug(f"cds_public accessed: {request.args}")
 
     if "mode" in request.args:
         total = db.session.query(func.count(Event.id)).scalar()
@@ -61,7 +61,7 @@ def cds_public():
             .limit(pagination.per_page)
             .all()
         )
-        logger.info("Listing events page %s", page)
+        logger.info(f"Listing events page {page}")
         return render_template(
             "cds_public.html",
             mode=True,
@@ -77,7 +77,7 @@ def cds_public():
 
     event_exists = Event.query.filter_by(event_name=event).first()
     if not event_exists:
-        logger.warning("Attempt to access unknown event %s", event)
+        logger.warning(f"Attempt to access unknown event {event}")
         return redirect(url_for("public.home", status="notfound", searched_event=event))
 
     is_inter = db.session.query(Event.isInter).filter_by(event_name=event).scalar()
@@ -94,7 +94,7 @@ def cds_public():
         .limit(pagination.per_page)
         .all()
     )
-    logger.info("Listing certificates for %s page %s", event, page)
+    logger.info(f"Listing certificates for {event} page {page}")
 
     return render_template(
         "cds_public.html",

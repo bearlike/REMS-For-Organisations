@@ -17,7 +17,7 @@ class Pagination:
     def offset(self) -> int:
         """Return the starting offset for a query."""
         off = self.per_page * (self.page - 1)
-        logger.trace("Pagination offset=%s", off)
+        logger.trace(f"Pagination offset={off}")
         return off
 
     def get_total_pages(self, total_items: int) -> int:
@@ -32,4 +32,4 @@ class Pagination:
     def set_total_pages(self, total_items: int) -> None:
         """Set the total pages based on total items."""
         self._total_pages = self.get_total_pages(total_items)
-        logger.debug("Total pages set to %s", self._total_pages)
+        logger.debug(f"Total pages set to {self._total_pages}")

@@ -14,7 +14,7 @@ from .logger import logger
 
 def log_activity(user: str, message: str) -> None:
     """Insert a log entry for the specified user."""
-    logger.debug("Activity log: %s - %s", user, message)
+    logger.debug(f"Activity log: {user} - {message}")
     entry = LogEntry(userid=user, log=message)
     db.session.add(entry)
     db.session.commit()
@@ -28,12 +28,12 @@ def is_admin(username: str) -> bool:
         .scalar()
     )
     is_admin_user = bool(count)
-    logger.trace("Admin check for %s: %s", username, is_admin_user)
+    logger.trace(f"Admin check for {username}: {is_admin_user}")
     return is_admin_user
 
 
 def sanitize_identifier(name: str) -> str:
     """Return a safe SQL identifier with only alphanumerics and underscores."""
     sanitized = re.sub(r"[^0-9a-zA-Z_]+", "_", name).strip("_")
-    logger.debug("Sanitized identifier %s -> %s", name, sanitized)
+    logger.debug(f"Sanitized identifier {name} -> {sanitized}")
     return sanitized

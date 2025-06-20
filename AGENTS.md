@@ -28,7 +28,7 @@ docs/              # images and sample SQL
 - **Pydantic validation** – forms and CSV uploads use schemas from `schemas.py`.
 - **Jinja2 templates** – HTML pages are rendered from files under `src/app/templates`.
 - **Docker first** – use `Dockerfile` and `docker-compose.yml` for local development and deployment.
-- **Helper utilities** – common logic for authentication and logging lives under `src/app/utils`.
+- **Helper utilities** – common logic for authentication and logging lives under `src/app/utils`. The module `src/app/utils/logger.py` configures the shared Loguru instance. Always use f-strings when passing values to the logger.
 - **Image generation** – certificate images are created using the Pillow library.
 
 ## Jinja2 Template Guidelines
@@ -59,6 +59,7 @@ This ensures consistent styling and keeps navigation identical across views.
 | `src/app/routes/errors.py` | Custom 404 and 500 error handlers |
 | `src/app/utils/auth.py` | `login_required` decorator for protecting routes |
 | `src/app/utils/email.py` | Utilities for building and sending emails |
+| `src/app/utils/logger.py` | Loguru configuration and shared logger |
 | `src/app/utils/helpers.py` | Logging, admin checks and identifier sanitation |
 | `src/app/utils/pagination.py` | Simple pagination helper class |
 

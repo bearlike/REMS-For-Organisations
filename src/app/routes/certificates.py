@@ -52,7 +52,7 @@ _check_files_exist()
 
 def _create_template(metadata: EventMetadata, folder: Path) -> Path:
     """Generate the base certificate template with event details."""
-    logger.debug("Creating certificate template for %s", metadata.event_name)
+    logger.debug(f"Creating certificate template for {metadata.event_name}")
     img = Image.open(TEMPLATE_DIR / "Participation.png").convert("RGBA")
     draw = ImageDraw.Draw(img)
     light = ImageFont.truetype(str(FONT_LIGHT), 50)
@@ -95,7 +95,7 @@ def _create_certificate_image(
     counter: int,
 ) -> Path:
     """Create a certificate image for a single participant."""
-    logger.debug("Generating certificate image for %s", data.name)
+    logger.debug(f"Generating certificate image for {data.name}")
     if metadata.is_inter:
         pos_file = {
             "Winner": "Winner.png",
@@ -163,9 +163,7 @@ def generate():
             )
 
         logger.info(
-            "Generating certificates for event '%s' from file '%s'",
-            request.form.get("event_name", ""),
-            file.filename,
+            f"Generating certificates for event '{request.form.get('event_name', '')}' from file '{file.filename}'"
         )
 
         metadata = EventMetadata(
@@ -306,7 +304,7 @@ def generate():
         )
 
         logger.info(
-            "%d certificates created for event '%s'", counter, metadata.event_name
+            f"{counter} certificates created for event '{metadata.event_name}'"
         )
 
         # Calculate file metadata like PHP version
@@ -331,7 +329,7 @@ def generate():
 @cert_bp.route("/serve/<path:filename>")
 def serve_certificate(filename):
     """Serve certificate files from the static certificates directory."""
-    logger.debug("Serving certificate file %s", filename)
+    logger.debug(f"Serving certificate file {filename}")
     try:
         static_folder = Path(current_app.static_folder or "src/app/static")
         certificates_dir = static_folder / "certificates"
@@ -347,6 +345,6 @@ def serve_certificate(filename):
         else:
             return render_template("errors/404.html"), 404
     except (ValueError, OSError) as exc:
-        logger.warning("Invalid certificate path: %s", filename)
-        logger.debug("Certificate serve error: %s", exc)
+        logger.warning(f"Invalid certificate path: {filename}")
+        logger.debug(f"Certificate serve error: {exc}")
         return render_template("errors/404.html"), 404

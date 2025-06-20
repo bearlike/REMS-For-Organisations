@@ -24,7 +24,7 @@ def create_short_url() -> str:
     short_url: str | None = None
     error: str | None = None
 
-    logger.debug("Short URL request by %s", g.user)
+    logger.debug(f"Short URL request by {g.user}")
 
     if request.method == "POST":
         original_url = request.form.get("url", "")
@@ -59,13 +59,13 @@ def create_short_url() -> str:
                             g.user,
                             f"In Link-Short, [{original_url}] -> [{short_url}] shortened",
                         )
-                        logger.info("Shortened %s to %s", original_url, short_url)
+                        logger.info(f"Shortened {original_url} to {short_url}")
                     else:
                         error = "Failed to get short URL from response"
                         logger.warning("Short.cm API returned no short URL")
                 else:
                     error = f"API Error: {response.status_code}"
-                    logger.error("Short.cm API error %s", response.status_code)
+                    logger.error(f"Short.cm API error {response.status_code}")
 
             except requests.exceptions.RequestException as e:
                 error = f"Network error: {str(e)}"

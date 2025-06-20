@@ -31,7 +31,7 @@ forms_bp = Blueprint("forms", __name__)
 @forms_bp.route("/entry", methods=["POST"])
 def submit_entry():
     """Handle event registration form submissions."""
-    logger.trace("Form submission for event %s", request.form.get("event_name"))
+    logger.trace(f"Form submission for event {request.form.get('event_name')}")
     form_data = request.form.to_dict()
     event_name = form_data.pop("event_name", None)
     if not event_name:
@@ -63,7 +63,7 @@ def generator() -> str:
     error = None
     success = False
 
-    logger.debug("Form generator accessed by %s", g.user)
+    logger.debug(f"Form generator accessed by {g.user}")
 
     if request.method == "POST":
         form = FormGeneratorSchema(
@@ -98,7 +98,7 @@ def generator() -> str:
                 error = "Database error"
             else:
                 log_activity(g.user, f"Generated form table {table}")
-                logger.info("Form table %s created by %s", table, g.user)
+                logger.info(f"Form table {table} created by {g.user}")
                 success = True
 
     with engine.connect() as conn:
@@ -123,13 +123,13 @@ def generator() -> str:
 @forms_bp.route("/forms/register/<event>")
 def register_form(event: str) -> str:
     """Render a registration form for the given event table."""
-    logger.debug("Rendering registration form for event %s", event)
+    logger.debug(f"Rendering registration form for event {event}")
     table = f"event_{sanitize_identifier(event)}"
     engine = db.get_engine(bind="forms")
     with engine.connect() as conn:
         tables = [row[0] for row in conn.execute(text("SHOW TABLES LIKE 'event_%'"))]
         if table not in tables:
-            logger.warning("Registration form requested for unknown event %s", event)
+            logger.warning(f"Registration form requested for unknown event {event}")
             return redirect(url_for("public.bad_request"))
         columns = [row[0] for row in conn.execute(text(f"SHOW COLUMNS FROM {table}"))]
 
@@ -181,7 +181,7 @@ def view_registrations() -> str:
             )
             rows = [dict(r._mapping) for r in result]
 
-    logger.debug("Viewing registrations for %s", event)
+    logger.debug(f"Viewing registrations for {event}")
     return render_template(
         "forms/registrations.html",
         events=events,
@@ -204,13 +204,13 @@ def download_csv() -> Response:
     if not event:
         return redirect(url_for("forms.view_registrations"))
 
-    logger.info("CSV download requested for event %s", event)
+    logger.info(f"CSV download requested for event {event}")
 
     engine = db.get_engine(bind="forms")
     with engine.connect() as conn:
         tables = [row[0] for row in conn.execute(text("SHOW TABLES LIKE 'event_%'"))]
         if event not in tables:
-            logger.warning("CSV download for unknown event %s", event)
+            logger.warning(f"CSV download for unknown event {event}")
             return redirect(url_for("public.bad_request"))
         columns = [row[0] for row in conn.execute(text(f"SHOW COLUMNS FROM {event}"))]
         data = conn.execute(text(f"SELECT * FROM {event} ORDER BY id")).fetchall()

@@ -14,7 +14,7 @@ logs_bp = Blueprint("logs", __name__, url_prefix="/logs")
 @login_required
 def list_logs():
     """List activity logs for the logged-in user."""
-    logger.debug("Listing logs for %s", g.user)
+    logger.debug(f"Listing logs for {g.user}")
     page = int(request.args.get("page", 1))
     per_page = int(request.args.get("perPage", 10))
 
@@ -29,7 +29,7 @@ def list_logs():
     offset = per_page * (page - 1)
 
     logs = base.order_by(LogEntry.id.desc()).offset(offset).limit(per_page).all()
-    logger.info("Fetched %s logs for user %s", len(logs), g.user)
+    logger.info(f"Fetched {len(logs)} logs for user {g.user}")
 
     return render_template(
         "logs.html",
