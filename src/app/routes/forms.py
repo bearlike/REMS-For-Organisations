@@ -6,13 +6,13 @@ import csv
 import io
 
 from flask import (
+    render_template,
     Blueprint,
     redirect,
+    Response,
     request,
     url_for,
-    render_template,
     g,
-    Response,
 )
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
@@ -52,9 +52,13 @@ def submit_entry():
 @forms_bp.route("/forms/generator", methods=["GET", "POST"])
 @login_required
 def generator() -> str:
-    """Create a new registration form table."""
+    """Create a new registration form table and list existing ones."""
     if not is_admin(g.user):
         return redirect(url_for("public.bad_request"))
+
+    engine = db.get_engine(bind="forms")
+    error = None
+    success = False
 
     if request.method == "POST":
         form = FormGeneratorSchema(
@@ -66,32 +70,62 @@ def generator() -> str:
         )
 
         if not form.event_name.strip():
-            return render_template("forms/generator.html", error="Event name required")
+            error = "Event name required"
+        else:
+            table = f"event_{sanitize_identifier(form.event_name)}"
+            columns = [
+                "id INT NOT NULL AUTO_INCREMENT PRIMARY KEY",
+                "timestamp DATETIME DEFAULT CURRENT_TIMESTAMP",
+            ]
+            for field in form.fields:
+                columns.append(f"`{field}` VARCHAR(255)")
+            if form.event_type == "team":
+                for idx in range(1, form.number_participants + 1):
+                    for field in form.fields:
+                        columns.append(f"`{field}{idx}` VARCHAR(255)")
 
-        table = f"event_{sanitize_identifier(form.event_name)}"
-        columns = [
-            "id INT NOT NULL AUTO_INCREMENT PRIMARY KEY",
-            "timestamp DATETIME DEFAULT CURRENT_TIMESTAMP",
-        ]
-        for field in form.fields:
-            columns.append(f"`{field}` VARCHAR(255)")
-        if form.event_type == "team":
-            for idx in range(1, form.number_participants + 1):
-                for field in form.fields:
-                    columns.append(f"`{field}{idx}` VARCHAR(255)")
+            sql = text(f"CREATE TABLE IF NOT EXISTS {table} ({', '.join(columns)})")
+            try:
+                with engine.begin() as conn:
+                    conn.execute(sql)
+            except SQLAlchemyError:
+                error = "Database error"
+            else:
+                log_activity(g.user, f"Generated form table {table}")
+                success = True
 
-        sql = text(f"CREATE TABLE IF NOT EXISTS {table} ({', '.join(columns)})")
-        engine = db.get_engine(bind="forms")
-        try:
-            with engine.begin() as conn:
-                conn.execute(sql)
-        except SQLAlchemyError:
-            return render_template("forms/generator.html", error="Database error")
+    with engine.connect() as conn:
+        tables = [row[0] for row in conn.execute(text("SHOW TABLES LIKE 'event_%'"))]
 
-        log_activity(g.user, f"Generated form table {table}")
-        return render_template("forms/generator.html", success=True)
+    events = [
+        {
+            "name": tbl[6:].replace("_", " "),
+            "slug": tbl[6:],
+        }
+        for tbl in tables
+    ]
 
-    return render_template("forms/generator.html")
+    return render_template(
+        "forms/generator.html",
+        error=error,
+        success=success,
+        events=events,
+    )
+
+
+@forms_bp.route("/forms/register/<event>")
+def register_form(event: str) -> str:
+    """Render a registration form for the given event table."""
+    table = f"event_{sanitize_identifier(event)}"
+    engine = db.get_engine(bind="forms")
+    with engine.connect() as conn:
+        tables = [row[0] for row in conn.execute(text("SHOW TABLES LIKE 'event_%'"))]
+        if table not in tables:
+            return redirect(url_for("public.bad_request"))
+        columns = [row[0] for row in conn.execute(text(f"SHOW COLUMNS FROM {table}"))]
+
+    fields = [c for c in columns if c not in ("id", "timestamp")]
+    return render_template("forms/register_form.html", event=event, fields=fields)
 
 
 @forms_bp.route("/forms/registrations")

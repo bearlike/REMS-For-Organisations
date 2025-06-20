@@ -21,37 +21,70 @@
             <div class="d-sm-flex justify-content-between align-items-center mb-4">
               <h3 class="text-dark mb-0">Bulk Mailer</h3>
             </div>
+            <div class="row-cert-gen">
+              <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                  <h6 class="text-primary m-0 font-weight-bold">Bulk Mailer</h6>
+                </div>
+                <div class="card-body">
+
             {% if error %}
             <div class="alert alert-danger">{{ error }}</div>
             {% elif success %}
             <div class="alert alert-success">Emails sent successfully.</div>
             {% endif %}
-            <form method="post">
-              <div class="mb-2">
-                <label>Mailing List</label>
-                <select name="mailing_list" class="form-control">
+            <form method="post" class="needs-validation" novalidate>
+              <div class="form-group">
+                <label for="mailing_list">Mailing List</label>
+                <select name="mailing_list" id="mailing_list" class="form-control custom-select" required>
+                  <option value="" disabled selected>Select a mailing list</option>
                   {% for t in mailing_lists %}
                   <option value="{{ t }}">{{ t }}</option>
                   {% endfor %}
                 </select>
+                <div class="invalid-feedback">Please select a mailing list.</div>
               </div>
-              <div class="mb-2"><input class="form-control" type="text" name="mail_subject" placeholder="Subject" required></div>
-              <div class="mb-2"><input class="form-control" type="text" name="mail_title" placeholder="Email Title" required></div>
-              <div class="mb-2">
-                <input class="form-control" type="text" name="mail_button_label" placeholder="Button label" value="{{ cfg.buttonLabel }}">
-                <input class="form-control mt-1" type="text" name="mail_button_url" placeholder="Button URL" value="{{ cfg.buttonURL }}">
+              <div class="form-group">
+                <label for="mail_subject">Subject</label>
+                <input class="form-control" type="text" id="mail_subject" name="mail_subject" placeholder="Subject" required>
+                <div class="invalid-feedback">Please provide a subject.</div>
               </div>
-              <div class="mb-2">
-                <input class="form-control" type="text" name="mail_logo_url" placeholder="Logo URL" value="{{ cfg.logoURL }}">
-                <input class="form-control mt-1" type="text" name="mail_coverimg_url" placeholder="Cover image URL" value="{{ cfg.coverURL }}">
+              <div class="form-group">
+                <label for="mail_title">Email Title</label>
+                <input class="form-control" type="text" id="mail_title" name="mail_title" placeholder="Email Title" required>
+                <div class="invalid-feedback">Please provide an email title.</div>
               </div>
-              <div class="mb-2">
-                <textarea class="form-control" name="mail_body" rows="6" placeholder="Mail body"></textarea>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="mail_button_label">Button Label</label>
+                  <input class="form-control" type="text" id="mail_button_label" name="mail_button_label" placeholder="Button label" value="{{ cfg.buttonLabel }}">
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="mail_button_url">Button URL</label>
+                  <input class="form-control" type="text" id="mail_button_url" name="mail_button_url" placeholder="Button URL" value="{{ cfg.buttonURL }}">
+                </div>
               </div>
-              <button class="btn btn-primary">Send</button>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="mail_logo_url">Logo URL</label>
+                  <input class="form-control" type="text" id="mail_logo_url" name="mail_logo_url" placeholder="Logo URL" value="{{ cfg.logoURL }}">
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="mail_coverimg_url">Cover Image URL</label>
+                  <input class="form-control" type="text" id="mail_coverimg_url" name="mail_coverimg_url" placeholder="Cover image URL" value="{{ cfg.coverURL }}">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="mail_body">Mail Body</label>
+                <textarea class="form-control" id="mail_body" name="mail_body" rows="6" placeholder="Mail body" required></textarea>
+                <div class="invalid-feedback">Please provide a mail body.</div>
+              </div>
+              <button class="btn btn-primary" type="submit">Send</button>
             </form>
           </div>
-        <footer class="bg-white sticky-footer">
+        </div>
+      </div>
+      <footer class="bg-white sticky-footer">
           <div class="container my-auto">
             <div class="text-center">Made with ❤️ by <a href="https://thekrishna.in/">Krishnakanth</a> and <a href="https://www.linkedin.com/in/mahavisvanathan/">Mahalakshumi</a></div>
           </div>
@@ -62,5 +95,24 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
     <script src="{{ url_for('static', filename='assets/js/theme.js') }}"></script>
-    <script src="{{ url_for('static', filename='assets/js/dark-mode.js') }}"></script>  </body>
+    <script src="{{ url_for('static', filename='assets/js/dark-mode.js') }}"></script>
+    <script>
+    // Bootstrap form validation
+    (function() {
+      'use strict';
+      window.addEventListener('load', function() {
+        var forms = document.getElementsByClassName('needs-validation');
+        var validation = Array.prototype.filter.call(forms, function(form) {
+          form.addEventListener('submit', function(event) {
+            if (form.checkValidity() === false) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+          }, false);
+        });
+      }, false);
+    })();
+    </script>
+  </body>
 </html>

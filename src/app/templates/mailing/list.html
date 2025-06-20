@@ -21,6 +21,13 @@
           <div class="d-sm-flex justify-content-between align-items-center mb-4">
             <h3 class="text-dark mb-0">Mailing List Generator</h3>
           </div>
+          <div class="row-mail-list-gen">
+            <div class="card shadow mb-4">
+              <div class="card-header py-3">
+                <h6 class="text-primary m-0 font-weight-bold">Mailing List Generator</h6>
+              </div>
+              <div class="card-body">
+
           <!-- Success Tips Section -->
           <div class="text-center mt-3">
             <div class="alert alert-info small" role="alert">
@@ -34,17 +41,28 @@
           {% elif success %}
           <div class="alert alert-success">Mailing list created.</div>
           {% endif %}
-          <form method="post" enctype="multipart/form-data">
-            <div class="mb-2">
-              <input type="file" name="file" class="form-control-file" accept=".csv" required>
+          <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+            <div class="form-group">
+                <label for="file">Upload Mailing List (CSV file)</label>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="file" name="file" required accept=".csv">
+                    <label class="custom-file-label" for="file">Choose file...</label>
+                    <div class="invalid-feedback">Please choose a CSV file.</div>
+                </div>
             </div>
-            <div class="mb-2">
-              <input type="text" name="mailer_name" class="form-control" placeholder="List Name" required>
+            <div class="form-group">
+                <label for="mailer_name">List Name</label>
+                <input type="text" class="form-control" id="mailer_name" name="mailer_name" placeholder="List Name" required>
+                <div class="invalid-feedback">Please provide a list name.</div>
             </div>
-            <button class="btn btn-primary">Upload</button>
+            <button class="btn btn-primary" type="submit">Upload</button>
           </form>
         </div>
-      <footer class="bg-white sticky-footer">
+      </div>
+    </div>
+  </div>
+</div>
+<footer class="bg-white sticky-footer">
         <div class="container my-auto">
           <div class="text-center">Made with ❤️ by <a href="https://thekrishna.in/">Krishnakanth</a> and <a href="https://www.linkedin.com/in/mahavisvanathan/">Mahalakshumi</a></div>
         </div>

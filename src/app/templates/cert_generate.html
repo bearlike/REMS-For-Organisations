@@ -14,18 +14,30 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
   <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/custom.css') }}">
+  <style>
+    .upload-btn-wrapper input[type=file] {
+      opacity: 0;
+    }
+  </style>
+
 </head>
 
 <body id="page-top">
   <div id="wrapper">
     {% include 'partials/navigation.html' %}
     <div class="container-fluid">
-          <div class="d-sm-flex justify-content-between align-items-center mb-4">
-            <h3 class="text-dark mb-0">Certificate Generation</h3>
+      <div class="d-sm-flex justify-content-between align-items-center mb-4">
+        <h3 class="text-dark mb-0">Certificate Generation</h3>
+      </div>
+      <div class="row-cert-gen">
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="text-primary m-0 font-weight-bold">Certificate Generation</h6>
+          </div>
+          <div class="card-body">
             <a class="btn btn-primary btn-sm d-none d-sm-inline-block" role="button" href="{{ url_for('static', filename='Sample_headers.csv') }}">
               <i class="fas fa-download fa-sm text-white-50"></i>&nbsp;Download Sample CSV for CDS&nbsp;
             </a>
-          </div>
 
           {% if error %}
           <div class="alert alert-danger">{{ error }}</div>
@@ -35,45 +47,46 @@
           <div class="alert alert-success">Generation completed.</div>
           {% endif %}
 
-          <style>
-            .upload-btn-wrapper input[type=file] {
-              opacity: 0;
-            }
-          </style>
+          <div class="mt-4">
+            <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                <div class="form-group">
+                    <label for="myFile">Upload Certificate List (CSV file)</label>
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="myFile" name="file" required accept=".csv">
+                        <label class="custom-file-label" for="myFile">Choose file...</label>
+                        <div class="invalid-feedback">Please choose a CSV file.</div>
+                    </div>
+                </div>
 
-          <div style="padding-bottom: 19px;">
-            <form method="post" enctype="multipart/form-data">
-              <div style="display:inline-flex">
-                <input type="file" id="myFile" name="file" style="display: none" required />
-                <input id="spnFilePath" class="form-control border-1 small" style="width: 100%;max-width:15em;" placeholder="Selected certificate list" disabled>
-                <a class="btn btn-primary btn-sm link" id="btnFileUpload"><i class="fa fa-upload" aria-hidden="true"></i></a>
-              </div>
-              <script type="text/javascript">
-                window.onload = function() {
-                  var fileupload = document.getElementById("myFile");
-                  var filePath = document.getElementById("spnFilePath");
-                  var button = document.getElementById("btnFileUpload");
-                  button.onclick = function() {
-                    fileupload.click();
-                  };
-                  fileupload.onchange = function() {
-                    var fileName = fileupload.value.split('\\')[fileupload.value.split('\\').length - 1];
-                    filePath.value = fileName;
-                  };
-                };
-              </script><br><br>
-              <input type="text" name="event_name" class="form-control border-1 small" style="width: 68%;max-width:15em;" placeholder="Enter the Event Name" required />
-              <br>
-              <input type="date" name="date" class="form-control border-1 small" style="width: 68%;max-width:15em;" required />
-              <br>
-              <select class="form-control border-1 small" style="width: 68%;max-width:15em;" name="eventType" required>
-                <option value="0">Intra-College Event</option>
-                <option value="1">Inter-College Event</option>
-              </select>
-              <br>
-              <input class="btn btn-primary" type="submit" name="submit" />
+                <div class="form-row">
+                    <div class="form-group col-md-8">
+                        <label for="event_name">Event Name</label>
+                        <input type="text" class="form-control" id="event_name" name="event_name" placeholder="Enter the Event Name" required>
+                        <div class="invalid-feedback">Please provide an event name.</div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="date">Event Date</label>
+                        <input type="date" class="form-control" id="date" name="date" required>
+                        <div class="invalid-feedback">Please provide the event date.</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="eventType">Event Type</label>
+                    <select class="form-control custom-select" id="eventType" name="eventType" required>
+                        <option value="" disabled selected>Select event type</option>
+                        <option value="0">Intra-College Event</option>
+                        <option value="1">Inter-College Event</option>
+                    </select>
+                    <div class="invalid-feedback">Please select an event type.</div>
+                </div>
+
+                <button type="submit" name="submit" class="btn btn-primary">Generate Certificates</button>
             </form>
           </div>
+        </div>
+      </div>
+    </div>
 
           {% if rows %}
           <div class="card shadow">
@@ -150,6 +163,30 @@
   <script src="{{ url_for('static', filename='assets/js/bs-init.js') }}"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
   <script src="{{ url_for('static', filename='assets/js/theme.js') }}"></script>
+  <script>
+    // Update the label of the custom file input with the name of the selected file
+    $('#myFile').on('change',function(e){
+        var fileName = e.target.files[0].name;
+        $(this).next('.custom-file-label').html(fileName);
+    })
+
+    // Bootstrap form validation
+    (function() {
+      'use strict';
+      window.addEventListener('load', function() {
+        var forms = document.getElementsByClassName('needs-validation');
+        var validation = Array.prototype.filter.call(forms, function(form) {
+          form.addEventListener('submit', function(event) {
+            if (form.checkValidity() === false) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+          }, false);
+        });
+      }, false);
+    })();
+  </script>
 </body>
 
 </html>
