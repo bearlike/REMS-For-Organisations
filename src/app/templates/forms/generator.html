@@ -110,8 +110,20 @@
                                 <tr>
                                     <td class="text-capitalize">{{ e.name }}</td>
                                     <td>
-                                        <a target="_blank"
-                                           href="{{ url_for('forms.register_form', event=e.slug) }}">Open Form</a>
+                                        <div class="input-group input-group-sm link_copy">
+                                            <input type="text"
+                                                   id="link-{{ loop.index }}"
+                                                   class="form-control"
+                                                   readonly
+                                                   value="{{ url_for('forms.register_form', event=e.slug, _external=True) }}">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-outline-secondary"
+                                                        type="button"
+                                                        onclick="copyLink('link-{{ loop.index }}')">
+                                                    <i class="far fa-copy"></i>
+                                                </button>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -137,5 +149,13 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
         <script src="{{ url_for('static', filename='assets/js/theme.js') }}"></script>
         <script src="{{ url_for('static', filename='assets/js/dark-mode.js') }}"></script>
+        <script>
+            function copyLink(id) {
+                var input = document.getElementById(id);
+                input.select();
+                input.setSelectionRange(0, 99999);
+                document.execCommand('copy');
+            }
+        </script>
     </body>
 </html>

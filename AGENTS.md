@@ -64,6 +64,10 @@ This ensures consistent styling and keeps navigation identical across views.
 
 Forms are stored in the `forms` database. The form generator and submission routes now use `db.get_engine(bind="forms")` and sanitize event names with `sanitize_identifier` from `helpers.py`.
 
+The template `forms/generator.html` lists existing form tables below the creation form. Each entry shows a public registration link with a copy-to-clipboard button so admins can easily share it.
+
+`forms/register_form.html` renders registration pages. It groups fields per participant when the table columns end with numbers and provides dropdowns for `dept` and `year` with preset options.
+
 Mailing lists live in the `mail` database. The list manager creates tables using `db.get_engine(bind="mail")` and sanitizes the list name with the same helper to avoid unsafe characters.
 
 Keep this document up to date as modules evolve. It should help new contributors navigate the repository quickly and start coding in Python from day one.

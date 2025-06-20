@@ -125,7 +125,20 @@ def register_form(event: str) -> str:
         columns = [row[0] for row in conn.execute(text(f"SHOW COLUMNS FROM {table}"))]
 
     fields = [c for c in columns if c not in ("id", "timestamp")]
-    return render_template("forms/register_form.html", event=event, fields=fields)
+
+    grouped: dict[int, list[str]] = {}
+    for f in fields:
+        base = f.rstrip("0123456789")
+        suffix = f[len(base):]
+        idx = int(suffix) if suffix.isdigit() else 0
+        grouped.setdefault(idx, []).append(base)
+
+    order = [idx for idx in sorted(grouped)]
+    groups = [{"index": idx, "fields": grouped[idx]} for idx in order]
+
+    return render_template(
+        "forms/register_form.html", event=event, groups=groups
+    )
 
 
 @forms_bp.route("/forms/registrations")
@@ -152,11 +165,12 @@ def view_registrations() -> str:
             ]
             total = conn.execute(text(f"SELECT count(*) FROM {event}")).scalar() or 0
             offset = pagination.offset
-            data = conn.execute(
+            # Use row._mapping to convert SQLAlchemy Row to dict and avoid TypeError
+            result = conn.execute(
                 text(f"SELECT * FROM {event} ORDER BY id LIMIT :limit OFFSET :offset"),
                 {"limit": pagination.per_page, "offset": offset},
             )
-            rows = [dict(r) for r in data]
+            rows = [dict(r._mapping) for r in result]
 
     return render_template(
         "forms/registrations.html",
