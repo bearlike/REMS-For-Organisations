@@ -27,7 +27,7 @@ def create_app() -> Flask:
         SECRET_KEY="change-this-key",
     )
 
-    logger.debug(
+    logger.info(
         f"Database initialized with URI: {app.config['SQLALCHEMY_DATABASE_URI']}"
     )
 
