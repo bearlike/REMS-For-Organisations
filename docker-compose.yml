@@ -28,7 +28,10 @@ services:
       - 8989:5000
     volumes:
       - "generated_certificates_volume:/app/public/Generated Certificate"
+      # - /absolute/path/to/rems.db:/app/database/rems.db
     environment:
+      # Change the URI to a SQLite file, but it is not recommended for production loads.
+      # MAIN_DB_URI: "sqlite:////app/database/rems.db"
       MAIN_DB_URI: "mysql+pymysql://root:0000@database/db_cms"
       FORMS_DB_URI: "mysql+pymysql://root:0000@database/forms_db"
       MAIL_DB_URI: "mysql+pymysql://root:0000@database/mail_db"

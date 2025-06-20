@@ -49,7 +49,7 @@ docker-compose up -d
 2. Set the `MAIN_DB_URI` environment variable to your database connection. This can point to MySQL, PostgreSQL or SQLite, for example:
 
    ```bash
-   export MAIN_DB_URI="sqlite:///rems.db"
+   export MAIN_DB_URI="sqlite:///absolute/path/to/rems.db"
    # or
    export MAIN_DB_URI="mysql+pymysql://user:pass@localhost/rems"
    # or
@@ -57,7 +57,7 @@ docker-compose up -d
    ```
 
    ```powershell
-   $env:MAIN_DB_URI="sqlite:///rems.db"
+   $env:MAIN_DB_URI="sqlite:///absolute/path/to/rems.db"
    # or
    $env:MAIN_DB_URI="mysql+pymysql://user:pass@localhost/rems"
    # or
