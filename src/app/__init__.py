@@ -32,6 +32,7 @@ def create_app() -> Flask:
     )
 
     db.init_app(app)
+    logger.debug("Database initialized")
 
     @app.context_processor
     def inject_user_data():

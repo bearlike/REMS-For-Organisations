@@ -1,17 +1,16 @@
-# Developer Overview
+# Maintainer Guide
 
-This document describes the Python code base for the Resources and Event Management System (REMS). The application is mainly built with **Flask**, **SQLAlchemy** and **Jinja2**. You must constantly monitor and update this file as any commits, modifications, or new features are added. You may remove or consolidate entries as needed.
+This document explains the current structure of REMS (Resources and Event Management System) and how to contribute effectively. Keep it up to date whenever new modules or features are introduced.
 
-## Directory Layout
-
+## Repository Layout
 ```
-src/
-  app/             # Flask application package
-    __init__.py    # application factory and blueprint registration
+src/               # application source code
+  app/             # Flask package
+    __init__.py    # application factory
     models.py      # SQLAlchemy models
-    schemas.py     # Pydantic data models for form validation
-    routes/        # feature blueprints (auth, dashboard, forms, etc.)
-    utils/         # helper modules (auth decorators, email, logging)
+    schemas.py     # Pydantic validation models
+    routes/        # feature blueprints
+    utils/         # shared helpers and logger
     templates/     # Jinja2 templates
     static/        # Bootstrap, fonts and JavaScript assets
   config/          # configuration loaded from Docker secrets
@@ -42,7 +41,6 @@ Most pages share a common structure:
 This ensures consistent styling and keeps navigation identical across views.
 
 ## Key Modules
-
 | Module | Purpose |
 |-------|---------|
 | `src/app/__init__.py` | Application factory and blueprint registration |
@@ -65,12 +63,18 @@ This ensures consistent styling and keeps navigation identical across views.
 | `src/app/utils/pagination.py` | Simple pagination helper class |
 | `src/app/utils/sql.py` | Cross-database table and column helpers |
 
-Forms are stored in the `forms` database. The form generator and submission routes now use `db.get_engine(bind="forms")` and sanitize event names with `sanitize_identifier` from `helpers.py`.
 
-The template `forms/generator.html` lists existing form tables below the creation form. Each entry shows a public registration link with a copy-to-clipboard button so admins can easily share it.
+## Template Conventions
+The front‑end uses assets from the *Start Bootstrap* SB Admin 2 theme, compiled in Bootstrap Studio. All CSS, JavaScript and images live under `src/app/static/assets`. Generated certificate images are stored in `src/app/static/certificates`. Always reference files with `url_for('static', filename='...')`.
 
-`forms/register_form.html` renders registration pages. It groups fields per participant when the table columns end with numbers and provides dropdowns for `dept` and `year` with preset options.
+Templates include `partials/navigation.html` for navigation and `partials/footer.html` for a common footer. Most pages follow Bootstrap's **card layout** to stay consistent with the theme. When adding a new template:
 
-Mailing lists live in the `mail` database. The list manager creates tables using `db.get_engine(bind="mail")` and sanitizes the list name with the same helper to avoid unsafe characters.
+1. Copy an existing page such as `dashboard.html` as a starting point.
+2. Include the navigation and footer partials at the top and bottom of the file.
+3. Place custom assets in `static/assets/` and link them with `url_for`.
+4. Wrap page sections in `<div class="card shadow mb-4">` blocks to match the existing layout.
+5. Save the file under `src/app/templates` and register a new route if needed.
 
-Keep this document up to date as modules evolve. It should help new contributors navigate the repository quickly and start coding in Python from day one.
+Certificate templates and fonts for Pillow are located in `members/` and loaded by `certificates.py` when generating images.
+
+Maintain this guide as the project evolves so new contributors can navigate the repository with ease.

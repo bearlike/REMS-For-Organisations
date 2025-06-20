@@ -131,12 +131,12 @@ def register_form(event: str) -> str:
     logger.debug(f"Rendering registration form for event {event}")
     table = f"event_{sanitize_identifier(event)}"
     engine = db.get_engine(bind="forms")
+
     tables = list_tables(engine, pattern="event_%")
     if table not in tables:
         logger.warning(f"Registration form requested for unknown event {event}")
         return redirect(url_for("public.bad_request"))
     columns = list_columns(engine, table)
-
     fields = [c for c in columns if c not in ("id", "timestamp")]
 
     grouped: dict[int, list[str]] = {}

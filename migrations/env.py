@@ -5,9 +5,8 @@ import sys
 
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
-
 from alembic import context
-from loguru import logger
+
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
@@ -45,6 +44,7 @@ def run_migrations_offline() -> None:
     """
     url = os.environ.get("MAIN_DB_URI") or config.get_main_option("sqlalchemy.url")
     logger.info(f"Using database URL: {url}")
+
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -67,6 +67,7 @@ def run_migrations_online() -> None:
     if os.environ.get("MAIN_DB_URI"):
         section["sqlalchemy.url"] = os.environ["MAIN_DB_URI"]
         logger.info(f"Using MAIN_DB_URI from environment: {section['sqlalchemy.url']}")
+
     connectable = engine_from_config(
         section,
         prefix="sqlalchemy.",

@@ -1,6 +1,5 @@
-from __future__ import annotations
-
 """Generic database management routes."""
+from __future__ import annotations
 
 from flask import Blueprint, render_template, request, redirect, url_for, g
 from sqlalchemy import text
