@@ -20,6 +20,7 @@ services:
   app:
     container_name: rems-for-organisations-app
     image: "ghcr.io/bearlike/rems-for-organisations:latest"
+    build: .
     restart: on-failure
     depends_on:
       - database

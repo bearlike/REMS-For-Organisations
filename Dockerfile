@@ -15,9 +15,10 @@ COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
+RUN chmod +x docker/app-entrypoint.sh
 
 ENV FLASK_APP=src.app
 ENV FLASK_RUN_HOST=0.0.0.0
 ENV PYTHONUNBUFFERED=1
 
-CMD ["python", "-m", "flask", "run"]
+ENTRYPOINT ["sh", "docker/app-entrypoint.sh"]
