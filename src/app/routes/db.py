@@ -1,6 +1,5 @@
-from __future__ import annotations
-
 """Generic database management routes."""
+from __future__ import annotations
 
 from flask import Blueprint, render_template, request, redirect, url_for, g
 from sqlalchemy import text
@@ -10,6 +9,7 @@ from .. import db
 from ..utils.auth import login_required
 from ..utils.helpers import log_activity, is_admin
 from ..utils.logger import logger
+from ..utils.sql import list_tables, list_columns
 from ...config import docker_secrets
 
 
@@ -47,15 +47,15 @@ def manage() -> str:
     bind_key, db_name = _get_bind(db_code)
     engine = db.get_engine(bind=bind_key)
 
-    with engine.connect() as conn:
-        tables = [row[0] for row in conn.execute(text(f"SHOW TABLES FROM {db_name}"))]
+    tables = list_tables(engine)
 
-        rows = []
-        columns = []
-        total_pages = 1
-        total_rows = 0
-        if table:
-            columns = [row[0] for row in conn.execute(text(f"SHOW COLUMNS FROM {table}"))]
+    rows = []
+    columns = []
+    total_pages = 1
+    total_rows = 0
+    if table:
+        columns = list_columns(engine, table)
+        with engine.connect() as conn:
             total_rows = conn.execute(text(f"SELECT count(*) FROM {table}")).scalar() or 0
             total_pages = max(1, (total_rows + per_page - 1) // per_page)
             offset = per_page * (page - 1)

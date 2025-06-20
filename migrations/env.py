@@ -1,10 +1,10 @@
+#!/usr/bin/env python3
 from logging.config import fileConfig
 import os
 import sys
 
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
-
 from alembic import context
 
 # this is the Alembic Config object, which provides
@@ -21,8 +21,8 @@ if config.config_file_name is not None:
 sys.path.append(os.path.join(os.path.dirname(__file__), os.pardir))
 from src.app import create_app, db  # pylint: disable=wrong-import-position
 
-create_app()
 target_metadata = db.metadata
+logger.info(f"Target metadata set: {target_metadata}")
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
@@ -43,6 +43,8 @@ def run_migrations_offline() -> None:
 
     """
     url = os.environ.get("MAIN_DB_URI") or config.get_main_option("sqlalchemy.url")
+    logger.info(f"Using database URL: {url}")
+
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -64,6 +66,8 @@ def run_migrations_online() -> None:
     section = config.get_section(config.config_ini_section, {})
     if os.environ.get("MAIN_DB_URI"):
         section["sqlalchemy.url"] = os.environ["MAIN_DB_URI"]
+        logger.info(f"Using MAIN_DB_URI from environment: {section['sqlalchemy.url']}")
+
     connectable = engine_from_config(
         section,
         prefix="sqlalchemy.",

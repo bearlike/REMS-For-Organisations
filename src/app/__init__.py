@@ -8,7 +8,8 @@ from flask_sqlalchemy import SQLAlchemy
 from .utils.logger import logger
 
 
-load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
+# Load environment variables
+load_dotenv()
 db = SQLAlchemy()
 
 
@@ -24,6 +25,10 @@ def create_app() -> Flask:
         },
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
         SECRET_KEY="change-this-key",
+    )
+
+    logger.info(
+        f"Database initialized with URI: {app.config['SQLALCHEMY_DATABASE_URI']}"
     )
 
     db.init_app(app)

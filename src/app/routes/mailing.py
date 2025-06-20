@@ -13,6 +13,7 @@ from ..utils.auth import login_required
 from ..utils.helpers import log_activity, is_admin, sanitize_identifier
 from ..utils.logger import logger
 from ..utils.email import send_mail, build_mail
+from ..utils.sql import list_tables
 from ..schemas import BulkMailForm
 from ...config import docker_secrets
 
@@ -35,9 +36,13 @@ def list_manager() -> str:
             return render_template("mailing/list.html", error="Missing data")
         table = sanitize_identifier(name)
         engine = db.get_engine(bind="mail")
+        pk = (
+            "INTEGER PRIMARY KEY AUTOINCREMENT"
+            if engine.dialect.name == "sqlite"
+            else "INT AUTO_INCREMENT PRIMARY KEY"
+        )
         create_sql = text(
-            f"CREATE TABLE IF NOT EXISTS `{table}` "
-            "(id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), email VARCHAR(255))"
+            f"CREATE TABLE IF NOT EXISTS `{table}` (id {pk}, name VARCHAR(255), email VARCHAR(255))"
         )
         try:
             with engine.begin() as conn:
@@ -73,10 +78,7 @@ def bulk_mail() -> str:
 
     cfg = docker_secrets.CONFIG
     engine = db.get_engine(bind="mail")
-    with engine.connect() as conn:
-        lists = [
-            row[0] for row in conn.execute(text(f"SHOW TABLES FROM {cfg.mailerDB}"))
-        ]
+    lists = list_tables(engine)
 
     if request.method == "POST":
         logger.info(f"Bulk mail triggered by {g.user}")
