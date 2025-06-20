@@ -46,9 +46,18 @@ docker-compose up -d
 ### Manual Installation
 
 1. Install Python packages with `pip install -r requirements.txt` or using Poetry: `poetry install`.
-2. Import the sample database from [`docs/files/Sample_REMS_Database.sql`](docs/files/Sample_REMS_Database.sql).
-3. Export `MYSQL_HOST`, `MYSQL_USER` and `MYSQL_PASSWORD` or update `src/config/docker_secrets.py`.
-4. Start the app with `flask --app src.app run`.
+2. Set the `MAIN_DB_URI` environment variable to your database connection. This can point to MySQL, PostgreSQL or SQLite, for example:
+
+   ```bash
+   export MAIN_DB_URI="sqlite:///rems.db"
+   # or
+   export MAIN_DB_URI="mysql+pymysql://user:pass@localhost/rems"
+   # or
+   export MAIN_DB_URI="postgresql+psycopg2://user:pass@localhost/rems"
+   ```
+3. Run `alembic upgrade head` to create the initial tables in the configured database.
+4. Optionally set `FORMS_DB_URI` and `MAIL_DB_URI` if using separate databases for forms and mail.
+5. Start the app with `flask --app src.app run`.
 
 ## Features and Screenshots
 
