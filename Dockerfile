@@ -1,21 +1,24 @@
 # syntax=docker/dockerfile:1
 
-FROM php:7.2-apache
+FROM python:3.13-slim
 
-# Lablelling
-LABEL com.rems.title="Resources and Event Management System (REMS)"
-LABEL com.rems.version="1.1.6"
-LABEL com.rems.authors="Krishnakanth, Mahalakshumi"
-LABEL com.rems.repository="https://github.com/bearlike/REMS-For-Organisations"
-LABEL com.rems.description="Resources and Event Management System for small organisations and clubs. Bulk mailer, certificate generation and much more."
+# Metadata
+LABEL org.opencontainers.image.version="2.0.0"
+LABEL org.opencontainers.image.title="Resources and Event Management System (REMS)"
+LABEL org.opencontainers.image.authors="Krishnakanth Alagiri <https://github.com/bearlike>, Mahalakshumi V <https://github.com/mahavisvanathan>"
+LABEL org.opencontainers.image.source="https://github.com/bearlike/REMS-For-Organisations"
+LABEL org.opencontainers.image.description="Resources and Event Management System for small organisations and clubs. Bulk mailer, certificate generation and much more."
 
-# Installing dependencies
-RUN rm /etc/apt/preferences.d/no-debian-php
-ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
-RUN chmod +x /usr/local/bin/install-php-extensions && sync && \
-    install-php-extensions gd xdebug
-RUN install-php-extensions pdo_mysql
+WORKDIR /app
 
-# Copying project and (template) secrets file
-COPY . /var/www/html/
-COPY docker/secrets_.php /var/www/html/members
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+RUN chmod +x docker/app-entrypoint.sh
+
+ENV FLASK_APP=src.app
+ENV FLASK_RUN_HOST=0.0.0.0
+ENV PYTHONUNBUFFERED=1
+
+ENTRYPOINT ["sh", "docker/app-entrypoint.sh"]

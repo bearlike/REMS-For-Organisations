@@ -36,7 +36,7 @@ SELECT LoginName as code from login where Email=pEmail;
 END$$
 
 CREATE FUNCTION `ForgotPasswordHash` (`mailid` VARCHAR(255)) RETURNS VARCHAR(255) CHARSET utf8mb4 NO SQL
-BEGIN	
+BEGIN
 SELECT NOW() INTO @Now;
 SELECT id from login where Email=mailid INTO @id;
 SELECT sha(concat(id,LoginName,PasswordHash,Email,@Now)) from login where Email=mailid INTO @Hashstring;
@@ -52,7 +52,7 @@ RETURN @UserName;
 END$$
 
 CREATE FUNCTION `PasswordLinkVerification` (`gen` VARCHAR(255)) RETURNS INT(11) NO SQL
-BEGIN 
+BEGIN
     SELECT times FROM forgot_password where gen_key=gen INTO @pwd_time;
     SELECT TIMESTAMPDIFF(SECOND, @pwd_time, NOW()) INTO @Time_diff;
     return @Time_diff;
@@ -148,7 +148,7 @@ CREATE TABLE `login` (
   `Address` varchar(255) DEFAULT NULL COMMENT 'Address',
   `Phno` varchar(40) DEFAULT NULL COMMENT 'phone Number of User',
   `Signature` varchar(255) DEFAULT NULL COMMENT 'Email Signature',
-  `imgsrc` varchar(255) DEFAULT '../image2.png' COMMENT 'Profile Image URL'
+  `imgsrc` LONGTEXT DEFAULT NULL COMMENT 'Profile Image URL or Base64 string'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -158,7 +158,7 @@ CREATE TABLE `login` (
 --
 
 INSERT INTO `login` (`id`, `LoginName`, `PasswordHash`, `Email`, `FullName`, `IsAdmin`, `FirstName`, `LastName`, `Address`, `Phno`, `Signature`, `imgsrc`) VALUES
-(3, 'admin', 'd033e22ae348aeb5660fc2140aec35850c4da997', 'test@test.com', 'admin', 1, NULL, NULL, NULL, NULL, NULL, '../image2.png');
+(3, 'admin', 'd033e22ae348aeb5660fc2140aec35850c4da997', 'test@test.com', 'admin', 1, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 

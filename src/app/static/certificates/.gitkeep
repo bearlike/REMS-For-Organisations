@@ -1,0 +1,2 @@
+# This file ensures the certificates directory is created when the repository is cloned
+# Generated certificates will be stored in this directory

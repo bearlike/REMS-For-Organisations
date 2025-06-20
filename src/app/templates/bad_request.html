@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+  <head id="head_tag">
+    <meta charset="utf-8">
+    <title>Bad Request: SVCE-ACM</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" sizes="600x600" href="{{ url_for('static', filename='assets/img/Logo_White.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/bootstrap/css/bootstrap.min.css') }}">
+  </head>
+  <body>
+    <div class="jumbotron text-center">
+      <h1 class="display-5">Request is Invalid</h1>
+      <p class="lead"><strong>Our system detected that your request is not safe!</strong></p>
+      <hr>
+      <p>Having trouble? <a href="mailto:acm.svcecse@gmail.com">Contact us</a></p>
+    </div>
+    <div align="center" class="brands"><img src="{{ url_for('static', filename='assets/img/Logos-attached.png') }}"></div>
+  </body>
+</html>

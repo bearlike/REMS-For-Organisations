@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+
+<head id="head_tag">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <title>Edit Profile: {{ org_name }}</title>
+  <link rel="icon" type="image/png" sizes="600x600" href="{{ url_for('static', filename='assets/img/Logo_White.png') }}"
+    async>
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/bootstrap/css/bootstrap.min.css') }}">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css" async>
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/custom.css') }}">
+</head>
+
+<body id="page-top">
+  <div id="wrapper">
+    {% include 'partials/navigation.html' %}
+        <div class="container-fluid">
+          <div class="d-sm-flex justify-content-between align-items-center mb-4">
+            <h3 class="text-dark mb-0">Edit Profile</h3>
+          </div>
+          <div class="row-edit-profile">
+            <div class="card shadow mb-4">
+              <div class="card-header py-3">
+                <h6 class="text-primary m-0 font-weight-bold">Edit Profile</h6>
+              </div>
+              <div class="card-body">
+                <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                  <div class="form-row">
+                    <div class="col-md-4 text-center mb-3">
+                      {% if user.imgsrc and user.imgsrc.startswith('data:') %}
+                      <img id="profile-pic-preview" src="{{ user.imgsrc }}" width="200" height="200" class="img-fluid img-thumbnail mb-2" alt="Profile Picture">
+                      {% elif user.imgsrc %}
+                      <img id="profile-pic-preview" src="{{ url_for('static', filename='assets/img/avatars/users/' + user.imgsrc) }}" width="200" height="200" class="img-fluid img-thumbnail mb-2" alt="Profile Picture">
+                      {% else %}
+                      <div id="profile-pic-placeholder" class="img-thumbnail mb-2 p-5 text-muted">
+                        <i class="fas fa-user fa-3x"></i>
+                      </div>
+                      {% endif %}
+                      <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="picture" name="picture" accept="image/*">
+                        <label class="custom-file-label" for="picture">Choose picture</label>
+                        <div class="invalid-feedback">Please select a valid image file.</div>
+                      </div>
+                      <input type="hidden" id="picture-base64" name="picture_base64" value="">
+                    </div>
+                    <div class="col-md-8">
+                      <div class="form-group">
+                        <label for="email">Email</label>
+                        <input name="email" type="email" id="email" class="form-control" value="{{ user.Email }}" required>
+                        <div class="invalid-feedback">Please enter a valid email.</div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col-md-6">
+                          <label for="first_name">First Name</label>
+                          <input name="first_name" type="text" id="first_name" class="form-control" value="{{ user.FirstName }}" required>
+                          <div class="invalid-feedback">First name is required.</div>
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label for="last_name">Last Name</label>
+                          <input name="last_name" type="text" id="last_name" class="form-control" value="{{ user.LastName }}" required>
+                          <div class="invalid-feedback">Last name is required.</div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="address">Address</label>
+                        <input name="address" type="text" id="address" class="form-control" value="{{ user.Address }}">
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col-md-6">
+                          <label for="phno">Phone</label>
+                          <input name="phno" type="text" id="phno" class="form-control" value="{{ user.Phno }}">
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label for="signature">Signature</label>
+                          <input name="signature" type="text" id="signature" class="form-control" value="{{ user.Signature }}">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="text-right mt-3">
+                    <button class="btn btn-primary" type="submit">Update Profile</button>
+                  </div>
+                </form>
+              </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% include 'partials/footer.html' %}
+    </div>
+    <a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
+    <script src="{{ url_for('static', filename='assets/js/theme.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/dark-mode.js') }}"></script>
+    <script>      // Update the label of the custom file input with the name of the selected file
+      $('#picture').on('change',function(e){
+          var fileName = e.target.files[0].name;
+          $(this).next('.custom-file-label').html(fileName);
+
+          // Preview the selected image and convert to base64
+          var reader = new FileReader();
+          reader.onload = function (e) {
+              var base64Data = e.target.result;
+
+              // Store base64 data in hidden input
+              $('#picture-base64').val(base64Data);
+
+              // Check if the placeholder exists, and if so, replace it with an img tag
+              var placeholder = $('#profile-pic-placeholder');
+              if (placeholder.length) {
+                  placeholder.replaceWith('<img id="profile-pic-preview" src="' + base64Data + '" width="200" height="200" class="img-fluid img-thumbnail mb-2" alt="Profile Picture">');
+              } else {
+                  $('#profile-pic-preview').attr('src', base64Data);
+              }
+          };
+          reader.readAsDataURL(e.target.files[0]);
+      })
+
+      // Bootstrap form validation
+      (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+          var forms = document.getElementsByClassName('needs-validation');
+          var validation = Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', function(event) {
+              if (form.checkValidity() === false) {
+                event.preventDefault();
+                event.stopPropagation();
+              }
+              form.classList.add('was-validated');
+            }, false);
+          });
+        }, false);
+      })();
+    </script>
+  </body>
+</html>
