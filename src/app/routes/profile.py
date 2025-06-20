@@ -11,6 +11,7 @@ from .. import db
 from ..models import Login
 from ..utils.auth import login_required
 from ..utils.helpers import log_activity
+from ..utils.logger import logger
 from ..schemas import ProfileUpdateForm
 
 profile_bp = Blueprint("profile", __name__, url_prefix="/profile")
@@ -23,6 +24,7 @@ UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 @login_required
 def view_profile() -> str:
     """Display and update profile information."""
+    logger.trace("Rendering profile page for %s", g.user)
     user = Login.query.filter_by(LoginName=g.user).first()
     if not user:
         return redirect(url_for("public.bad_request"))
@@ -45,7 +47,7 @@ def view_profile() -> str:
                 user.imgsrc = picture_base64
                 log_activity(g.user, "Updated profile picture (base64)")
             else:
-                current_app.logger.warning(f"Invalid base64 image data from user {g.user}")
+                logger.warning("Invalid base64 image data from user %s", g.user)
 
         user.Email = form.email or user.Email
         user.FirstName = form.first_name or user.FirstName
@@ -54,6 +56,7 @@ def view_profile() -> str:
         user.Phno = form.phno or user.Phno
         user.Signature = form.signature or user.Signature
         db.session.commit()
+        logger.info("User %s updated profile", g.user)
         log_activity(g.user, "Updated profile details")
         return redirect(url_for("profile.view_profile"))
 

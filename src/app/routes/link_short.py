@@ -8,6 +8,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, g
 
 from ..utils.auth import login_required
 from ..utils.helpers import log_activity, is_admin
+from ..utils.logger import logger
 from ...config.docker_secrets import CONFIG
 
 link_short_bp = Blueprint("link_short", __name__, url_prefix="/short")
@@ -22,6 +23,8 @@ def create_short_url() -> str:
 
     short_url: str | None = None
     error: str | None = None
+
+    logger.debug("Short URL request by %s", g.user)
 
     if request.method == "POST":
         original_url = request.form.get("url", "")
@@ -56,16 +59,22 @@ def create_short_url() -> str:
                             g.user,
                             f"In Link-Short, [{original_url}] -> [{short_url}] shortened",
                         )
+                        logger.info("Shortened %s to %s", original_url, short_url)
                     else:
                         error = "Failed to get short URL from response"
+                        logger.warning("Short.cm API returned no short URL")
                 else:
                     error = f"API Error: {response.status_code}"
+                    logger.error("Short.cm API error %s", response.status_code)
 
             except requests.exceptions.RequestException as e:
                 error = f"Network error: {str(e)}"
+                logger.exception("Network error shortening URL: {}", e)
             except json.JSONDecodeError:
                 error = "Invalid response from URL shortening service"
+                logger.error("Invalid JSON from Short.cm")
             except Exception as e:
                 error = f"Failed to shorten URL: {str(e)}"
+                logger.exception("Unexpected error: {}", e)
 
     return render_template("link_short.html", short_url=short_url, error=error)

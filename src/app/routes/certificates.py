@@ -5,7 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 import csv
 from datetime import datetime
-from loguru import logger
+from ..utils.logger import logger
 from PIL import Image, ImageDraw, ImageFont
 
 from flask import Blueprint, render_template, request, redirect, url_for, g, current_app
@@ -27,6 +27,7 @@ FONT_MEDIUM = FONTS_DIR / "Raleway-Medium.ttf"
 
 def _check_files_exist() -> None:
     """Ensure required template and font files exist."""
+    logger.trace("Checking certificate template resources")
     missing_files = []
 
     if not TEMPLATE_DIR.exists():
@@ -51,6 +52,7 @@ _check_files_exist()
 
 def _create_template(metadata: EventMetadata, folder: Path) -> Path:
     """Generate the base certificate template with event details."""
+    logger.debug("Creating certificate template for %s", metadata.event_name)
     img = Image.open(TEMPLATE_DIR / "Participation.png").convert("RGBA")
     draw = ImageDraw.Draw(img)
     light = ImageFont.truetype(str(FONT_LIGHT), 50)
@@ -93,6 +95,7 @@ def _create_certificate_image(
     counter: int,
 ) -> Path:
     """Create a certificate image for a single participant."""
+    logger.debug("Generating certificate image for %s", data.name)
     if metadata.is_inter:
         pos_file = {
             "Winner": "Winner.png",
@@ -158,6 +161,12 @@ def generate():
             return render_template(
                 "cert_generate.html", error=f"Invalid date format: {parsing_error}"
             )
+
+        logger.info(
+            "Generating certificates for event '%s' from file '%s'",
+            request.form.get("event_name", ""),
+            file.filename,
+        )
 
         metadata = EventMetadata(
             event_name=request.form.get("event_name", ""),
@@ -286,13 +295,18 @@ def generate():
 
         try:
             db.session.commit()
-        except SQLAlchemyError:
+        except SQLAlchemyError as exc:
             db.session.rollback()
+            logger.exception("Failed to commit certificate data: {}", exc)
             return render_template("cert_generate.html", error="Database error")
 
         log_activity(
             g.user,
             f"{'Regenerated' if is_regeneration else 'Generated'} {counter} certificates for {metadata.event_name}"
+        )
+
+        logger.info(
+            "%d certificates created for event '%s'", counter, metadata.event_name
         )
 
         # Calculate file metadata like PHP version
@@ -317,6 +331,7 @@ def generate():
 @cert_bp.route("/serve/<path:filename>")
 def serve_certificate(filename):
     """Serve certificate files from the static certificates directory."""
+    logger.debug("Serving certificate file %s", filename)
     try:
         static_folder = Path(current_app.static_folder or "src/app/static")
         certificates_dir = static_folder / "certificates"
@@ -331,6 +346,7 @@ def serve_certificate(filename):
             return redirect(url_for("static", filename=cert_relative_path.as_posix()))
         else:
             return render_template("errors/404.html"), 404
-    except (ValueError, OSError):
-        # Path traversal attempt or file access error
+    except (ValueError, OSError) as exc:
+        logger.warning("Invalid certificate path: %s", filename)
+        logger.debug("Certificate serve error: %s", exc)
         return render_template("errors/404.html"), 404

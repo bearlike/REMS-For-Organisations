@@ -5,7 +5,7 @@ from flask import Flask, session, url_for
 
 from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
-from loguru import logger
+from .utils.logger import logger
 
 
 load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
@@ -14,6 +14,7 @@ db = SQLAlchemy()
 
 def create_app() -> Flask:
     """Create and configure the Flask application."""
+    logger.info("Initializing Flask application")
     app = Flask(__name__)
     app.config.update(
         SQLALCHEMY_DATABASE_URI=os.getenv("MAIN_DB_URI"),
@@ -26,10 +27,12 @@ def create_app() -> Flask:
     )
 
     db.init_app(app)
+    logger.debug("Database initialized")
 
     @app.context_processor
     def inject_user_data():
         """Inject current user data into all templates."""
+        logger.trace("Injecting user data into template context")
         # pylint: disable=import-outside-toplevel, relative-beyond-top-level
         from .models import Login
         from ..config.docker_secrets import CONFIG
@@ -61,9 +64,8 @@ def create_app() -> Flask:
                         profile_pic = url_for(
                             "static", filename="assets/img/avatars/image2.png"
                         )
-            except Exception:
-                # If there's any database error, return default values
-                pass
+            except Exception as exc:
+                logger.exception("Failed retrieving user data: {}", exc)
 
         from .utils.alerts import get_recent_alerts
 
@@ -101,5 +103,9 @@ def create_app() -> Flask:
     app.register_blueprint(profile_bp)
     app.register_blueprint(settings_bp)
     app.register_blueprint(errors_bp)
+
+    logger.debug("Blueprints registered")
+
+    logger.info("Application setup complete")
 
     return app
