@@ -14,6 +14,6 @@ def not_found(_: Exception):
 
 
 @errors_bp.app_errorhandler(500)
-def server_error(_: Exception):
+def server_error(err_msg: Exception):
     """Render the database error page."""
-    return render_template("errors/db_error.html"), 500
+    return render_template("errors/db_error.html", error_message=str(err_msg)), 500
