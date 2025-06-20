@@ -38,9 +38,8 @@ REMS began as a fun PHP project in college and has since been completely migrate
 - Launch with:
 
 ```bash
-# The docker-compose.yml uses the GitHub Container Registry image
-# No need to build locally unless you're making changes
-
+# The docker-compose.yml now builds the image locally and will
+# automatically apply Alembic migrations on startup
 docker-compose up -d
 ```
 

@@ -18,6 +18,7 @@ src/
 public/            # static landing pages served by Flask
 members/           # legacy templates now rendered via Jinja2
 docker/            # Docker and database setup scripts
+  app-entrypoint.sh  # runs Alembic migrations then starts the app
 docs/              # images and sample SQL
 ```
 
