@@ -72,6 +72,7 @@ def create_app() -> Flask:
             "profile_pic": profile_pic,
             "org_name": CONFIG.OrgName,
             "alerts": get_recent_alerts(),
+            "app_version": os.getenv("APP_VERSION", "2.0.0"),
         }
 
     # pylint: disable=import-outside-toplevel
