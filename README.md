@@ -56,6 +56,14 @@ docker-compose up -d
    export MAIN_DB_URI="postgresql+psycopg2://user:pass@localhost/rems"
    ```
 
+   ```powershell
+   $env:MAIN_DB_URI="sqlite:///rems.db"
+   # or
+   $env:MAIN_DB_URI="mysql+pymysql://user:pass@localhost/rems"
+   # or
+   $env:MAIN_DB_URI="postgresql+psycopg2://user:pass@localhost/rems"
+   ```
+
 3. Run `alembic upgrade head` to create the initial tables in the configured database.
 4. Optionally set `FORMS_DB_URI` and `MAIL_DB_URI` if using separate databases for forms and mail.
 5. Start the app with `flask --app src.app run`.

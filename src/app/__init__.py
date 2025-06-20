@@ -26,8 +26,10 @@ def create_app() -> Flask:
         SECRET_KEY="change-this-key",
     )
 
+    logger.debug(
+        f"Database initialized with URI: {app.config['SQLALCHEMY_DATABASE_URI']}"
+    )
     db.init_app(app)
-    logger.debug("Database initialized")
 
     @app.context_processor
     def inject_user_data():
