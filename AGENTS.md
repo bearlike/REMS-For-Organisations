@@ -1,75 +1,72 @@
-# Developer Overview
+# Maintainer Guide
 
-This document describes the Python code base for the Resources and Event Management System (REMS). The application is mainly built with **Flask**, **SQLAlchemy** and **Jinja2**. You must constantly monitor and update this file as any commits, modifications, or new features are added. You may remove or consolidate entries as needed.
+This document explains the current structure of REMS (Resources and Event Management System) and how to contribute effectively. Keep it up to date whenever new modules or features are introduced.
 
-## Directory Layout
-
+## Repository Layout
 ```
-src/
-  app/             # Flask application package
-    __init__.py    # application factory and blueprint registration
+src/               # application source code
+  app/             # Flask package
+    __init__.py    # application factory
     models.py      # SQLAlchemy models
-    schemas.py     # Pydantic data models for form validation
-    routes/        # feature blueprints (auth, dashboard, forms, etc.)
-    utils/         # helper modules (auth decorators, email, logging)
+    schemas.py     # Pydantic validation models
+    routes/        # feature blueprints
+    utils/         # shared helpers and logger
     templates/     # Jinja2 templates
-    static/        # Bootstrap, fonts and JavaScript assets
-  config/          # configuration loaded from Docker secrets
-public/            # static landing pages served by Flask
-members/           # legacy templates now rendered via Jinja2
-docker/            # Docker and database setup scripts
-  app-entrypoint.sh  # runs Alembic migrations then starts the app
-docs/              # images and sample SQL
+    static/        # CSS, JS, fonts and generated certificates
+  config/          # configuration via docker secrets
+  migrations/      # Alembic migration scripts
+members/           # certificate templates and fonts
+docker/            # container setup files
+  app-entrypoint.sh  # runs migrations then starts Flask
 ```
+The old `public/` folder was removed during the Python migration.
 
-## Programming Principles
+## Development Setup
+1. Install Python 3.13 or use Docker.
+2. Create `src/app/.env` and define at minimum `MAIN_DB_URI`.
+   Optional databases for forms and mail use `FORMS_DB_URI` and `MAIL_DB_URI`.
+3. Apply migrations with `alembic upgrade head` or let `docker-compose up` run them automatically via the entrypoint script.
+4. Start the server with `flask --app src.app run` (or use Docker Compose).
 
-- **Blueprint modularity** – each major feature lives in its own module inside `src/app/routes`.
-- **SQLAlchemy models** – database tables are represented in `models.py` and reused across routes.
-- **Pydantic validation** – forms and CSV uploads use schemas from `schemas.py`.
-- **Jinja2 templates** – HTML pages are rendered from files under `src/app/templates`.
-- **Docker first** – use `Dockerfile` and `docker-compose.yml` for local development and deployment.
-- **Helper utilities** – common logic for authentication and logging lives under `src/app/utils`. The module `src/app/utils/logger.py` configures the shared Loguru instance. Always use f-strings when passing values to the logger.
-- **Image generation** – certificate images are created using the Pillow library.
-
-## Jinja2 Template Guidelines
-
-Most pages share a common structure:
-
-1. **Static assets** – include Bootstrap, FontAwesome and custom CSS in the `<head>` using `url_for('static', ...)`.
-2. **Navigation** – import `partials/navigation.html` to display the sidebar and topbar.
-
-This ensures consistent styling and keeps navigation identical across views.
+## Coding Principles
+- **Blueprint modularity** – each feature lives in its own module under `src/app/routes`.
+- **Single models file** – all database tables live in `models.py` and are shared between routes.
+- **Pydantic schemas** – forms and API inputs are validated in `schemas.py`.
+- **Jinja2 templates** – HTML resides in `src/app/templates` with `partials/navigation.html` providing the sidebar and menu.
+- **Loguru for logging** – `src/app/utils/logger.py` exposes a configured logger. Format messages with f-strings.
+- **Helper utilities** – authentication, mailing and pagination helpers live in `src/app/utils`.
+- **Database binds** – additional databases are accessed using `db.get_engine(bind="forms")` or `bind="mail"`. Table names must be sanitized with `sanitize_identifier`.
 
 ## Key Modules
-
 | Module | Purpose |
 |-------|---------|
-| `src/app/__init__.py` | Application factory and blueprint registration |
-| `src/app/models.py` | SQLAlchemy models for certificates, events, logs and users |
-| `src/app/schemas.py` | Pydantic schemas used for form and CSV validation |
-| `src/app/routes/auth.py` | Login, logout and password management |
-| `src/app/routes/certificates.py` | Certificate generation from CSV uploads |
-| `src/app/routes/forms.py` | Registration form creation and CSV export |
-| `src/app/routes/mailing.py` | Mailing list creation and bulk email sending |
-| `src/app/routes/db.py` | Generic database browser and edit interface |
-| `src/app/routes/public.py` | Public certificate search and event listing |
-| `src/app/routes/profile.py` | User profile view and picture upload |
-| `src/app/routes/logs.py` | Activity log listing for users |
-| `src/app/routes/link_short.py` | Short URL generator using an external API |
-| `src/app/routes/errors.py` | Custom 404 and 500 error handlers |
-| `src/app/utils/auth.py` | `login_required` decorator for protecting routes |
-| `src/app/utils/email.py` | Utilities for building and sending emails |
-| `src/app/utils/logger.py` | Loguru configuration and shared logger |
+| `src/app/__init__.py` | Creates the Flask app and registers blueprints |
+| `src/app/models.py` | SQLAlchemy models for certificates, events, logs and logins |
+| `src/app/schemas.py` | Pydantic schemas for form validation and CSV parsing |
+| `src/app/routes/auth.py` | Login, logout and password reset |
+| `src/app/routes/certificates.py` | Generate certificates from uploaded CSV files |
+| `src/app/routes/forms.py` | Create and view event registration forms |
+| `src/app/routes/mailing.py` | Upload mailing lists and send bulk mail |
+| `src/app/routes/db.py` | Browse and edit database tables |
+| `src/app/routes/public.py` | Certificate search and event listing |
+| `src/app/routes/profile.py` | User profile and picture upload |
+| `src/app/routes/logs.py` | View user activity logs |
+| `src/app/routes/link_short.py` | Shorten URLs via the Short.io API |
 | `src/app/utils/helpers.py` | Logging, admin checks and identifier sanitation |
-| `src/app/utils/pagination.py` | Simple pagination helper class |
+| `src/app/utils/email.py` | Build and send HTML emails |
+| `src/app/utils/pagination.py` | Simple pagination class |
 
-Forms are stored in the `forms` database. The form generator and submission routes now use `db.get_engine(bind="forms")` and sanitize event names with `sanitize_identifier` from `helpers.py`.
+## Template Conventions
+The front‑end uses assets from the *Start Bootstrap* SB Admin 2 theme, compiled in Bootstrap Studio. All CSS, JavaScript and images live under `src/app/static/assets`. Generated certificate images are stored in `src/app/static/certificates`. Always reference files with `url_for('static', filename='...')`.
 
-The template `forms/generator.html` lists existing form tables below the creation form. Each entry shows a public registration link with a copy-to-clipboard button so admins can easily share it.
+Templates include `partials/navigation.html` for navigation and `partials/footer.html` for a common footer. Most pages follow Bootstrap's **card layout** to stay consistent with the theme. When adding a new template:
 
-`forms/register_form.html` renders registration pages. It groups fields per participant when the table columns end with numbers and provides dropdowns for `dept` and `year` with preset options.
+1. Copy an existing page such as `dashboard.html` as a starting point.
+2. Include the navigation and footer partials at the top and bottom of the file.
+3. Place custom assets in `static/assets/` and link them with `url_for`.
+4. Wrap page sections in `<div class="card shadow mb-4">` blocks to match the existing layout.
+5. Save the file under `src/app/templates` and register a new route if needed.
 
-Mailing lists live in the `mail` database. The list manager creates tables using `db.get_engine(bind="mail")` and sanitizes the list name with the same helper to avoid unsafe characters.
+Certificate templates and fonts for Pillow are located in `members/` and loaded by `certificates.py` when generating images.
 
-Keep this document up to date as modules evolve. It should help new contributors navigate the repository quickly and start coding in Python from day one.
+Maintain this guide as the project evolves so new contributors can navigate the repository with ease.
