@@ -8,13 +8,13 @@
 <p align="center">
   <img src="https://img.shields.io/github/last-commit/bearlike/REMS-For-Organisations?color=blue&style=flat-square" alt="Last Commit">
   <a href="/LICENSE"><img src="https://img.shields.io/github/license/bearlike/REMS-For-Organisations.svg?style=flat-square" alt="License"></a>
-  <a href="https://github.com/bearlike/REMS-For-Organisations/pkgs/container/rems-for-organisations"><img src="https://img.shields.io/badge/ghcr.io-container-blue?logo=docker&style=flat-square" alt="Docker Container" /></a>
+  <a href="https://github.com/bearlike/REMS-For-Organisations/pkgs/container/rems-for-organisations"><img src="https://img.shields.io/badge/ghcr.io-REMS--For--Organisations-blue?logo=docker&style=flat-square" alt="Docker Container" /></a>
   <a href="https://github.com/bearlike/REMS-For-Organisations/issues"><img src="https://img.shields.io/github/issues-raw/bearlike/REMS-For-Organisations?color=red&style=flat-square" alt="Open Issues"/></a>
   <a href="https://github.com/bearlike/REMS-For-Organisations/releases"><img src="https://img.shields.io/github/v/tag/bearlike/REMS-For-Organisations?label=stable&style=flat-square" alt="Latest Release"/></a>
 </p>
 
-> [!NOTE]
-> Prior to [version 1.1.5](https://github.com/bearlike/REMS-For-Organisations/tree/release/v1.1.5?tab=readme-ov-file), this project was developed in PHP and has since been fully migrated to Python.
+ > [!NOTE]
+ > Prior to [version `1.1.5`](https://github.com/bearlike/REMS-For-Organisations/tree/release/v1.1.5?tab=readme-ov-file), this project was developed in PHP and has since been fully migrated to Python. The Python codebase begins with [`v2.0.0`](https://github.com/bearlike/REMS-For-Organisations/releases/tag/v2.0.0). No database migrations are required when upgrading from `v1.x` to `v2.0.0`.
 
 ## 📝 Overview
 
@@ -49,20 +49,28 @@ docker-compose up -d
 2. Set the `MAIN_DB_URI` environment variable to your database connection. This can point to MySQL, PostgreSQL or SQLite, for example:
 
    ```bash
+   # Local SQLite database for development
    export MAIN_DB_URI="sqlite:///absolute/path/to/rems.db"
-   # or
+   # or MySQL database
    export MAIN_DB_URI="mysql+pymysql://user:pass@localhost/rems"
-   # or
+   # or PostgreSQL database
    export MAIN_DB_URI="postgresql+psycopg2://user:pass@localhost/rems"
    ```
 
-   ```powershell
-   $env:MAIN_DB_URI="sqlite:///absolute/path/to/rems.db"
-   # or
-   $env:MAIN_DB_URI="mysql+pymysql://user:pass@localhost/rems"
-   # or
-   $env:MAIN_DB_URI="postgresql+psycopg2://user:pass@localhost/rems"
-   ```
+  <details>
+    <summary>Windows (PowerShell) users: Setting environment variable</summary>
+
+  ```powershell
+  $env:MAIN_DB_URI="sqlite:///absolute/path/to/rems.db"
+  # or
+  $env:MAIN_DB_URI="mysql+pymysql://user:pass@localhost/rems"
+  # or
+  $env:MAIN_DB_URI="postgresql+psycopg2://user:pass@localhost/rems"
+  ```
+
+  </details><br>
+
+
 
 3. Run `alembic upgrade head` to create the initial tables in the configured database.
 4. Optionally set `FORMS_DB_URI` and `MAIL_DB_URI` if using separate databases for forms and mail.
