@@ -5,6 +5,7 @@ from flask import Flask, session, url_for
 
 from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
+from loguru import logger
 
 
 load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
@@ -44,10 +45,18 @@ def create_app() -> Flask:
                     current_user = db_user
                     # Build profile path similar to PHP retProfilePic
                     if db_user.imgsrc:
-                        profile_pic = url_for(
-                            "static",
-                            filename=(f"assets/img/avatars/users/{db_user.imgsrc}"),
-                        )
+                        if db_user.imgsrc.startswith("data:"):
+                            # Base64 image data
+                            profile_pic = db_user.imgsrc
+                        else:
+                            # Legacy file-based image
+                            profile_pic = url_for(
+                                "static",
+                                filename=(f"assets/img/avatars/users/{db_user.imgsrc}"),
+                            )
+                            logger.warning(
+                                f"Using legacy profile picture for user {user}. Need to update to base64 format."
+                            )
                     else:
                         profile_pic = url_for(
                             "static", filename="assets/img/avatars/image2.png"

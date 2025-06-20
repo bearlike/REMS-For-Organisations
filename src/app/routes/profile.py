@@ -37,13 +37,15 @@ def view_profile() -> str:
             signature=request.form.get("signature"),
         )
 
-        if "picture" in request.files and request.files["picture"].filename:
-            file = request.files["picture"]
-            filename = secure_filename(file.filename)
-            path = UPLOAD_DIR / filename
-            file.save(path)
-            user.imgsrc = filename
-            log_activity(g.user, f"Updated profile picture {filename}")
+        # Handle base64 image data
+        picture_base64 = request.form.get("picture_base64")
+        if picture_base64:
+            # Validate that it's a proper base64 image
+            if picture_base64.startswith('data:image/'):
+                user.imgsrc = picture_base64
+                log_activity(g.user, "Updated profile picture (base64)")
+            else:
+                current_app.logger.warning(f"Invalid base64 image data from user {g.user}")
 
         user.Email = form.email or user.Email
         user.FirstName = form.first_name or user.FirstName
