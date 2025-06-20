@@ -9,6 +9,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from .. import db
 from ..utils.auth import login_required
 from ..utils.helpers import log_activity, is_admin
+from ..utils.logger import logger
 from ...config import docker_secrets
 
 
@@ -40,6 +41,8 @@ def manage() -> str:
     table = request.args.get("table")
     page = int(request.args.get("page", 1))
     per_page = int(request.args.get("perPage", 10))
+
+    logger.info(f"DB manage view by {g.user}: db={db_code} table={table}")
 
     bind_key, db_name = _get_bind(db_code)
     engine = db.get_engine(bind=bind_key)
@@ -94,10 +97,12 @@ def insert_row() -> str:
     try:
         with engine.begin() as conn:
             conn.execute(sql, data)
-    except SQLAlchemyError:
+    except SQLAlchemyError as exc:
+        logger.exception("Insert failed: {}", exc)
         return redirect(url_for("db.manage", db=db_code, table=table))
 
     log_activity(g.user, f"Inserted row in table {table} of database {db_code}")
+    logger.info(f"Row inserted into {table} by {g.user}")
     return redirect(url_for("db.manage", db=db_code, table=table))
 
 
@@ -119,10 +124,12 @@ def delete_row() -> str:
     try:
         with engine.begin() as conn:
             conn.execute(sql, {"id": row_id})
-    except SQLAlchemyError:
+    except SQLAlchemyError as exc:
+        logger.exception("Delete failed: {}", exc)
         return redirect(url_for("db.manage", db=db_code, table=table))
 
     log_activity(g.user, f"Removed id={row_id} from {table} of database {db_code}")
+    logger.info(f"Row {row_id} deleted from {table} by {g.user}")
     return redirect(url_for("db.manage", db=db_code, table=table))
 
 
@@ -146,9 +153,11 @@ def modify_row(row_id: int) -> str:
         try:
             with engine.begin() as conn:
                 conn.execute(sql, data)
-        except SQLAlchemyError:
+        except SQLAlchemyError as exc:
+            logger.exception("Update failed: {}", exc)
             return redirect(url_for("db.modify_row", row_id=row_id, db=db_code, table=table))
         log_activity(g.user, f"Modified id={row_id} in {table} of database {db_code}")
+        logger.info(f"Row {row_id} updated in {table} by {g.user}")
         return redirect(url_for("db.manage", db=db_code, table=table))
 
     with engine.connect() as conn:
@@ -188,8 +197,10 @@ def push_alert() -> str:
     try:
         with engine.begin() as conn:
             conn.execute(sql, data)
-    except SQLAlchemyError:
+    except SQLAlchemyError as exc:
+        logger.exception("Failed to push alert: {}", exc)
         return redirect(url_for("dashboard.index"))
 
     log_activity(g.user, "Pushed dashboard alert")
+    logger.info(f"Dashboard alert pushed by {g.user}")
     return redirect(url_for("dashboard.index"))

@@ -11,6 +11,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from .. import db
 from ..utils.auth import login_required
 from ..utils.helpers import log_activity, is_admin, sanitize_identifier
+from ..utils.logger import logger
 from ..utils.email import send_mail, build_mail
 from ..schemas import BulkMailForm
 from ...config import docker_secrets
@@ -24,6 +25,8 @@ def list_manager() -> str:
     """Create a new mailing list from an uploaded CSV."""
     if not is_admin(g.user):
         return redirect(url_for("public.bad_request"))
+
+    logger.debug(f"Mailing list manager accessed by {g.user}")
 
     if request.method == "POST":
         file = request.files.get("file")
@@ -51,9 +54,11 @@ def list_manager() -> str:
                         ),
                         {"name": row[0].strip(), "email": row[1].strip()},
                     )
-        except SQLAlchemyError:
+        except SQLAlchemyError as exc:
+            logger.exception("Failed creating mailing list: {}", exc)
             return render_template("mailing/list.html", error="Database error")
         log_activity(g.user, f"Created mailing list {table}")
+        logger.info(f"Mailing list {table} created")
         return render_template("mailing/list.html", success=True)
 
     return render_template("mailing/list.html")
@@ -74,6 +79,7 @@ def bulk_mail() -> str:
         ]
 
     if request.method == "POST":
+        logger.info(f"Bulk mail triggered by {g.user}")
         form = BulkMailForm(
             mailing_list=request.form.get("mailing_list", ""),
             mail_subject=request.form.get("mail_subject", ""),
@@ -108,7 +114,8 @@ def bulk_mail() -> str:
                 ]
             for recipient in recipients:
                 send_mail(recipient, form.mail_subject, content)
-        except Exception:
+        except Exception as exc:
+            logger.exception("Bulk mail failed: {}", exc)
             return render_template(
                 "mailing/bulk.html",
                 mailing_lists=lists,
@@ -116,6 +123,7 @@ def bulk_mail() -> str:
                 error="Failed to send emails",
             )
         log_activity(g.user, f"Sent bulk mail to list {list_name}")
+        logger.info(f"Bulk mail sent to list {list_name}")
         return render_template(
             "mailing/bulk.html", mailing_lists=lists, cfg=cfg, success=True
         )

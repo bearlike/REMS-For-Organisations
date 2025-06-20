@@ -1,156 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head id="head_tag">
-        <meta charset="utf-8">
-        <meta name="viewport"
-              content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-        <title>Form Generator: {{ org_name }}</title>
-        <link rel="icon"
-              type="image/png"
-              sizes="600x600"
-              href="{{ url_for('static', filename='assets/img/Logo_White.png') }}"
-              async>
-        <link rel="stylesheet"
-              href="{{ url_for('static', filename='assets/bootstrap/css/bootstrap.min.css') }}">
-        <link rel="stylesheet"
-              href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
-        <link rel="stylesheet"
-              href="https://use.fontawesome.com/releases/v5.12.0/css/all.css"
-              async>
-        <link rel="stylesheet"
-              href="{{ url_for('static', filename='assets/css/custom.css') }}">
-    </head>
-    <body id="page-top">
-        <div id="wrapper">
-            {% include 'partials/navigation.html' %}
-            <div class="container-fluid">
-                <div class="d-sm-flex justify-content-between align-items-center mb-4">
-                    <h3 class="text-dark mb-0">Create Registration Form</h3>
-                </div>
-                <div class="row-create-form">
+
+<head id="head_tag">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Form Generator: {{ org_name }}</title>
+    <link rel="icon" type="image/png" sizes="600x600"
+        href="{{ url_for('static', filename='assets/img/Logo_White.png') }}" async>
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css" async>
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/custom.css') }}">
+</head>
+
+<body id="page-top">
+    <div id="wrapper">
+        {% include 'partials/navigation.html' %}
+        <div class="container-fluid">
+            <div class="d-sm-flex justify-content-between align-items-center mb-4">
+                <h3 class="text-dark mb-0">Create Registration Form</h3>
+            </div>
+            <div class="row-create-form">
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
                         <h6 class="text-primary m-0 font-weight-bold">Create Registration Form</h6>
                     </div>
-                <div class="card-body">
-                {% if error %}
-                    <div class="alert alert-danger">{{ error }}</div>
-                {% elif success %}
-                    <div class="alert alert-success">Form table created.</div>
-                {% endif %}
-                <form method="post">
-                    <div class="mb-2">
-                        <label>Event name</label>
-                        <input type="text" name="event_name" class="form-control" required>
-                    </div>
-                    <div class="mb-2">
-                        <label>Description</label>
-                        <textarea name="event_description" class="form-control"></textarea>
-                    </div>
-                    <div class="mb-2">
-                        <label>Type</label>
-                        <div class="form-check">
-                            <input class="form-check-input"
-                                   type="radio"
-                                   name="event_type"
-                                   value="individual"
-                                   checked>
-                            <label class="form-check-label">Individual</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="event_type" value="team">
-                            <label class="form-check-label">Team</label>
-                        </div>
-                    </div>
-                    <div class="mb-2">
-                        <label>Team size</label>
-                        <select name="number_participants" class="form-control">
-                            {% for i in range(1,6) %}<option value="{{ i }}">{{ i }}</option>{% endfor %}
-                        </select>
-                    </div>
-                    <div class="mb-2">
-                        <label>Fields</label>
-                        {% set opts = ["regno", "dept", "year", "email", "phoneno", "college", "github", "linkedin"] %}
-                        {% for opt in opts %}
-                            <div class="form-check">
-                                <input class="form-check-input"
-                                       type="checkbox"
-                                       name="fields[]"
-                                       value="{{ opt }}">
-                                <label class="form-check-label text-capitalize">{{ opt }}</label>
+                    <div class="card-body">
+                        {% if error %}
+                        <div class="alert alert-danger">{{ error }}</div>
+                        {% elif success %}
+                        <div class="alert alert-success">Form table created.</div>
+                        {% endif %}
+                        <form method="post">
+                            <div class="form-row">
+                                <div class="form-group col-md-6 mb-3">
+                                    <label class="font-weight-bold">
+                                        <i class="fas fa-calendar-alt mr-1"></i> Event Name
+                                    </label>
+                                    <input type="text" name="event_name" class="form-control" required>
+                                </div>
+                                <div class="form-group col-md-6 mb-3">
+                                    <label class="font-weight-bold">
+                                        <i class="fas fa-align-left mr-1"></i> Description
+                                    </label>
+                                    <textarea name="event_description" class="form-control"></textarea>
+                                </div>
                             </div>
-                        {% endfor %}
+                            <div class="form-row">
+                                <div class="form-group col-md-4 mb-3">
+                                    <label class="font-weight-bold">
+                                        <i class="fas fa-users mr-1"></i> Type
+                                    </label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="event_type" value="individual" checked>
+                                        <label class="form-check-label font-weight-bold">Individual</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="event_type" value="team">
+                                        <label class="form-check-label font-weight-bold">Team</label>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-4 mb-3">
+                                    <label class="font-weight-bold">
+                                        <i class="fas fa-user-friends mr-1"></i> Team Size
+                                    </label>
+                                    <select name="number_participants" class="form-control">
+                                        {% for i in range(1,6) %}<option value="{{ i }}">{{ i }}</option>{% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-4 mb-3">
+                                    <label class="font-weight-bold">
+                                        <i class="fas fa-list mr-1"></i> Fields to Include
+                                    </label>
+                                    {% set opts = [
+                                        {"value": "regno", "label": "Registration Number", "icon": "id-card"},
+                                        {"value": "dept", "label": "Department", "icon": "building"},
+                                        {"value": "year", "label": "Year of Study", "icon": "calendar"},
+                                        {"value": "email", "label": "Email Address", "icon": "envelope"},
+                                        {"value": "phoneno", "label": "Phone Number", "icon": "phone"},
+                                        {"value": "college", "label": "College Name", "icon": "university"},
+                                        {"value": "github", "label": "GitHub Username", "icon": "github"},
+                                        {"value": "linkedin", "label": "LinkedIn Profile", "icon": "linkedin"}
+                                    ] %}
+                                    <div class="row">
+                                        {% for opt in opts %}
+                                        <div class="col-12 col-md-12">
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input" type="checkbox" name="fields[]" value="{{ opt.value }}">
+                                                <label class="form-check-label font-weight-bold">
+                                                    <i class="fab fa-{{ opt.icon if 'github' in opt.value or 'linkedin' in opt.value else 'fa-' + opt.icon }} mr-1"></i> {{ opt.label }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary mt-3"><i class="fas fa-magic mr-1"></i> Generate</button>
+                        </form>
                     </div>
-                    <button class="btn btn-primary">Generate</button>
-                </form>
                 </div>
             </div>
-        </div>
 
 
-        <!-- Display existing forms if any -->
-        {% if events %}
+            <!-- Display existing forms if any -->
+            {% if events %}
 
-        <div class="row-existing-forms">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="text-primary m-0 font-weight-bold">Existing Forms</h6>
-                </div>
-                <div class="card-body">
+            <div class="row-existing-forms">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="text-primary m-0 font-weight-bold">Existing Forms</h6>
+                    </div>
+                    <div class="card-body">
 
-                    <table class="table table-sm table-striped">
-                        <thead>
-                            <tr>
-                                <th>Event</th>
-                                <th>Link</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for e in events %}
+                        <table class="table table-sm table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Event</th>
+                                    <th>Link</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for e in events %}
                                 <tr>
                                     <td class="text-capitalize">{{ e.name }}</td>
                                     <td>
                                         <div class="input-group input-group-sm link_copy">
-                                            <input type="text"
-                                                   id="link-{{ loop.index }}"
-                                                   class="form-control"
-                                                   readonly
-                                                   value="{{ url_for('forms.register_form', event=e.slug, _external=True) }}">
+                                            <input type="text" id="link-{{ loop.index }}" class="form-control" readonly
+                                                value="{{ url_for('forms.register_form', event=e.slug, _external=True) }}">
                                             <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary"
-                                                        type="button"
-                                                        onclick="copyLink('link-{{ loop.index }}')">
+                                                <button class="btn btn-outline-secondary" type="button"
+                                                    onclick="copyLink('link-{{ loop.index }}')">
                                                     <i class="far fa-copy"></i>
                                                 </button>
                                             </div>
                                         </div>
                                     </td>
                                 </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
+
+            {% endif %}
         </div>
-    </div>
-    </div>
-    </div>
 
         {% include 'partials/footer.html' %}
-        </div>
-        <a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
-        <script src="{{ url_for('static', filename='assets/js/theme.js') }}"></script>
-        <script src="{{ url_for('static', filename='assets/js/dark-mode.js') }}"></script>
-        <script>
-            function copyLink(id) {
-                var input = document.getElementById(id);
-                input.select();
-                input.setSelectionRange(0, 99999);
-                document.execCommand('copy');
-            }
-        </script>
-    </body>
+    </div>
+    <a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
+    <script src="{{ url_for('static', filename='assets/js/theme.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/dark-mode.js') }}"></script>
+    <script>
+        function copyLink(id) {
+            var input = document.getElementById(id);
+            input.select();
+            input.setSelectionRange(0, 99999);
+            document.execCommand('copy');
+        }
+    </script>
+</body>
+
 </html>

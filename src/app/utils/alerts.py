@@ -8,10 +8,12 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from .. import db
 from ..routes.db import _get_bind
+from .logger import logger
 
 
 def get_recent_alerts(limit: int = 5) -> List[Dict[str, str]]:
     """Return recent dashboard alerts from the database."""
+    logger.trace(f"Fetching {limit} recent alerts")
     bind_key, _ = _get_bind("1")
     engine = db.get_engine(bind=bind_key)
     sql = text(
@@ -33,6 +35,8 @@ def get_recent_alerts(limit: int = 5) -> List[Dict[str, str]]:
                         "imgsrc": row["imgsrc"],
                     }
                 )
-    except SQLAlchemyError:
+    except SQLAlchemyError as exc:
+        logger.exception("Failed to fetch alerts: {}", exc)
         return []
+    logger.debug(f"Fetched {len(alerts)} alerts")
     return alerts
